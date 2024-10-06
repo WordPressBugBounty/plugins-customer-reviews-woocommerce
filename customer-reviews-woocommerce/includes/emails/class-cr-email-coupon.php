@@ -166,7 +166,6 @@ class CR_Email_Coupon {
 		$message = $this->replace_variables( $message );
 
 		$data = array(
-			'token' => '164592f60fbf658711d47b2f55a1bbba',
 			'shop' => array( "name" => Ivole_Email::get_blogname(),
 				'domain' => Ivole_Email::get_blogurl() ),
 			'email' => array( 'to' => $to,

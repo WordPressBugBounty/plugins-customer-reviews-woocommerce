@@ -470,7 +470,6 @@ class Ivole_Email {
 			$message = $this->replace_variables( $message );
 
 			$data = array(
-				'token' => '164592f60fbf658711d47b2f55a1bbba',
 				'shop' => array( "name" => self::get_blogname(),
 			 	'domain' => self::get_blogurl() ),
 				'email' => array( 'to' => $to,

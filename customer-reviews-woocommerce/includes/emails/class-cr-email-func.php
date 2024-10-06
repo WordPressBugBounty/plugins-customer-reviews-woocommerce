@@ -428,7 +428,7 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 				// CusRev mailer
 				$api_url = 'https://api.cusrev.com/v1/production/review-reminder';
 				if( $is_test ) {
-					$api_url = 'https://api.cusrev.com/v1/production/test-email';
+					$api_url = 'https://api.cusrev.com/v2/test-email';
 				}
 				$data_string = json_encode( $data );
 				//error_log( $data_string );
@@ -501,7 +501,7 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 			} else {
 				$api_url = 'https://api.cusrev.com/v1/production/review-discount';
 				if( $is_test ) {
-					$api_url = 'https://api.cusrev.com/v1/production/test-email';
+					$api_url = 'https://api.cusrev.com/v2/test-email';
 				}
 				$data_string = json_encode( $data );
 				//error_log( $data_string );
