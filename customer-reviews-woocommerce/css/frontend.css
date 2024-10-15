@@ -2284,6 +2284,7 @@ img.ivole-verified-badge-ext-icon {
 	right: 5px;
 	margin: -15px 0 0;
 	line-height: 0;
+	min-height: auto;
 }
 #reviews.cr-reviews-ajax-reviews .cr-ajax-reviews-cus-images-modal button.cr-ajax-reviews-cus-images-close svg,
 .cr-all-reviews-shortcode .cr-ajax-reviews-cus-images-modal button.cr-ajax-reviews-cus-images-close svg {

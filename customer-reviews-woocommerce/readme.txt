@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 6.6
 Requires PHP: 7.2
-Stable tag: 5.61.0
+Stable tag: 5.61.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -232,6 +232,10 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.61.1 =
+* Improvement: links to relevant pages of tags and categories in the documentation for the shortcodes settings
+* Improvement: simplification of a payload format of the CusRev API for testing emails
+* Bug fix: syntax error on some WordPress configurations
 = 5.61.0 =
 * New feature: an option to set a custom login URL for on-site review forms
 * Performance optimization: reduction of autoloaded options

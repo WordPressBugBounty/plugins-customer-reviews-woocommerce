@@ -428,6 +428,7 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 				// CusRev mailer
 				$api_url = 'https://api.cusrev.com/v1/production/review-reminder';
 				if( $is_test ) {
+					unset( $data['order']['items'] );
 					$api_url = 'https://api.cusrev.com/v2/test-email';
 				}
 				$data_string = json_encode( $data );
@@ -501,6 +502,7 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 			} else {
 				$api_url = 'https://api.cusrev.com/v1/production/review-discount';
 				if( $is_test ) {
+					unset( $data['order']['items'] );
 					$api_url = 'https://api.cusrev.com/v2/test-email';
 				}
 				$data_string = json_encode( $data );
@@ -526,6 +528,20 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 			} else {
 				return strtolower( uniqid( 'eml' ) );
 			}
+		}
+
+		public static function get_test_items() {
+			return array( array( 'id' => 1,
+					'name' => __( 'Item 1 Test', 'customer-reviews-woocommerce' ),
+					'price' => 15,
+					'image' => plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'img/test-product-1.jpeg'
+				),
+				array( 'id' => 2,
+					'name' => __( 'Item 2 Test', 'customer-reviews-woocommerce' ),
+					'price' => 150,
+					'image' => plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'img/test-product-2.jpeg'
+				)
+			);
 		}
 
 	}
