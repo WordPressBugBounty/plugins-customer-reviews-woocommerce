@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 6.6
 Requires PHP: 7.2
-Stable tag: 5.61.1
+Stable tag: 5.61.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -232,6 +232,10 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.61.2 =
+* Improvement: performance optimization for creation of XML Product Reviews feeds for Google Shopping
+* Improvement: support of product identifiers for XML feeds from the Germanized plugin
+* Bug fix: special characters in XML Product Reviews feeds when the plugin was updated from old versions
 = 5.61.1 =
 * Improvement: links to relevant pages of tags and categories in the documentation for the shortcodes settings
 * Improvement: simplification of a payload format of the CusRev API for testing emails
