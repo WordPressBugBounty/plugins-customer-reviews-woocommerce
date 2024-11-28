@@ -23,6 +23,7 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 		const HEADER_TEMPLATE = 'form-header.php';
 		const ITEM_BLOCK_TEMPLATE = 'form-block-item.php';
 		const CUSTOMER_TEMPLATE = 'form-customer.php';
+		const ERROR_TEMPLATE = 'form-error.php';
 		const FOOTER_TEMPLATE = 'form-footer.php';
 		const FORMS_TABLE = 'cr_local_forms';
 		const FORMS_SLUG = 'cusrev';
@@ -119,6 +120,9 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 					$this->form_block( $item );
 				}
 				$this->customer_block();
+				$this->form_footer();
+			} else {
+				$this->form_error();
 				$this->form_footer();
 			}
 		}
@@ -262,6 +266,27 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 			} else {
 				$cr_form_footer = sprintf( __( 'This form was created by %1$s.', 'customer-reviews-woocommerce' ), $home_url );
 			}
+			ob_start();
+			include( $template );
+			$output = ob_get_clean();
+			echo $output;
+		}
+
+		private function form_error() {
+			$template = wc_locate_template(
+				self::ERROR_TEMPLATE,
+				'customer-reviews-woocommerce',
+				__DIR__ . '/../../templates/'
+			);
+			$output = '';
+			$cr_form_css = plugins_url( '/css/form.css', dirname( dirname( __FILE__ ) ) ) . '?ver=' . Ivole::CR_VERSION;
+			$cr_form_js = plugins_url( '/js/form.js', dirname( dirname( __FILE__ ) ) ) . '?ver=' . Ivole::CR_VERSION;
+			$cr_form_id = $this->form_id;
+			$cr_form_header = __( 'Error', 'customer-reviews-woocommerce' );
+			$cr_form_desc = __( 'The order contains no items for review. Please reach out to the website administrator for assistance.', 'customer-reviews-woocommerce' );
+			$cr_form_color1 = $this->cr_form_color1;
+			$cr_form_color2 = $this->cr_form_color2;
+			$cr_form_color3 = $this->cr_form_color3;
 			ob_start();
 			include( $template );
 			$output = ob_get_clean();
