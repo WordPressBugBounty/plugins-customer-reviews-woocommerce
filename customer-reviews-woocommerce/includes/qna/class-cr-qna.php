@@ -54,6 +54,13 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 			$args = $this->get_args( $attributes );
 			if( $args ) {
 				$cr_post_id = get_the_ID();
+				$cr_product = wc_get_product( $cr_post_id );
+				$cr_item_name = '';
+				$cr_item_pic = false;
+				if ( $cr_product ) {
+					$cr_item_name = $cr_product->get_name();
+					$cr_item_pic = wp_get_attachment_image_url( $cr_product->get_image_id(), 'thumbnail', false );
+				}
 				$qna = $this->get_qna( $args, 0 );
 				$total_qna = $this->get_qna_count( $args );
 				$template = wc_locate_template(
@@ -148,21 +155,25 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 		public function new_qna() {
 			$return = array(
 				'code' => 2,
-				'description' => __( 'Data validation error.', 'customer-reviews-woocommerce' )
+				'description' => __( 'Data validation error.', 'customer-reviews-woocommerce' ),
+				'button' => __( 'OK', 'customer-reviews-woocommerce' )
 			);
-			if( isset( $_POST['currentPostID'] ) ) {
-				$product_id = intval( $_POST['currentPostID'] );
-				$question_id = 0;
-				$nonce = 'cr_qna_';
-				if( isset( $_POST['questionID'] ) && 0 < intval( $_POST['questionID'] ) ) {
-					$question_id = intval( $_POST['questionID'] );
-					$nonce = 'cr_qna_a_';
-					if( isset( $_POST['productID'] ) && 0 < intval( $_POST['productID'] ) ) {
-						$product_id = intval( $_POST['productID'] );
+			$error_button = __( 'Try again', 'customer-reviews-woocommerce' );
+			$success_button = __( 'Continue', 'customer-reviews-woocommerce' );
+			if (
+				isset( $_POST['crNonce'] ) &&
+				wp_verify_nonce( $_POST['crNonce'], "cr_qna" )
+			) {
+				if ( isset( $_POST['currentPostID'] ) ) {
+					$product_id = intval( $_POST['currentPostID'] );
+					$question_id = 0;
+					if( isset( $_POST['questionID'] ) && 0 < intval( $_POST['questionID'] ) ) {
+						$question_id = intval( $_POST['questionID'] );
+						if( isset( $_POST['productID'] ) && 0 < intval( $_POST['productID'] ) ) {
+							$product_id = intval( $_POST['productID'] );
+						}
 					}
-				}
-				if( 0 < $product_id ) {
-					if( check_ajax_referer( $nonce . $_POST['currentPostID'], 'security', false ) ) {
+					if( 0 < $product_id ) {
 						$captcha_correct = true;
 						if( self::is_captcha_enabled() ) {
 							$secret_key = get_option( 'ivole_qna_captcha_secret_key', '' );
@@ -177,14 +188,16 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 									$captcha_correct = false;
 									$return['code'] = 3;
 									$return['description'] = sprintf( __( 'reCAPTCHA validation error (%s).', 'customer-reviews-woocommerce' ), implode(', ', $captch_response["error-codes"] ) );
+									$return['button'] = $error_button;
 								}
 							} else {
 								$captcha_correct = false;
 								$return['code'] = 4;
 								$return['description'] = __( 'reCAPTCHA response is missing.', 'customer-reviews-woocommerce' );
+								$return['button'] = $error_button;
 							}
 						}
-						if( $captcha_correct ) {
+						if ( $captcha_correct ) {
 							$data_is_available = true;
 							$question = '';
 							$name = '';
@@ -228,24 +241,29 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 									$error_description = __( 'An error when adding the question.', 'customer-reviews-woocommerce' );
 									$success_description = __( 'The question was successfully added.', 'customer-reviews-woocommerce' );
 								}
-								if( !$result || is_wp_error( $result ) ) {
+								if( ! $result || is_wp_error( $result ) ) {
 									if( is_wp_error( $result ) ) {
 										$error_description = $result->get_error_message();
 									}
 									$return = array(
 										'code' => 1,
-										'description' => $error_description
+										'description' => $error_description,
+										'button' => $error_button
 									);
 								} else {
 									$return = array(
 										'code' => 0,
-										'description' => $success_description
+										'description' => $success_description,
+										'button' => $success_button
 									);
 								}
 							}
 						}
 					}
 				}
+			} else {
+				$return['description'] = __( 'Nonce validation error', 'customer-reviews-woocommerce' );
+				$return['button'] = $error_button;
 			}
 			wp_send_json( $return );
 		}
@@ -635,7 +653,7 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 
 		// returns HTML with a list of questions and answers
 		// requires an array of questions and answers as the input parameter
-		public static function display_qna_list( $qna ) {
+		public static function display_qna_list( $qna, $args ) {
 			$template = wc_locate_template(
 				'qna-list.php',
 				'customer-reviews-woocommerce',
@@ -652,6 +670,16 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 				}
 			} else {
 				$cr_verified_label = esc_attr__( 'verified owner', 'woocommerce' );
+			}
+			$cr_recaptcha = '';
+			if (
+				$args &&
+				is_array( $args ) &&
+				isset( $args['recaptcha'] )
+			) {
+				$cr_recaptcha = $args['recaptcha'];
+			} else {
+				$cr_recaptcha = get_option( 'ivole_qna_captcha_site_key', '' );
 			}
 			ob_start();
 			include( $template );
@@ -676,7 +704,7 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 					$qna = $this->get_qna( $args, $page );
 					$qna_count = count( $qna );
 					if( 0 < $qna_count ) {
-						$html = CR_Qna::display_qna_list( $qna );
+						$html = CR_Qna::display_qna_list( $qna, null );
 					}
 					if( $this->get_qna_count( $args ) <= $this->per_page * $page + $qna_count ) {
 						$last_page = true;

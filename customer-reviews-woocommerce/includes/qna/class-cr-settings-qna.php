@@ -80,7 +80,8 @@ class CR_Qna_Settings {
 								'desc'     => __( 'If you would like to use reCAPTCHA v3, insert here the Secret Key that you will receive after registration at the reCAPTCHA website.', 'customer-reviews-woocommerce' ),
 								'default'  => '',
 								'id'       => 'ivole_qna_captcha_secret_key',
-								'desc_tip' => true
+								'desc_tip' => true,
+								'autoload' => false
 						),
 						array(
 								'title'   => __( 'Display Count of Answered Questions', 'customer-reviews-woocommerce' ),
