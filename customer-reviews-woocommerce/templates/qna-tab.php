@@ -37,58 +37,85 @@ if( $attributes ) {
 				</svg>
 			</div>
 		</div>
-		<div class="cr-review-form-item">
-			<img src="<?php echo esc_url( $cr_item_pic ); ?>" alt="<?php echo esc_attr( $cr_item_name ); ?>"/>
-			<span><?php echo esc_html( $cr_item_name ); ?></span>
-			<input type="hidden" value="<?php echo esc_attr( $cr_post_id ); ?>" class="cr-review-form-item-id" />
-		</div>
-		<div class="cr-review-form-comment">
-			<div class="cr-review-form-lbl">
-				<?php _e( 'Your question', 'customer-reviews-woocommerce' ); ?>
+		<?php if ( 'registered' === $cr_qna_permissions && ! is_user_logged_in() ) : ?>
+			<div class="cr-review-form-not-logged-in">
+				<span>
+					<?php _e( 'You must be logged in to ask a question', 'customer-reviews-woocommerce' ); ?>
+				</span>
+				<?php
+					if ( $cr_qna_login ) {
+						$cr_qna_login = add_query_arg( 'redirect_to', urlencode( apply_filters( 'the_permalink', get_the_permalink(), $cr_post_id ) ), $cr_qna_login );
+					} else {
+						$cr_qna_login = wp_login_url( apply_filters( 'the_permalink', get_the_permalink(), $cr_post_id ) );
+					}
+				?>
+				<a class="cr-review-form-continue" href="<?php echo esc_url( $cr_qna_login ); ?>" rel="nofollow"><?php _e( 'Log In', 'customer-reviews-woocommerce' ); ?></a>
 			</div>
-			<textarea rows="5" name="cr_review_form_comment_txt" class="cr-review-form-comment-txt" placeholder="<?php _e( 'Start your question with \'What\', \'How\', \'Why\', etc.', 'customer-reviews-woocommerce' ); ?>"></textarea>
-			<div class="cr-review-form-field-error">
-				<?php _e( '* Question is required', 'customer-reviews-woocommerce' ); ?>
+		<?php elseif ( 'anybody' === $cr_qna_permissions || ( 'registered' === $cr_qna_permissions && is_user_logged_in() ) ) : ?>
+			<div class="cr-review-form-item">
+				<img src="<?php echo esc_url( $cr_item_pic ); ?>" alt="<?php echo esc_attr( $cr_item_name ); ?>"/>
+				<span><?php echo esc_html( $cr_item_name ); ?></span>
+				<input type="hidden" value="<?php echo esc_attr( $cr_post_id ); ?>" class="cr-review-form-item-id" />
 			</div>
-		</div>
-		<div class="cr-review-form-ne">
-			<div class="cr-review-form-name">
+			<div class="cr-review-form-comment">
 				<div class="cr-review-form-lbl">
-					<?php _e( 'Name', 'customer-reviews-woocommerce' ); ?>
+					<?php _e( 'Your question', 'customer-reviews-woocommerce' ); ?>
 				</div>
-				<input type="text" name="cr_review_form_name" class="cr-review-form-txt" autocomplete="name" placeholder="<?php esc_attr_e( 'Your name', 'customer-reviews-woocommerce' ); ?>" value="<?php echo esc_attr( $user_name ); ?>" data-defval="<?php echo esc_attr( $user_name ); ?>"></input>
+				<textarea rows="5" name="cr_review_form_comment_txt" class="cr-review-form-comment-txt" placeholder="<?php _e( 'Start your question with \'What\', \'How\', \'Why\', etc.', 'customer-reviews-woocommerce' ); ?>"></textarea>
 				<div class="cr-review-form-field-error">
-					<?php _e( '* Name is required', 'customer-reviews-woocommerce' ); ?>
+					<?php _e( '* Question is required', 'customer-reviews-woocommerce' ); ?>
 				</div>
 			</div>
-			<div class="cr-review-form-email">
-				<div class="cr-review-form-lbl">
-					<?php _e( 'Email', 'customer-reviews-woocommerce' ); ?>
+			<div class="cr-review-form-ne">
+				<div class="cr-review-form-name">
+					<div class="cr-review-form-lbl">
+						<?php _e( 'Name', 'customer-reviews-woocommerce' ); ?>
+					</div>
+					<input type="text" name="cr_review_form_name" class="cr-review-form-txt" autocomplete="name" placeholder="<?php esc_attr_e( 'Your name', 'customer-reviews-woocommerce' ); ?>" value="<?php echo esc_attr( $user_name ); ?>" data-defval="<?php echo esc_attr( $user_name ); ?>"></input>
+					<div class="cr-review-form-field-error">
+						<?php _e( '* Name is required', 'customer-reviews-woocommerce' ); ?>
+					</div>
 				</div>
-				<input type="email" name="cr_review_form_email" class="cr-review-form-txt" autocomplete="email" placeholder="<?php esc_attr_e( 'Your email', 'customer-reviews-woocommerce' ); ?>" value="<?php echo esc_attr( $user_email ); ?>" data-defval="<?php echo esc_attr( $user_email ); ?>"></input>
-				<div class="cr-review-form-field-error">
-					<?php _e( '* Email is required', 'customer-reviews-woocommerce' ); ?>
+				<div class="cr-review-form-email">
+					<div class="cr-review-form-lbl">
+						<?php _e( 'Email', 'customer-reviews-woocommerce' ); ?>
+					</div>
+					<input type="email" name="cr_review_form_email" class="cr-review-form-txt" autocomplete="email" placeholder="<?php esc_attr_e( 'Your email', 'customer-reviews-woocommerce' ); ?>" value="<?php echo esc_attr( $user_email ); ?>" data-defval="<?php echo esc_attr( $user_email ); ?>"></input>
+					<div class="cr-review-form-field-error">
+						<?php _e( '* Email is required', 'customer-reviews-woocommerce' ); ?>
+					</div>
 				</div>
 			</div>
-		</div>
-		<?php if ( 0 < strlen( $cr_recaptcha ) ) : ?>
-			<div class="cr-captcha-terms">
-				<?php echo sprintf( esc_html( __( 'This site is protected by reCAPTCHA and the Google %1$sPrivacy Policy%2$s and %3$sTerms of Service%4$s apply.', 'customer-reviews-woocommerce' ) ), '<a href="https://policies.google.com/privacy" rel="noopener noreferrer nofollow" target="_blank">', '</a>', '<a href="https://policies.google.com/terms" rel="noopener noreferrer nofollow" target="_blank">', '</a>' ); ?>
+			<?php if ( $cr_qna_checkbox ) : ?>
+				<div class="cr-review-form-terms">
+					<label>
+						<input type="checkbox" class="cr-review-form-checkbox" name="cr_review_form_checkbox" />
+						<span><?php echo $cr_qna_checkbox_text; ?></span>
+					</label>
+					<div class="cr-review-form-field-error">
+						<?php _e( '* Please tick the checkbox to proceed', 'customer-reviews-woocommerce' ); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+			<?php if ( 0 < strlen( $cr_recaptcha ) ) : ?>
+				<div class="cr-captcha-terms">
+					<?php echo sprintf( esc_html( __( 'This site is protected by reCAPTCHA and the Google %1$sPrivacy Policy%2$s and %3$sTerms of Service%4$s apply.', 'customer-reviews-woocommerce' ) ), '<a href="https://policies.google.com/privacy" rel="noopener noreferrer nofollow" target="_blank">', '</a>', '<a href="https://policies.google.com/terms" rel="noopener noreferrer nofollow" target="_blank">', '</a>' ); ?>
+				</div>
+			<?php endif; ?>
+			<div class="cr-review-form-buttons">
+				<button type="button" class="cr-review-form-submit" data-crcptcha="<?php echo $cr_recaptcha; ?>">
+					<span><?php _e( 'Submit', 'customer-reviews-woocommerce' ); ?></span>
+					<img src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'img/spinner-dots.svg'; ?>" alt="Loading" />
+				</button>
+				<button type="button" class="cr-review-form-cancel">
+					<?php _e( 'Cancel', 'customer-reviews-woocommerce' ); ?>
+				</button>
+			</div>
+			<div class="cr-review-form-result">
+				<span></span>
+				<button type="button" class="cr-review-form-continue"></button>
 			</div>
 		<?php endif; ?>
-		<div class="cr-review-form-buttons">
-			<button type="button" class="cr-review-form-submit" data-crcptcha="<?php echo $cr_recaptcha; ?>">
-				<span><?php _e( 'Submit', 'customer-reviews-woocommerce' ); ?></span>
-				<img src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'img/spinner-dots.svg'; ?>" alt="Loading" />
-			</button>
-			<button type="button" class="cr-review-form-cancel">
-				<?php _e( 'Cancel', 'customer-reviews-woocommerce' ); ?>
-			</button>
-		</div>
-		<div class="cr-review-form-result">
-			<span></span>
-			<button type="button" class="cr-review-form-continue"></button>
-		</div>
 	</div>
 	<div class="cr-qna-search-block">
 		<div class="cr-ajax-qna-search">
@@ -102,19 +129,36 @@ if( $attributes ) {
 				</svg>
 			</span>
 		</div>
-		<button type="button" class="cr-qna-ask-button"><?php _e( 'Ask a question', 'customer-reviews-woocommerce' ); ?></button>
+		<?php if ( in_array( $cr_qna_permissions, ['registered', 'anybody'] ) ) : ?>
+			<button type="button" class="cr-qna-ask-button">
+				<?php _e( 'Ask a question', 'customer-reviews-woocommerce' ); ?>
+			</button>
+		<?php endif; ?>
 	</div>
 	<div class="cr-qna-list-block">
-		<?php
-		if( isset( $qna ) && is_array( $qna ) && 0 < count( $qna ) ) :
-			?><div class="cr-qna-list-block-inner"><?php
-			echo CR_Qna::display_qna_list( $qna, array( 'recaptcha' => $cr_recaptcha ) );
-			?></div><?php
-			?>
-			<button id="cr-show-more-q-id" type="button" class="cr-show-more-que" data-product="<?php echo $cr_post_id; ?>" data-page="0"<?php if( count( $qna ) >= $total_qna ) echo ' style="display:none"'; ?>><?php echo __( 'Show more', 'customer-reviews-woocommerce' ); ?></button>
+		<?php if( isset( $qna ) && is_array( $qna ) && 0 < count( $qna ) ) : ?>
+			<div class="cr-qna-list-block-inner">
+				<?php
+					echo CR_Qna::display_qna_list(
+						$qna,
+						array(
+							'recaptcha' => $cr_recaptcha,
+							'permissions' => $cr_qna_permissions,
+							'login' => $cr_qna_login,
+							'permalink' => get_the_permalink(),
+							'post_id' => $cr_post_id,
+							'checkbox' => $cr_qna_checkbox,
+							'chbx_text' => $cr_qna_checkbox_text
+						)
+					);
+				?>
+			</div>
+			<button id="cr-show-more-q-id" type="button" class="cr-show-more-que" data-product="<?php echo $cr_post_id; ?>" data-permalink="<?php echo esc_attr( get_the_permalink() ); ?>" data-page="0"<?php if( count( $qna ) >= $total_qna ) echo ' style="display:none"'; ?>>
+				<?php echo __( 'Show more', 'customer-reviews-woocommerce' ); ?>
+			</button>
 			<span id="cr-show-more-q-spinner" style="display:none;"></span>
 			<p class="cr-search-no-qna" style="display:none"><?php esc_html_e( 'Sorry, no questions were found', 'customer-reviews-woocommerce' );?></p>
-			<?php
+		<?php
 		else:
 		?>
 		<div class="cr-qna-list-empty"><?php _e( 'There are no questions yet', 'customer-reviews-woocommerce' ); ?></div>

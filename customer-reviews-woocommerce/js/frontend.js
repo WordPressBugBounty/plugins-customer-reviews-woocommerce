@@ -630,10 +630,12 @@
 			let cr_page = jQuery(this).attr("data-page");
 			let cr_attributes = qna_block.data("attributes");
 			let cr_search = qna_block.find(".cr-ajax-qna-search input").val();
+			let cr_permalink = jQuery(this).attr("data-permalink");
 			let cr_data = {
 				"action": "cr_show_more_qna",
 				"productID": cr_product_id,
 				"page": cr_page,
+				"permalink": cr_permalink,
 				"search": cr_search,
 				"cr_attributes": cr_attributes
 			};
@@ -1043,6 +1045,7 @@
 			jQuery( this ).closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-comment" ).removeClass( "cr-review-form-error" );
 			jQuery( this ).closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-name" ).removeClass( "cr-review-form-error" );
 			jQuery( this ).closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-email" ).removeClass( "cr-review-form-error" );
+			jQuery( this ).closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-terms" ).removeClass( "cr-review-form-error" );
 			if( cr_validate_qna( jQuery( this ) ) ) {
 				// submit the form if the validation is successful
 				let cr_data = {
@@ -1099,6 +1102,7 @@
 			jQuery( this ).closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-comment" ).removeClass( "cr-review-form-error" );
 			jQuery( this ).closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-name" ).removeClass( "cr-review-form-error" );
 			jQuery( this ).closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-email" ).removeClass( "cr-review-form-error" );
+			jQuery( this ).closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-terms" ).removeClass( "cr-review-form-error" );
 			if( cr_validate_ans( jQuery( this ) ) ) {
 				// submit the form if the validation is successful
 				let cr_data = {
@@ -1666,6 +1670,12 @@
 			submitBtn.closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-email" ).addClass( "cr-review-form-error" );
 			validationResult = false;
 		}
+		if ( 0 < submitBtn.closest( ".cr-qna-new-q-form" ).find( '.cr-review-form-terms' ).length ) {
+			if ( ! submitBtn.closest( ".cr-qna-new-q-form" ).find( '.cr-review-form-terms .cr-review-form-checkbox' ).is(':checked') ) {
+				submitBtn.closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-terms" ).addClass( "cr-review-form-error" );
+				validationResult = false;
+			}
+		}
 		return validationResult;
 	}
 
@@ -1682,6 +1692,12 @@
 		if( ! crValidateEmail( submitBtn.closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-email .cr-review-form-txt" ).val().trim() ) ) {
 			submitBtn.closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-email" ).addClass( "cr-review-form-error" );
 			validationResult = false;
+		}
+		if ( 0 < submitBtn.closest( ".cr-qna-list-inl-answ" ).find( '.cr-review-form-terms' ).length ) {
+			if ( ! submitBtn.closest( ".cr-qna-list-inl-answ" ).find( '.cr-review-form-terms .cr-review-form-checkbox' ).is(':checked') ) {
+				submitBtn.closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-terms" ).addClass( "cr-review-form-error" );
+				validationResult = false;
+			}
 		}
 		return validationResult;
 	}
@@ -1738,6 +1754,10 @@
 		const emailField = refElement.closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-email" );
 		emailField.find( ".cr-review-form-txt" ).val(emailField.find( ".cr-review-form-txt" ).data('defval'));
 		emailField.removeClass( "cr-review-form-error" );
+
+		// reset the terms and conditions checkbox
+		refElement.closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-terms .cr-review-form-checkbox" ).prop( 'checked', false );
+		refElement.closest( ".cr-qna-new-q-form" ).find( ".cr-review-form-terms" ).removeClass( "cr-review-form-error" );
 	}
 
 	function cr_reset_ans_form( refElement ) {
@@ -1754,6 +1774,10 @@
 		const emailField = refElement.closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-email" );
 		emailField.find( ".cr-review-form-txt" ).val("");
 		emailField.removeClass( "cr-review-form-error" );
+
+		// reset the terms and conditions checkbox
+		refElement.closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-terms .cr-review-form-checkbox" ).prop( 'checked', false );
+		refElement.closest( ".cr-qna-list-inl-answ" ).find( ".cr-review-form-terms" ).removeClass( "cr-review-form-error" );
 	}
 
 	function crDebounce(callback, wait) {

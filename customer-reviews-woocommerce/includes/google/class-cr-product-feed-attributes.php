@@ -316,6 +316,18 @@ if ( ! class_exists( 'CR_Attributes_Product_Feed' ) ):
 				return $attributes;
 			}, $product_attributes );
 
+			// _woosea           : Product Feed PRO for WooCommerce
+			// _cr               : Customer Reviews for WooCommerce
+			// _cpf              : Advanced Custom Fields
+			// _yoast            : Yoast SEO
+			// _alg_ean          : EAN Barcode Generator for WooCommerce
+			// _wpsso_product    : WPSSO Product Metadata (aka Custom Fields) for WooCommerce
+			// _ts               : Germanized for WooCommerce
+			// _unit_product     : Germanized for WooCommerce
+			// _unit             : Germanized for WooCommerce
+			// _unit_base        : Germanized for WooCommerce
+			// _global_unique_id : WooCommerce
+
 			$meta_attributes = $wpdb->get_results(
 				"SELECT meta.meta_id, meta.meta_key
 				FROM {$wpdb->postmeta} AS meta, {$wpdb->posts} AS posts

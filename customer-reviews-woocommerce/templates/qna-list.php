@@ -75,8 +75,16 @@ foreach ($qna as $q) {
 		?>
 		<div class="cr-qna-list-q-b" data-question="<?php echo $q['id']; ?>" data-post="<?php echo $q['post']; ?>">
 			<div class="cr-qna-list-q-b-l"></div>
-			<div class="cr-qna-list-q-b-r">
-				<button type="button" class="cr-qna-ans-button"><?php _e( 'Answer the question', 'customer-reviews-woocommerce' ); ?></button>
+			<?php
+				$class_cr_qna_list_q_b_r = 'cr-qna-list-q-b-r';
+				if ( ! in_array( $cr_qna_permissions, ['registered', 'anybody'] ) ) {
+					$class_cr_qna_list_q_b_r .= ' cr-qna-list-q-b-r-no-ans';
+				}
+			?>
+			<div class="<?php echo esc_attr( $class_cr_qna_list_q_b_r ); ?>">
+				<button type="button" class="cr-qna-ans-button">
+					<?php _e( 'Answer the question', 'customer-reviews-woocommerce' ); ?>
+				</button>
 				<div class="cr-qna-q-voting cr-voting-cont-uni cr-qna-q-voting-<?php echo $q['id']; ?>" data-vquestion="<?php echo $q['id']; ?>">
 					<span class="cr-voting-upvote cr-voting-a<?php echo ( $q['votes']['current'] > 0 ? ' cr-voting-active' : '' ); ?>" data-vote="<?php echo $q['id']; ?>" data-upvote="1">
 						<svg width="1000" height="1227" viewBox="0 0 1000 1227" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -120,53 +128,80 @@ foreach ($qna as $q) {
 						</svg>
 					</div>
 				</div>
-				<div class="cr-review-form-comment">
-					<div class="cr-review-form-lbl">
-						<?php _e( 'Your answer', 'customer-reviews-woocommerce' ); ?>
+				<?php if ( 'registered' === $cr_qna_permissions && ! is_user_logged_in() ) : ?>
+					<div class="cr-review-form-not-logged-in">
+						<span>
+							<?php _e( 'You must be logged in to answer a question', 'customer-reviews-woocommerce' ); ?>
+						</span>
+						<?php
+							if ( $cr_qna_login ) {
+								$cr_qna_login = add_query_arg( 'redirect_to', urlencode( $cr_permalink ), $cr_qna_login );
+							} else {
+								$cr_qna_login = wp_login_url( $cr_permalink );
+							}
+						?>
+						<a class="cr-review-form-continue" href="<?php echo esc_url( $cr_qna_login ); ?>" rel="nofollow"><?php _e( 'Log In', 'customer-reviews-woocommerce' ); ?></a>
 					</div>
-					<textarea rows="4" name="cr_review_form_comment_txt" class="cr-review-form-comment-txt" placeholder="<?php _e( 'Write your answer here', 'customer-reviews-woocommerce' ); ?>"></textarea>
-					<div class="cr-review-form-field-error">
-						<?php _e( '* Answer is required', 'customer-reviews-woocommerce' ); ?>
-					</div>
-				</div>
-				<div class="cr-review-form-ne">
-					<div class="cr-review-form-name">
+				<?php elseif ( 'anybody' === $cr_qna_permissions || ( 'registered' === $cr_qna_permissions && is_user_logged_in() ) ) : ?>
+					<div class="cr-review-form-comment">
 						<div class="cr-review-form-lbl">
-							<?php _e( 'Name', 'customer-reviews-woocommerce' ); ?>
+							<?php _e( 'Your answer', 'customer-reviews-woocommerce' ); ?>
 						</div>
-						<input type="text" name="cr_review_form_name" class="cr-review-form-txt" autocomplete="name" placeholder="<?php esc_attr_e( 'Your name', 'customer-reviews-woocommerce' ); ?>"></input>
+						<textarea rows="4" name="cr_review_form_comment_txt" class="cr-review-form-comment-txt" placeholder="<?php _e( 'Write your answer here', 'customer-reviews-woocommerce' ); ?>"></textarea>
 						<div class="cr-review-form-field-error">
-							<?php _e( '* Name is required', 'customer-reviews-woocommerce' ); ?>
+							<?php _e( '* Answer is required', 'customer-reviews-woocommerce' ); ?>
 						</div>
 					</div>
-					<div class="cr-review-form-email">
-						<div class="cr-review-form-lbl">
-							<?php _e( 'Email', 'customer-reviews-woocommerce' ); ?>
+					<div class="cr-review-form-ne">
+						<div class="cr-review-form-name">
+							<div class="cr-review-form-lbl">
+								<?php _e( 'Name', 'customer-reviews-woocommerce' ); ?>
+							</div>
+							<input type="text" name="cr_review_form_name" class="cr-review-form-txt" autocomplete="name" placeholder="<?php esc_attr_e( 'Your name', 'customer-reviews-woocommerce' ); ?>"></input>
+							<div class="cr-review-form-field-error">
+								<?php _e( '* Name is required', 'customer-reviews-woocommerce' ); ?>
+							</div>
 						</div>
-						<input type="email" name="cr_review_form_email" class="cr-review-form-txt" autocomplete="email" placeholder="<?php esc_attr_e( 'Your email', 'customer-reviews-woocommerce' ); ?>"></input>
-						<div class="cr-review-form-field-error">
-							<?php _e( '* Email is required', 'customer-reviews-woocommerce' ); ?>
+						<div class="cr-review-form-email">
+							<div class="cr-review-form-lbl">
+								<?php _e( 'Email', 'customer-reviews-woocommerce' ); ?>
+							</div>
+							<input type="email" name="cr_review_form_email" class="cr-review-form-txt" autocomplete="email" placeholder="<?php esc_attr_e( 'Your email', 'customer-reviews-woocommerce' ); ?>"></input>
+							<div class="cr-review-form-field-error">
+								<?php _e( '* Email is required', 'customer-reviews-woocommerce' ); ?>
+							</div>
 						</div>
 					</div>
-				</div>
-				<?php if ( 0 < strlen( $cr_recaptcha ) ) : ?>
-					<div class="cr-captcha-terms">
-						<?php echo sprintf( esc_html( __( 'This site is protected by reCAPTCHA and the Google %1$sPrivacy Policy%2$s and %3$sTerms of Service%4$s apply.', 'customer-reviews-woocommerce' ) ), '<a href="https://policies.google.com/privacy" rel="noopener noreferrer nofollow" target="_blank">', '</a>', '<a href="https://policies.google.com/terms" rel="noopener noreferrer nofollow" target="_blank">', '</a>' ); ?>
+					<?php if ( $cr_qna_checkbox ) : ?>
+						<div class="cr-review-form-terms">
+							<label>
+								<input type="checkbox" class="cr-review-form-checkbox" name="cr_review_form_checkbox" />
+								<span><?php echo $cr_qna_checkbox_text; ?></span>
+							</label>
+							<div class="cr-review-form-field-error">
+								<?php _e( '* Please tick the checkbox to proceed', 'customer-reviews-woocommerce' ); ?>
+							</div>
+						</div>
+					<?php endif; ?>
+					<?php if ( 0 < strlen( $cr_recaptcha ) ) : ?>
+						<div class="cr-captcha-terms">
+							<?php echo sprintf( esc_html( __( 'This site is protected by reCAPTCHA and the Google %1$sPrivacy Policy%2$s and %3$sTerms of Service%4$s apply.', 'customer-reviews-woocommerce' ) ), '<a href="https://policies.google.com/privacy" rel="noopener noreferrer nofollow" target="_blank">', '</a>', '<a href="https://policies.google.com/terms" rel="noopener noreferrer nofollow" target="_blank">', '</a>' ); ?>
+						</div>
+					<?php endif; ?>
+					<div class="cr-review-form-buttons">
+						<button type="button" class="cr-review-form-submit" data-crcptcha="<?php echo $cr_recaptcha; ?>">
+							<span><?php _e( 'Submit', 'customer-reviews-woocommerce' ); ?></span>
+							<img src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'img/spinner-dots.svg'; ?>" alt="Loading" />
+						</button>
+						<button type="button" class="cr-review-form-cancel">
+							<?php _e( 'Cancel', 'customer-reviews-woocommerce' ); ?>
+						</button>
+					</div>
+					<div class="cr-review-form-result">
+						<span></span>
+						<button type="button" class="cr-review-form-continue"></button>
 					</div>
 				<?php endif; ?>
-				<div class="cr-review-form-buttons">
-					<button type="button" class="cr-review-form-submit" data-crcptcha="<?php echo $cr_recaptcha; ?>">
-						<span><?php _e( 'Submit', 'customer-reviews-woocommerce' ); ?></span>
-						<img src="<?php echo plugin_dir_url( dirname( __FILE__ ) ) . 'img/spinner-dots.svg'; ?>" alt="Loading" />
-					</button>
-					<button type="button" class="cr-review-form-cancel">
-						<?php _e( 'Cancel', 'customer-reviews-woocommerce' ); ?>
-					</button>
-				</div>
-				<div class="cr-review-form-result">
-					<span></span>
-					<button type="button" class="cr-review-form-continue"></button>
-				</div>
 			</div>
 		</div>
 	</div>

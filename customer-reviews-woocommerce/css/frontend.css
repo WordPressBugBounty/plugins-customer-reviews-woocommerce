@@ -556,7 +556,8 @@ div.iv-comment-image img {
 .cr-reviews-grid .cr-review-form-terms.cr-review-form-error .cr-review-form-field-error,
 .cr-qna-block .cr-review-form-comment.cr-review-form-error .cr-review-form-field-error,
 .cr-qna-block .cr-review-form-name.cr-review-form-error .cr-review-form-field-error,
-.cr-qna-block .cr-review-form-email.cr-review-form-error .cr-review-form-field-error {
+.cr-qna-block .cr-review-form-email.cr-review-form-error .cr-review-form-field-error,
+.cr-qna-block .cr-review-form-terms.cr-review-form-error .cr-review-form-field-error {
 	display: block;
 }
 .cr-all-reviews-shortcode .cr-review-form-comment,
@@ -619,7 +620,8 @@ div.iv-comment-image img {
 .cr-all-reviews-shortcode .cr-review-form-terms,
 .cr-ajax-reviews-review-form .cr-review-form-terms,
 .cr-reviews-grid .cr-review-form-terms,
-.cr-qna-block .cr-captcha-terms {
+.cr-qna-block .cr-captcha-terms,
+.cr-qna-block .cr-review-form-terms {
 	max-width: 500px;
 	margin: 0 auto;
 	padding: 0 0 20px 0;
@@ -628,7 +630,8 @@ div.iv-comment-image img {
 }
 .cr-all-reviews-shortcode .cr-review-form-terms label,
 .cr-ajax-reviews-review-form .cr-review-form-terms label,
-.cr-reviews-grid .cr-review-form-terms label {
+.cr-reviews-grid .cr-review-form-terms label,
+.cr-qna-block .cr-review-form-terms label {
 	display: inline-block;
 	font-size: 14px;
 	font-weight: normal;
@@ -636,7 +639,8 @@ div.iv-comment-image img {
 }
 .cr-all-reviews-shortcode .cr-review-form-terms .cr-review-form-checkbox,
 .cr-ajax-reviews-review-form .cr-review-form-terms .cr-review-form-checkbox,
-.cr-reviews-grid .cr-review-form-terms .cr-review-form-checkbox {
+.cr-reviews-grid .cr-review-form-terms .cr-review-form-checkbox,
+.cr-qna-block .cr-review-form-terms .cr-review-form-checkbox {
 	appearance: auto;
 	width: auto;
 	height: auto;
@@ -648,7 +652,8 @@ div.iv-comment-image img {
 }
 .cr-all-reviews-shortcode .cr-review-form-terms span,
 .cr-ajax-reviews-review-form .cr-review-form-terms span,
-.cr-reviews-grid .cr-review-form-terms span {
+.cr-reviews-grid .cr-review-form-terms span,
+.cr-qna-block .cr-review-form-terms span {
 	display: inline;
 	vertical-align: middle;
 	color: #0E252C;
@@ -656,7 +661,8 @@ div.iv-comment-image img {
 }
 .cr-all-reviews-shortcode .cr-review-form-terms .cr-review-form-checkbox::after,
 .cr-ajax-reviews-review-form .cr-review-form-terms .cr-review-form-checkbox::after,
-.cr-reviews-grid .cr-review-form-terms .cr-review-form-checkbox::after {
+.cr-reviews-grid .cr-review-form-terms .cr-review-form-checkbox::after,
+.cr-qna-block .cr-review-form-terms .cr-review-form-checkbox::after {
 	border: none;
 	content: normal;
 }
@@ -924,7 +930,8 @@ div.iv-comment-image img {
 .cr-qna-block .cr-review-form-res .cr-review-form-comment,
 .cr-qna-block .cr-review-form-res .cr-review-form-ne,
 .cr-qna-block .cr-review-form-res .cr-review-form-buttons,
-.cr-qna-block .cr-review-form-res .cr-captcha-terms {
+.cr-qna-block .cr-review-form-res .cr-captcha-terms,
+.cr-qna-block .cr-review-form-res .cr-review-form-terms {
 	display: none;
 }
 .cr-all-reviews-shortcode .cr-review-form-result,
@@ -933,6 +940,7 @@ div.iv-comment-image img {
 .cr-ajax-reviews-review-form .cr-review-form-not-logged-in,
 .cr-reviews-grid .cr-review-form-result,
 .cr-reviews-grid .cr-review-form-not-logged-in,
+.cr-qna-block .cr-review-form-not-logged-in,
 .cr-qna-block .cr-review-form-result {
 	max-width: 500px;
 	margin: 0 auto;
@@ -946,7 +954,8 @@ div.iv-comment-image img {
 .cr-ajax-reviews-review-form .cr-review-form-not-logged-in,
 .cr-reviews-grid .cr-review-form-res .cr-review-form-result,
 .cr-reviews-grid .cr-review-form-not-logged-in,
-.cr-qna-block .cr-review-form-res .cr-review-form-result {
+.cr-qna-block .cr-review-form-res .cr-review-form-result,
+.cr-qna-block .cr-review-form-not-logged-in {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -957,7 +966,8 @@ div.iv-comment-image img {
 .cr-ajax-reviews-review-form .cr-review-form-not-logged-in span,
 .cr-reviews-grid .cr-review-form-res .cr-review-form-result span,
 .cr-reviews-grid .cr-review-form-not-logged-in span,
-.cr-qna-block .cr-review-form-res .cr-review-form-result span {
+.cr-qna-block .cr-review-form-res .cr-review-form-result span,
+.cr-qna-block .cr-review-form-not-logged-in span {
 	padding: 0 0 20px 0;
 }
 .cr-all-reviews-shortcode .cr-review-form-res .cr-review-form-result .cr-review-form-continue,
@@ -966,7 +976,8 @@ div.iv-comment-image img {
 .cr-ajax-reviews-review-form .cr-review-form-not-logged-in .cr-review-form-continue,
 .cr-reviews-grid .cr-review-form-res .cr-review-form-result .cr-review-form-continue,
 .cr-reviews-grid .cr-review-form-not-logged-in .cr-review-form-continue,
-.cr-qna-block .cr-review-form-res .cr-review-form-result .cr-review-form-continue {
+.cr-qna-block .cr-review-form-res .cr-review-form-result .cr-review-form-continue,
+.cr-qna-block .cr-review-form-not-logged-in .cr-review-form-continue {
 	display: flex;
 	background-color: #31856C;
 	color: #ffffff;
@@ -981,7 +992,8 @@ div.iv-comment-image img {
 }
 .cr-all-reviews-shortcode .cr-review-form-not-logged-in .cr-review-form-continue,
 .cr-ajax-reviews-review-form .cr-review-form-not-logged-in .cr-review-form-continue,
-.cr-reviews-grid .cr-review-form-not-logged-in .cr-review-form-continue {
+.cr-reviews-grid .cr-review-form-not-logged-in .cr-review-form-continue,
+.cr-qna-block .cr-review-form-not-logged-in .cr-review-form-continue {
 	padding: 10px 20px;
 	min-width: 100px;
 	text-align: center;
@@ -992,7 +1004,8 @@ div.iv-comment-image img {
 .cr-ajax-reviews-review-form .cr-review-form-not-logged-in .cr-review-form-continue:hover,
 .cr-reviews-grid .cr-review-form-res .cr-review-form-result .cr-review-form-continue:hover,
 .cr-reviews-grid .cr-review-form-not-logged-in .cr-review-form-continue:hover,
-.cr-qna-block .cr-review-form-res .cr-review-form-result .cr-review-form-continue:hover {
+.cr-qna-block .cr-review-form-res .cr-review-form-result .cr-review-form-continue:hover,
+.cr-qna-block .cr-review-form-not-logged-in .cr-review-form-continue:hover {
 	background-color: #276A56;
 	text-decoration: none;
 	cursor: pointer;
@@ -2560,6 +2573,9 @@ img.ivole-verified-badge-ext-icon {
 	justify-content: space-between;
 	align-items: flex-end;
 }
+.cr-qna-block .cr-qna-list-block .cr-qna-list-q-cont .cr-qna-list-q-b .cr-qna-list-q-b-r.cr-qna-list-q-b-r-no-ans {
+	justify-content: right;
+}
 .cr-qna-block .cr-qna-list-block .cr-qna-list-q-cont .cr-qna-list-q-b.cr-qna-ans-form-open .cr-qna-list-q-b-r {
 	display: none;
 }
@@ -2652,9 +2668,12 @@ img.ivole-verified-badge-ext-icon {
 .cr-qna-block .cr-qna-list-block .cr-qna-list-q-cont .cr-qna-ans-button:hover {
 	border-color: #4D5D64;
 }
+.cr-qna-block .cr-qna-list-block .cr-qna-list-q-cont .cr-qna-list-q-b-r-no-ans .cr-qna-ans-button {
+	display: none;
+}
 .cr-qna-block #cr-show-more-q-spinner {
 	display: block;
-	margin: 20px auto;
+	margin: 30px auto;
 	background: url(../img/spinner-2x.gif) no-repeat;
 	background-size: 20px 20px;
 	width: 20px;
