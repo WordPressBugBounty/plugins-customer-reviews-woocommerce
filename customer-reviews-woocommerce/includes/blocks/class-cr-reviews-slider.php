@@ -48,7 +48,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			wp_enqueue_script( 'cr-reviews-slider' );
 			$max_reviews = $attributes['count'];
 			$order_by = $attributes['sort_by'] === 'date' ? 'comment_date_gmt' : 'rating';
-			$order = $attributes['sort'];
+			$order = strtoupper( $attributes['sort'] );
 			$inactive_products = $attributes['inactive_products'];
 			$avatars = 'initials';
 			if( isset( $attributes['avatars'] ) ) {
@@ -57,6 +57,9 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				} elseif( 'standard' === $attributes['avatars'] ) {
 					$avatars = 'standard';
 				}
+			}
+			if ( 'RAND' === $order ) {
+				$order_by = $order;
 			}
 
 			$post_ids = $attributes['products'];
@@ -151,7 +154,30 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				}
 				$args['lang'] = '';
 			} elseif ( has_filter( 'wpml_current_language' ) ) {
-				// WPML compatibility
+				// Check for the 'show reviews in all languages' setting of WPML
+				$is_filtered = apply_filters(
+					'wpml_is_comment_query_filtered',
+					true,
+					null,
+					(object) array( 'query_vars' => array( 'post_type' => 'product' ) )
+				);
+				if ( false === $is_filtered ) {
+					foreach ( $post_ids as $product_id ) {
+						$trid = apply_filters( 'wpml_element_trid', NULL, $product_id, 'post_product' );
+						if ( $trid ) {
+							$translations = apply_filters( 'wpml_get_element_translations', NULL, $trid, 'post_product' );
+							if ( $translations && is_array( $translations ) ) {
+								foreach ( $translations as $translation ) {
+									if ( isset( $translation->element_id ) ) {
+										$post_ids[] = intval( $translation->element_id );
+									}
+								}
+							}
+						}
+					}
+					$args['post__in'] = $post_ids;
+				}
+				//
 				global $sitepress;
 				if ( $sitepress ) {
 					remove_filter( 'comments_clauses', array( $sitepress, 'comments_clauses' ), 10, 2 );
@@ -164,29 +190,14 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				$this->min_chars = $attributes['min_chars'];
 				add_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
 			}
-			if( 'RAND' === $order ) {
-				$all_product_reviews = get_comments( $args );
-				$count_all_product_reviews = count( $all_product_reviews );
-				if (
-					0 < $count_all_product_reviews &&
-					0 < $max_reviews
-				) {
-					$max_reviews = ( $count_all_product_reviews < $max_reviews ) ? $count_all_product_reviews : $max_reviews;
-					$random_keys = array_rand( $all_product_reviews, $max_reviews );
-					if( is_array( $random_keys ) ) {
-						for( $i = 0; $i < $max_reviews; $i++ ) {
-							$reviews[] = $all_product_reviews[$random_keys[$i]];
-						}
-					} else {
-						$reviews[] = $all_product_reviews[$random_keys];
-					}
-				}
-			} else {
-				if( 0 < $max_reviews ) {
-					$args['order'] = $order;
-					$args['number'] = $max_reviews;
-					$reviews = get_comments( $args );
-				}
+			// Query needs to be modified if random sorting is required
+			if ( 'RAND' === $order ) {
+				add_filter( 'comments_clauses', array( $this, 'random_order_comments_clauses' ), 10, 2 );
+			}
+			if ( 0 < $max_reviews ) {
+				$args['order'] = $order;
+				$args['number'] = $max_reviews;
+				$reviews = get_comments( $args );
 			}
 
 			$shop_page_id = wc_get_page_id( 'shop' );
@@ -206,29 +217,13 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 						$args_s['lang'] = '';
 					}
 					$shop_reviews = [];
-					if( 'RAND' === $order ) {
-						$all_shop_reviews = get_comments( $args_s );
-						$count_all_shop_reviews = count( $all_shop_reviews );
-						if( 0 < $count_all_shop_reviews ) {
-							$max_shop_reviews = ( $count_all_shop_reviews < $max_shop_reviews ) ? $count_all_shop_reviews : $max_shop_reviews;
-							$random_keys = array_rand( $all_shop_reviews, $max_shop_reviews );
-							if( is_array( $random_keys ) ) {
-								for( $i = 0; $i < $max_shop_reviews; $i++ ) {
-									$shop_reviews[] = $all_shop_reviews[$random_keys[$i]];
-								}
-							} else {
-								$shop_reviews[] = $all_shop_reviews[$random_keys];
-							}
-						}
-					} else {
-						if( 0 < $max_shop_reviews ) {
-							$args_s['order'] = $order;
-							$args_s['number'] = $max_shop_reviews;
-							$shop_reviews = get_comments( $args_s );
-						}
+					if ( 0 < $max_shop_reviews ) {
+						$args_s['order'] = $order;
+						$args_s['number'] = $max_shop_reviews;
+						$shop_reviews = get_comments( $args_s );
 					}
 
-					if( is_array( $reviews ) && is_array( $shop_reviews ) ) {
+					if ( is_array( $reviews ) && is_array( $shop_reviews ) ) {
 						$reviews = array_merge( $reviews, $shop_reviews );
 						CR_Reviews_Slider::$sort_order_by = $order_by;
 						CR_Reviews_Slider::$sort_order = $order;
@@ -237,6 +232,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				}
 			}
 			remove_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
+			remove_filter( 'comments_clauses', array( $this, 'random_order_comments_clauses' ), 10 );
 
 			// WPML compatibility
 			if( has_filter( 'wpml_current_language' ) && ! function_exists( 'pll_current_language' ) ) {
@@ -504,9 +500,15 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 
 		public function min_chars_comments_clauses( $clauses ) {
 			global $wpdb;
-
 			$clauses['where'] .= " AND CHAR_LENGTH({$wpdb->comments}.comment_content) >= " . $this->min_chars;
+			return $clauses;
+		}
 
+		public function random_order_comments_clauses( $clauses, $comment_query ) {
+			global $wpdb;
+			if ( ! empty( $comment_query->query_vars['orderby'] ) && 'RAND' === $comment_query->query_vars['orderby'] ) {
+				$clauses['orderby'] = 'RAND()';
+			}
 			return $clauses;
 		}
 

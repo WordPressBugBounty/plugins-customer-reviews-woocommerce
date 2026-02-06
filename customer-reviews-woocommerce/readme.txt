@@ -2,9 +2,9 @@
 Contributors: ivole
 Tags: woocommerce, review plugin, review reminder, customer reviews, review for discount
 Requires at least: 4.5
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 5.84.0
+Stable tag: 5.99.1
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -105,6 +105,7 @@ Plus, benefit from:
 
 * Getting unique, user-generated SEO content for your shop - customer reviews often contain long tail keywords
 * Building user-generated content (UGC) such as photos and videos uploaded by your customers
+* Embedding JSON-LD structured data for product reviews to help search engines better understand and display your review content
 * Enhancing rich snippets and structured data markup for reviews with pictures
 * Enhancing the standard WooCommerce structured data markup with product identifiers (GTIN, MPN, Brand)
 
@@ -233,6 +234,84 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.99.1 =
+* Improvement: media files attached to a review are automatically removed when the review is deleted
+* Bug fix: media files uploaded to local aggregated review forms not linked to reviews correctly
+= 5.99.0 =
+* New feature: display of product recommendation statistics on the Reviews page in WordPress admin console
+* New feature: 'group' parameter for the [cusrev_reviews_rating] shortcode to display aggregated ratings of child products linked under a grouped product
+* Improvement: compatibility of the [cusrev_reviews_slider] shortcode with "Show reviews in all languages" setting of WPML
+* Several minor bug fixes
+= 5.98.0 =
+* New feature: display product recommendations on local aggregated review forms
+* Bug fix: vulnerability in media files attachments
+= 5.97.0 =
+* New feature: an option to customize a page linked from the terms and conditions text on self-hosted aggregated review forms
+* Improvement: new fields for updating a review location on a screen for editing reviews in the admin console
+* Improvement: a new filter 'cr_schema_markup' to modify output of schema markup on product pages
+= 5.96.0 =
+* New feature: 'condition' attribute support for Google Shopping product XML feed
+* Improvement: reduced number of option checks on page load
+= 5.95.0 =
+* Improvement: reviews dashboard in admin console displays revenue attributed to purchases influenced by product recommendations shown on aggregated review forms
+= 5.94.0 =
+* Bug fix: vulnerability in Ajax requests for local aggregated review forms
+= 5.93.1 =
+* Bug fix: incorrect version in the schema URL for Google Product Reviews
+= 5.93.0 =
+* Improvement: update of XML feed format to version 2.4 for Google Product Reviews
+= 5.92.0 =
+* New feature: 'schema_markup' parameter in [cusrev_reviews_grid] shortcode to create AggregateRating rich snippet
+* Improvement: display replies to reviews in [cusrev_reviews_grid] shortcode
+* Improvement: reduce database queries on WooCommerce Orders page when Review Reminder column is hidden
+* Bug fix: JSON-LD structured data markup not properly detected due to a missing schema property
+* Bug fix: product identifiers displayed on product pages despite being deactivated in the settings
+= 5.91.0 =
+* New feature: 'Review Schema Markup' option on the 'Review Extensions' tab of the plugin's settings to add schema markup when a theme or plugin prevents output of the standard WooCommerce schema markup
+* Improvement: increased buffer size for exporting reviews
+= 5.90.0 =
+* Improvement: support of <is_incentivized_review> attribute in XML product reviews feed for Google
+* Improvement: display coupon codes created for reviews on the Reviews page in WordPress admin panel
+* Improvement: improved compatibility with non-standard WooCommerce and WordPress themes
+* Improvement: reduced number of option checks on page load
+* Bug fix: reviews imported from CSV could not be sorted by media attachments
+= 5.89.0 =
+* New feature: 'schema_markup' parameter in [cusrev_all_reviews] shortcode to create AggregateRating rich snippet
+* New feature: support of 'title' field in the utility for import / export of reviews
+* Improvement: cache for count of Q & A on product pages
+* Improvement: compatibility with Variation Swatches plugin
+* Bug fix: locations could be matched to incorrect reviews during some import scenarios
+= 5.88.1 =
+* Improvement: compatibility for displaying country flags on web servers that do not automatically convert uppercase and lowercase characters in URLs
+= 5.88.0 =
+* Improvement: a check that a review is not SPAM before triggering sending of a discount coupon
+* Improvement: a new filter 'cr_settings_permissions' to allow modification of permissions required to edit the plugin's settings
+* Improvement: compatibility with WPML plugin to prevent double avatars
+* Improvement: exclude review reminders scheduled via CR Cron from the Reminders page
+* Bug fix: button to cancel import of reviews didn't work
+* Bug fix: translations of aggregated review forms in Portuguese (Brazil) weren't selected correctly
+= 5.87.0 =
+* New feature: support of 'location' field in the utility for import / export of reviews
+* Improvement: display location of reviews on Reviews page in the admin console
+* Improvement: a new CSS class name to prevent conflicts with other plugins and themes
+* Improvement: reload the page after submission of reviews via on-site review forms
+* Bug fix: export of reviews could not be completed in some scenarios
+= 5.86.2 =
+* Bug fix: export of reviews could not be completed in some scenarios
+= 5.86.1 =
+* Bug fix: media files were uploaded to the Media Library but not attached to reviews during import
+* Bug fix: random sorting in [cusrev_reviews_slider] shortcode didn't work correctly in some scenarios
+= 5.86.0 =
+* New feature: include replies to reviews when importing reviews
+* New feature: include replies to reviews when exporting reviews
+* Improvement: 'max_chars' parameter is available for the Reviews Grid block
+* Improvement: a new 'cr_local_forms_created' action is triggered on creation of local aggregated review forms
+* Bug fix: XML feeds for Google Shopping created only in the active WPML language instead of all WPML languages
+= 5.85.0 =
+* New feature: create XML Product Feed for Google Shopping in multiple languages when using WPML translation plugin
+* New feature: create XML Product Review Feed for Google Shopping in multiple languages when using WPML translation plugin
+* New feature: 'max_chars' parameter for [cusrev_reviews_grid] shortcode
+* Improvement: a check for variations during import of reviews
 = 5.84.0 =
 * New feature: an option to copy a link to an aggregated review form for an order from the 'Actions' menu on the 'Orders' page in WooCommerce when the plugin is configured with the self-hosted setting
 * Improvement: display a verified owner label on general shop reviews if a reviewer has at least one order

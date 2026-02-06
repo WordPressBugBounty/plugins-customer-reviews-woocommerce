@@ -630,6 +630,11 @@ li.select2-results__option {
 .cr-all-reviews-rating {
 	margin-bottom: 0.6em;
 }
+.cr-reviews-list-table .cr-comment-head-text {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0.6em 0;
+}
 .cr-qna-admin-details,
 .cr-all-reviews-details {
 	font-size: 11px;
@@ -641,6 +646,14 @@ li.select2-results__option {
 		width: 12px;
 		height: 12px;
 		font-size: 12px;
+	}
+	.cr-incentivized-badge {
+		display: flex;
+		align-items: center;
+		column-gap: 5px;
+		.cr-incentivized-icon {
+			line-height: 0;
+		}
 	}
 }
 .cr_qna .cr-qna-admin-details,
@@ -733,6 +746,9 @@ li.select2-results__option {
 .cr-features-banner .cr-features-bnr-uls .cr-features-bnr-ul:first-of-type {
 	margin-right: 20px;
 }
+.cr-features-banner .cr-features-bnr-sec {
+	font-weight: bold;
+}
 .cr-features-banner .cr-features-bnr-other {
 	margin: 10px 0 30px 0;
 }
@@ -815,6 +831,24 @@ li.select2-results__option {
 }
 .cr-reviews-list-table .cr-admin-avatar img {
 	border-radius: 16px;
+}
+.cr-reviews-list-table .cr-review-country-cont {
+	display: flex;
+	align-items: flex-start;
+	margin: 2px 0;
+}
+.cr-reviews-list-table .cr-review-country-cont .cr-review-country-icon {
+	display: inline;
+	height: 12px;
+	width: auto;
+	margin: 0 5px 0 0;
+	padding: 0;
+	border-radius: 0;
+	float: none;
+}
+.cr-reviews-list-table .cr-review-country-cont .cr-review-country-text {
+	line-height: 1;
+	font-size: 12px;
 }
 .cr-reviews-list-table .cr-avatar-check {
 	width: 15px;
@@ -1813,6 +1847,37 @@ li.select2-results__option {
 	column-gap: 7px;
 }
 
+.cr-review-location-table {
+	width: auto;
+	td {
+		padding: 10px;
+	}
+	.cr-review-location-table-first {
+		padding-left: 0;
+	}
+	.cr-review-loc-country,
+	.cr-review-loc-desc {
+		width: 300px;
+	}
+}
+.cr-select-country-cont {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	.cr-select-country-flag {
+		width: 20px;
+		height: 12px;
+		margin-right: 8px;
+		vertical-align: middle;
+	}
+}
+.rtl .cr-select-country-cont {
+	.cr-select-country-flag {
+		margin-left: 8px;
+		margin-right: 0;
+	}
+}
+
 @keyframes dashicons-spin {
 	0% {
 		transform: rotate( 0deg );
@@ -1931,5 +1996,15 @@ li.select2-results__option {
 	.ivole-new-settings .forminp-cr_customer_attributes .cr-cus-atts-table .cr-cus-atts-table-type,
 	.ivole-new-settings .forminp-cr_rating_criteria .cr-rtn-crta-table .cr-rtn-crta-table-label {
 		width: auto;
+	}
+	.cr-review-location-table {
+		width: 100%;
+		td {
+			padding: 5px 0;
+		}
+		.cr-review-loc-country,
+		.cr-review-loc-desc {
+			width: 100%;
+		}
 	}
 }

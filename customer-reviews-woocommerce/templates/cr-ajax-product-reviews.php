@@ -21,6 +21,7 @@ $nonce = wp_create_nonce( "cr_product_reviews_" . $cr_product_id );
 
 ?>
 <div id="reviews" class="cr-reviews-ajax-reviews">
+	<?php do_action( 'cr_reviews_section', $cr_product_id ); ?>
 	<div id="comments" class="cr-reviews-ajax-comments" data-nonce="<?php echo $nonce; ?>" data-page="1">
 		<h2 class="woocommerce-Reviews-title">
 			<?php
@@ -154,7 +155,8 @@ $nonce = wp_create_nonce( "cr_product_reviews_" . $cr_product_id );
 						'cr_form_item_media_desc' => $cr_form_item_media_desc,
 						'cr_form_permissions' => $cr_form_permissions,
 						'cr_form_checkbox' => $cr_form_checkbox,
-						'cr_form_checkbox_text' => wp_specialchars_decode( $cr_form_checkbox_text, ENT_QUOTES )
+						'cr_form_checkbox_text' => wp_specialchars_decode( $cr_form_checkbox_text, ENT_QUOTES ),
+						'cr_form_settings_array' => $form_settings
 					),
 					'customer-reviews-woocommerce',
 					dirname( dirname( __FILE__ ) ) . '/templates/'

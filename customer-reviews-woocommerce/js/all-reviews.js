@@ -556,7 +556,12 @@
 			var cr_data = {
 				"action": "cr_update_tags",
 				"review_id": jQuery(this).data("reviewid"),
-				"tags": JSON.stringify(jQuery(this).parents("td.tags").find("select.cr_tags").eq(0).select2("data")),
+				"tags": JSON.stringify(
+					jQuery(this).parents("td.tags").find("select.cr_tags").eq(0).select2("data").map( item => ( {
+							text: item.text
+						} )
+					)
+				),
 				"cr_nonce": jQuery(this).data("nonce")
 			};
 			jQuery(this).parents("td.tags").find(".cr-tags-edit").addClass("cr-update-in-progress");
@@ -653,6 +658,11 @@
 			keepAlive: false,
 		} );
 
+		jQuery( ".cr-review-loc-country" ).select2( {
+			templateResult: cr_formatCountry,
+			templateSelection: cr_formatCountry
+		} );
+
 	});
 
 	function cr_updatePending( diff ) {
@@ -741,4 +751,18 @@
 			}
 		});
 	}
+
+	function cr_formatCountry( country ) {
+		if ( ! country.id ) {
+			return jQuery(
+				`<span class="cr-select-country-cont"><span class="cr-select-country-name">${country.text}</span></span>`
+			);
+		}
+		const code = country.id.toLowerCase();
+		const flag = `<img src="${cr_ajax_object.flags_path}${code}.svg" class="cr-select-country-flag" />`;
+		return jQuery(
+			`<span class="cr-select-country-cont">${flag}<span class="cr-select-country-name">${country.text}</span></span>`
+		);
+	}
+
 }());

@@ -36,7 +36,7 @@ const fetcher = ( [url, nonce, hook] ) => {
   ).then(res => res.json());
 };
 
-function Reviews({ nonce, referrals }) {
+function Reviews({ nonce }) {
 
   let ratingCard = {
     title: __( "Ratings", "customer-reviews-woocommerce" ),
@@ -98,27 +98,25 @@ function Reviews({ nonce, referrals }) {
     content: ""
   };
   let refsSWR;
-  if ( referrals ) {
-    referralsCard.content = (
-      <Card withBorder padding="xs" className={referralsCard.class}>
-        <Group justify="space-between">
-          <Text size="xs" c="dimmed" className={classes.title}>
-            {referralsCard.title}
-          </Text>
-          <IconThumbUp size="1.4rem" stroke={1.5} className={classes.icon} />
-        </Group>
-        <Skeleton width="100%" radius="sm" mt={10} className={classes.skel}>
-          <IconEye size="1.4rem" stroke={1.5} className={classes.iconReferrals} />
-          <Text fz="xs">...</Text>
-          <Text fz="sm">...</Text>
-        </Skeleton>
-      </Card>
-    );
-    refsSWR = useSWR(
-      [ ajaxurl, nonce, "cr_get_reviews_top_row_refs" ],
-      fetcher
-    );
-  }
+  referralsCard.content = (
+    <Card withBorder padding="xs" className={referralsCard.class}>
+      <Group justify="space-between">
+        <Text size="xs" c="dimmed" className={classes.title}>
+          {referralsCard.title}
+        </Text>
+        <IconThumbUp size="1.4rem" stroke={1.5} className={classes.icon} />
+      </Group>
+      <Skeleton width="100%" radius="sm" mt={10} className={classes.skel}>
+        <IconEye size="1.4rem" stroke={1.5} className={classes.iconReferrals} />
+        <Text fz="xs">...</Text>
+        <Text fz="sm">...</Text>
+      </Skeleton>
+    </Card>
+  );
+  refsSWR = useSWR(
+    [ ajaxurl, nonce, "cr_get_reviews_top_row_refs" ],
+    fetcher
+  );
 
   const statsSWR = useSWR(
     [ ajaxurl, nonce, "cr_get_reviews_top_row_stats" ],
@@ -299,7 +297,7 @@ function Reviews({ nonce, referrals }) {
     );
   }
 
-  if ( referrals && refsSWR && ! refsSWR.error && ! refsSWR.isLoading ) {
+  if ( refsSWR && ! refsSWR.error && ! refsSWR.isLoading ) {
     // referralsCard
     let referralsCardContent = '';
     if ( -1 == refsSWR.data ) {
@@ -373,6 +371,37 @@ function Reviews({ nonce, referrals }) {
                 </HoverCard>
               </Group>
               <Text fz="sm" fw={600}>{refsSWR.data.referralClicks.count}</Text>
+            </div>
+          </div>
+          <div className={classes.subContReferrals}>
+            <IconShoppingCart size="1.4rem" stroke={1.5} className={classes.iconReferrals} />
+            <div>
+              <Group gap="5px" justify="center">
+                <Text c="dimmed" fz="xs">
+                  {refsSWR.data.referralSales.label}
+                </Text>
+                <HoverCard width={280} shadow="md" withArrow>
+                  <HoverCard.Target>
+                    <IconHelp className={classes.helpIcon} color="var(--mantine-color-gray-6)" />
+                  </HoverCard.Target>
+                  <HoverCard.Dropdown>
+                    <Text size="xs">
+                      {refsSWR.data.referralSales.help}
+                    </Text>
+                    <Divider my="xs" />
+                    <Group gap="5px">
+                      <IconArticle className={classes.settingsIcon} />
+                      <Anchor
+                        size="xs"
+                        href={refsSWR.data.referralSales.helpLinks.link}
+                      >
+                        {refsSWR.data.referralSales.helpLinks.label}
+                      </Anchor>
+                    </Group>
+                  </HoverCard.Dropdown>
+                </HoverCard>
+              </Group>
+              <Text fz="sm" fw={600}>{refsSWR.data.referralSales.amount}</Text>
             </div>
           </div>
         </Group>

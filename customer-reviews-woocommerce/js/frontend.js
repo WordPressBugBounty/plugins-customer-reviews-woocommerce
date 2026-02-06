@@ -611,6 +611,24 @@
 			parent.find(".cr-slider-read-more").css("display", "inline");
 			jQuery(this).parents(".cr-reviews-slider").slickk('setPosition');
 		} );
+		jQuery( '.cr-reviews-grid' ).on( 'click', '.cr-grid-read-more a', function (e) {
+			e.preventDefault();
+			let parent = jQuery(this).parents(".review-content");
+			if ( 0 === parent.length ) {
+				parent = jQuery(this).parents(".cr-grid-reply-content");
+			}
+			parent.find(".cr-grid-read-more").hide();
+			parent.find(".cr-grid-details").css("display", "inline");
+		} );
+		jQuery( '.cr-reviews-grid' ).on( 'click', '.cr-grid-read-less a', function (e) {
+			e.preventDefault();
+			let parent = jQuery(this).parents(".review-content");
+			if ( 0 === parent.length ) {
+				parent = jQuery(this).parents(".cr-grid-reply-content");
+			}
+			parent.find(".cr-grid-details").hide();
+			parent.find(".cr-grid-read-more").css("display", "inline");
+		} );
 		jQuery('.cr-qna-block .cr-qna-search-block .cr-qna-ask-button').on( 'click', function (e) {
 			e.preventDefault();
 			jQuery( this ).closest( '.cr-qna-block' ).addClass( 'cr-qna-new-q-form-open' );
@@ -922,6 +940,8 @@
 			jQuery( this ).closest( ".cr-all-reviews-shortcode" ).removeClass( "cr-all-reviews-new-review" );
 			jQuery( this ).closest( ".cr-review-form-wrap" ).removeClass( "cr-review-form-res" );
 			cr_reset_review_form( jQuery( this ) );
+			// reload the page
+			window.location.reload();
 		} );
 		jQuery( ".cr-review-form-wrap" ).on( "click", ".cr-review-form-error", function( e ) {
 			jQuery( this ).closest( ".cr-review-form-wrap" ).removeClass( "cr-review-form-res" );
@@ -937,6 +957,11 @@
 			jQuery(this).closest(".cr-reviews-ajax-reviews").find(".cr-ajax-reviews-review-form").hide();
 			jQuery( this ).closest( ".cr-review-form-wrap" ).removeClass( "cr-review-form-res" );
 			cr_reset_review_form( jQuery( this ) );
+			// reload the page
+			if ( window.location.hash !== '#reviews' ) {
+				window.location.href = window.location.pathname + '#reviews';
+			}
+			window.location.reload();
 		} );
 		jQuery( ".cr-reviews-grid .cr-nav-left svg, .cr-reviews-grid .cr-nav-right svg, .cr-reviews-grid .cr-review-form-cancel" ).on( "click", function( e ) {
 			jQuery( this ).closest( ".cr-reviews-grid" ).removeClass( "cr-reviews-grid-new-review" );
@@ -947,6 +972,8 @@
 			jQuery( this ).closest( ".cr-reviews-grid" ).removeClass( "cr-reviews-grid-new-review" );
 			jQuery( this ).closest( ".cr-review-form-wrap" ).removeClass( "cr-review-form-res" );
 			cr_reset_review_form( jQuery( this ) );
+			// reload the page
+			window.location.reload();
 		} );
 		// close the qna form
 		jQuery( ".cr-qna-block" ).on( "click", ".cr-qna-new-q-form .cr-nav-left svg, .cr-qna-new-q-form .cr-nav-right svg, .cr-qna-new-q-form .cr-review-form-cancel", function( e ) {
@@ -1741,6 +1768,11 @@
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-onsite-questions .cr-onsite-question" ).removeClass( "cr-review-form-error" );
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-onsite-questions .cr-onsite-question input[type = 'text']" ).val('');
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-onsite-questions .cr-onsite-question input[type = 'number']" ).val('');
+
+		// reset the key custom questions
+		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-onsite-key-question" ).removeClass( "cr-review-form-error" );
+		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-onsite-key-question input[type = 'text']" ).val('');
+		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-onsite-key-question input[type = 'number']" ).val('');
 
 		// reset the media files
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-form-item-media .cr-upload-images-containers" ).remove();

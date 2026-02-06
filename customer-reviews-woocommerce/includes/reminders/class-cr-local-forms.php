@@ -146,6 +146,7 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 			$cr_form_subm_header = __( 'Thank you for submitting a review!', 'customer-reviews-woocommerce' );
 			$cr_form_subm_desc = __( 'Your response has been recorded.', 'customer-reviews-woocommerce' );
 			$cr_form_edit_label = __( 'Edit your review', 'customer-reviews-woocommerce' );
+			$cr_form_edit_recom = __( 'Items You May Be Interested In', 'customer-reviews-woocommerce' );
 			$cr_form_edit = $this->display_name ? true : false;
 			$cr_form_color1 = $this->cr_form_color1;
 			$cr_form_color2 = $this->cr_form_color2;
@@ -253,13 +254,13 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 					$cr_form_cust_f_name = $firstname;
 				}
 			}
-			$wc_terms_page = wc_get_page_id( 'terms' );
-			if( $wc_terms_page ) {
-				$wc_terms_page = get_permalink( $wc_terms_page );
+			$cr_terms_page = get_option( 'ivole_form_terms_page', wc_get_page_id( 'terms' ) );
+			if ( $cr_terms_page ) {
+				$cr_terms_page = get_permalink( $cr_terms_page );
 			} else {
-				$wc_terms_page = '';
+				$cr_terms_page = '';
 			}
-			$cr_form_terms = sprintf( __( 'By submitting your review, you agree to the <a href="%s" target="_blank" rel="noopener noreferrer">terms and conditions</a>.', 'customer-reviews-woocommerce' ), esc_url( $wc_terms_page ) );
+			$cr_form_terms = sprintf( __( 'By submitting your review, you agree to the <a href="%s" target="_blank" rel="noopener noreferrer">terms and conditions</a>.', 'customer-reviews-woocommerce' ), esc_url( $cr_terms_page ) );
 			$cr_form_submit = __( 'Submit', 'customer-reviews-woocommerce' );
 			ob_start();
 			include( $template );
@@ -417,7 +418,9 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 			// insert data
 			$res = $wpdb->replace( $table_name, $insert_args );
 			if( false !== $res ) {
-				return array( 'code' => 0, 'text' => get_home_url() . '/' . self::FORMS_SLUG . '/' . $formId . '/' );
+				$formUrl = get_home_url() . '/' . self::FORMS_SLUG . '/' . $formId . '/';
+				do_action( 'cr_local_forms_created', $orderId, $formId, $formUrl );
+				return array( 'code' => 0, 'text' => $formUrl );
 			} else {
 				return array( 'code' => 2, 'text' => 'Form \'' . $formId . '\' could not be saved to the table \'' . $table_name . '\'. Error: ' . $wpdb->last_error );
 			}

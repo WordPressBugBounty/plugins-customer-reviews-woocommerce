@@ -148,6 +148,8 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 					wp_send_json( array( 'code' => 98, 'message' => __( 'Error: invalid order ID.', 'customer-reviews-woocommerce' ), 'order_id' => $order_id ) );
 				}
 
+				do_action( 'cr_reminder_manual_email_send', $order );
+
 				//qTranslate integration
 				$lang = $order->get_meta( '_user_language', true );
 				$old_lang = '';
@@ -190,21 +192,24 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 				$l_msg = '';
 				$e = new Ivole_Email( $order_id, 1 );
 				$result = $e->trigger2( $order_id, null, $schedule );
-				// logging
-				$log = new CR_Reminders_Log();
-				$l_result = $log->add(
-					$order_id,
-					'm',
-					'email',
-					$result
-				);
-				if (
-					is_array( $l_result ) &&
-					isset( $l_result['code'] ) &&
-					0 !== $l_result['code'] &&
-					isset( $l_result['text'] )
-				) {
-					$l_msg = ';<br>' . esc_html( $l_result['text'] );
+				// logging for reminders except when sent via CR Cron
+				// if sent via CR Cron, then loggin in CusRev dashboard
+				if ( ! $schedule ) {
+					$log = new CR_Reminders_Log();
+					$l_result = $log->add(
+						$order_id,
+						'm',
+						'email',
+						$result
+					);
+					if (
+						is_array( $l_result ) &&
+						isset( $l_result['code'] ) &&
+						0 !== $l_result['code'] &&
+						isset( $l_result['text'] )
+					) {
+						$l_msg = ';<br>' . esc_html( $l_result['text'] );
+					}
 				}
 				// end of logging
 
@@ -265,7 +270,10 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 		}
 
 		public function custom_orders_list_column_content( $column, $post_id ) {
-			if( 'ivole-review-reminder' === $column ) {
+			if (
+				'ivole-review-reminder' === $column &&
+				! $this->is_reminder_column_hidden()
+			) {
 				$order = wc_get_order( $post_id );
 				if ( $order ) {
 					// Check customer consent
@@ -846,6 +854,18 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 				$schedule = true;
 			}
 			return $schedule;
+		}
+
+		function is_reminder_column_hidden() {
+			$column_name = 'ivole-review-reminder';
+			$user_id = get_current_user_id();
+
+			// user meta key used by WordPress to store hidden columns for WooCommerce Orders
+			$hidden = get_user_meta( $user_id, 'managewoocommerce_page_wc-orderscolumnshidden', true );
+			if ( ! is_array( $hidden ) ) {
+				return false; // no hidden columns configured
+			}
+			return in_array( $column_name, $hidden, true );
 		}
 
 	}
