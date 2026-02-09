@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 5.99.2
+Stable tag: 5.99.3
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,8 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.99.3 =
+* A fix for the outdated template warning on WooCommerce status screen
 = 5.99.2 =
 * A temporary fix for 'WooCommerce Recent Reviews' widget in admin dashboard 
 = 5.99.1 =
