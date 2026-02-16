@@ -760,7 +760,7 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 						$comment_ID,
 						'ivole_country',
 						array(
-							'code' => $review_country,
+							'code' => strtolower( $review_country ),
 							'desc' => $review_location
 						)
 					);

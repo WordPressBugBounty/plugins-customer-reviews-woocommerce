@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 5.99.3
+Stable tag: 5.100.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,10 +234,14 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.100.0 =
+* New feature: [cusrev_review_button] shortcode that can be used to display a button linking to an aggregated review form in the customer-facing WooCommerce email notifications "Processing order" and "Completed order"
+* Improvement: additional CSS compatibility with third-party themes
+* Bug fix: country flags could not be displayed correctly for some website configurations
 = 5.99.3 =
 * A fix for the outdated template warning on WooCommerce status screen
 = 5.99.2 =
-* A temporary fix for 'WooCommerce Recent Reviews' widget in admin dashboard 
+* A temporary fix for 'WooCommerce Recent Reviews' widget in admin dashboard
 = 5.99.1 =
 * Improvement: media files attached to a review are automatically removed when the review is deleted
 * Bug fix: media files uploaded to local aggregated review forms not linked to reviews correctly

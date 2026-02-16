@@ -1149,9 +1149,14 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 					if( strlen( $output ) > 0 ) {
 						$output .= '<span class="ivole-review-country-space">&emsp;|&emsp;</span>';
 					}
-					$output .= '<img src="' . plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'img/flags/' . $country['code'] . '.svg" class="ivole-review-country-icon" alt="' . $country['code'] . '">';
-					if( isset( $country['desc'] ) ) {
-						$output .= '<span class="ivole-review-country-text">' . $country['desc'] . '</span>';
+					$output .= '<img src="' . plugin_dir_url( dirname( dirname( __FILE__ ) ) ) .
+						'img/flags/' .
+						rawurlencode( strtolower( $country['code'] ) ) .
+						'.svg" class="ivole-review-country-icon" alt="' .
+						esc_attr( strtoupper( $country['code'] ) ) .
+						'">';
+					if ( isset( $country['desc'] ) ) {
+						$output .= '<span class="ivole-review-country-text">' . esc_html( $country['desc'] ) . '</span>';
 					}
 				}
 			}
