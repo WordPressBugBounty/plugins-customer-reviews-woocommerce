@@ -1321,6 +1321,9 @@ if (! class_exists('CR_All_Reviews')) :
 											'rating' => intval( $rating )
 										)
 									);
+									// compatibility with 'WP Comment Policy Checkbox' plugin that calls wp_die
+									remove_filter( 'preprocess_comment', 'wpcpc_verify_policy_check', 10 );
+									//
 									add_filter( 'pre_comment_approved', array( 'CR_All_Reviews', 'is_review_approved' ), 10, 2 );
 									$result = wp_new_comment( $commentdata, true );
 									remove_filter( 'pre_comment_approved', array( 'CR_All_Reviews', 'is_review_approved' ), 10 );

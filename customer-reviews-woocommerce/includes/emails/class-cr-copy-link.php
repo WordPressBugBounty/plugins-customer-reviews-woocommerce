@@ -30,14 +30,7 @@ class CR_Copy_Link {
 		$this->find['coupon-code'] = '{coupon_code}';
 		$this->find['discount-amount'] = '{discount_amount}';
 
-		// copying links is currently avaiable only for self-hosted aggregated review forms
-		$wp_locale = get_locale();
-		$wp_lang = explode( '_', $wp_locale );
-		if( is_array( $wp_lang ) && 0 < count( $wp_lang ) ) {
-			$this->language = strtoupper( $wp_lang[0] );
-		} else {
-			$this->language = 'EN';
-		}
+		$this->language = Ivole_Email::fetch_language();
 
 		$order = false;
 		if ( $order_id ) {

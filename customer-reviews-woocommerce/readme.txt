@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 5.100.0
+Stable tag: 5.101.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,9 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.101.0 =
+* Bug fix: a link to an incorrect form template could be copied from WooCommerce Orders page for some languages
+* Bug fix: a button for download of the Pro add-on didn't work correctly
 = 5.100.0 =
 * New feature: [cusrev_review_button] shortcode that can be used to display a button linking to an aggregated review form in the customer-facing WooCommerce email notifications "Processing order" and "Completed order"
 * Improvement: additional CSS compatibility with third-party themes

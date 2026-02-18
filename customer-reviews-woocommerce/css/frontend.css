@@ -599,6 +599,7 @@ div.iv-comment-image img {
 	width: 100%;
 	margin: 0;
 	box-sizing: border-box;
+	border-radius: 3px;
 }
 .cr-all-reviews-shortcode .cr-review-form-comment.cr-review-form-error .cr-review-form-comment-txt,
 .cr-ajax-reviews-review-form .cr-review-form-comment.cr-review-form-error .cr-review-form-comment-txt,
@@ -753,6 +754,7 @@ div.iv-comment-image img {
 	font-size: 14px;
 	margin: 0;
 	box-sizing: border-box;
+	border-radius: 3px;
 }
 .cr-review-form-wrap .cr-onsite-question .cr-onsite-question-inp {
 	border: solid 1px #D8E2E7;

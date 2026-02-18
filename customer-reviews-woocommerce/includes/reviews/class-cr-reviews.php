@@ -1489,7 +1489,17 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 	}
 
 	private static function is_captcha_enabled() {
-		return 'yes' === get_option( 'ivole_enable_captcha', 'no' );
+		$response = false;
+		$site_key = trim( get_option( 'ivole_captcha_site_key', '' ) );
+		$secret_key = trim( get_option( 'ivole_captcha_secret_key', '' ) );
+		if (
+			$site_key &&
+			$secret_key &&
+			'yes' === get_option( 'ivole_enable_captcha', 'no' )
+		) {
+			$response = true;
+		}
+		return $response;
 	}
 
 	private static function captcha_site_key() {
