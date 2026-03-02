@@ -10,7 +10,6 @@ if (! class_exists('CR_All_Reviews')) :
 	{
 		private $shortcode_atts;
 		private $shop_page_id;
-		private $crsearch = 'crsearch';
 		private $search = '';
 		private $tags = array();
 		private $default_per_page = 10;

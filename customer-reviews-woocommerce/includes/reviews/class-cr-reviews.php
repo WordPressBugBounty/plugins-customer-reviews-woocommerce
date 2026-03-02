@@ -1730,7 +1730,7 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 					$ec = new CR_Email_Coupon( 0 );
 					$ec->maybe_send_coupon(
 						$comment_id, // id of the review
-						0, // count of media files uploaded with the review
+						$this->count_media_meta( $comment_id ), // count of media files uploaded with the review
 						'onsite', // scenario when a review is submitted via an on-site review form
 						$customer_email, // email of the reviewer
 						get_user_by( 'email', $customer_email ), // WordPress user ID
@@ -1899,6 +1899,38 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 				}
 			}
 		}
+	}
+
+	private function count_media_meta( $comment_id ) {
+		global $wpdb;
+
+		$comment_id = absint( $comment_id );
+
+		if ( ! $comment_id ) {
+			return 0;
+		}
+
+		$meta_keys = array(
+			self::REVIEWS_META_IMG,
+			self::REVIEWS_META_LCL_IMG,
+			self::REVIEWS_META_VID,
+			self::REVIEWS_META_LCL_VID
+		);
+
+		// Prepare placeholders for IN clause.
+		$placeholders = implode( ',', array_fill( 0, count( $meta_keys ), '%s' ) );
+
+		$query = $wpdb->prepare(
+			"
+			SELECT COUNT(*)
+			FROM {$wpdb->commentmeta}
+			WHERE comment_id = %d
+			AND meta_key IN ($placeholders)
+			",
+			array_merge( array( $comment_id ), $meta_keys )
+		);
+
+		return (int) $wpdb->get_var( $query );
 	}
 }
 
