@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 6.9
 Requires PHP: 7.2
-Stable tag: 5.105.0
+Stable tag: 5.106.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,10 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.106.0 =
+* Improvement: compatibility with Elementor to display [cusrev_reviews_slider] shortcode in preview mode
+* Improvement: compatibility with Divi to check if it has overwritten WooCommerce's $product variable
+* Bug fix: incorrect currency displayed on self-hosted aggregated review forms with WPML Multicurrency
 = 5.105.0 =
 * Improvement: improved CSS compatibility for display of popup slider for reviews with media files on mobile devices
 * Bug fix: SQL vulnerabilities in logging of review reminders
