@@ -100,52 +100,56 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 				'code' => 100,
 				'message' => ''
 			);
-			if( isset( $_POST['cr_form'] ) && isset( $_POST['cr_item'] ) ) {
-				if( isset( $_FILES ) && is_array( $_FILES ) && 0 < count( $_FILES ) ) {
-					// check the file size
-					$attach_image_size = get_option( 'ivole_attach_image_size', 25 );
-					$max_size = 1024 * 1024 * $attach_image_size;
-					if ( $max_size < $_FILES['cr_file']['size'] ) {
-						$return['code'] = 501;
-						$return['message'] = sprintf( __( 'The file cannot be uploaded because its size exceeds the limit of %d MB', 'customer-reviews-woocommerce' ), $attach_image_size );
-						wp_send_json( $return );
-						return;
-					}
-					// check the file type
-					$file_name_parts = explode( '.', $_FILES['cr_file']['name'] );
-					$file_ext = $file_name_parts[ count( $file_name_parts ) - 1 ];
-					if( ! CR_Reviews::is_valid_file_type( $file_ext ) ) {
-						$return['code'] = 502;
-						$return['message'] = __( 'Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI', 'customer-reviews-woocommerce' );
-						wp_send_json( $return );
-						return;
-					}
-					// upload the file
-					$attachmentId = media_handle_upload( 'cr_file', 0 );
-					if( !is_wp_error( $attachmentId ) ) {
-						$upload_key = bin2hex( openssl_random_pseudo_bytes( 10 ) );
-						if( false !== update_post_meta( $attachmentId, 'cr-upload-temp-key', $upload_key ) ) {
-							// save the attachment id in the database
-							if( false !== self::update_db_item( $_POST['cr_form'], $_POST['cr_item'], $attachmentId, false ) ) {
-								// return to js
-								$return['attachment'] = array(
-									'id' => $attachmentId,
-									'key' => $upload_key
-								);
-							} else {
-								$return['code'] = 504;
-								$return['message'] = 'Error: could not update media in the database.';
+			if ( 'yes' === get_option( 'ivole_form_attach_media', 'no' ) ) {
+				if ( isset( $_POST['cr_form'] ) && isset( $_POST['cr_item'] ) ) {
+					if ( self::form_exists( $_POST['cr_form'] ) ) {
+						if ( isset( $_FILES ) && is_array( $_FILES ) && 0 < count( $_FILES ) ) {
+							// check the file size
+							$attach_image_size = get_option( 'ivole_attach_image_size', 25 );
+							$max_size = 1024 * 1024 * $attach_image_size;
+							if ( $max_size < $_FILES['cr_file']['size'] ) {
+								$return['code'] = 501;
+								$return['message'] = sprintf( __( 'The file cannot be uploaded because its size exceeds the limit of %d MB', 'customer-reviews-woocommerce' ), $attach_image_size );
+								wp_send_json( $return );
+								return;
 							}
-						} else {
-							$return['code'] = 503;
-							$return['message'] = $_FILES['cr_file']['name'] . ': could not update the upload key.';
+							// check the file type
+							$file_name_parts = explode( '.', $_FILES['cr_file']['name'] );
+							$file_ext = $file_name_parts[ count( $file_name_parts ) - 1 ];
+							if( ! CR_Reviews::is_valid_file_type( $file_ext ) ) {
+								$return['code'] = 502;
+								$return['message'] = __( 'Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI', 'customer-reviews-woocommerce' );
+								wp_send_json( $return );
+								return;
+							}
+							// upload the file
+							$attachmentId = media_handle_upload( 'cr_file', 0 );
+							if( !is_wp_error( $attachmentId ) ) {
+								$upload_key = bin2hex( openssl_random_pseudo_bytes( 10 ) );
+								if( false !== update_post_meta( $attachmentId, 'cr-upload-temp-key', $upload_key ) ) {
+									// save the attachment id in the database
+									if( false !== self::update_db_item( $_POST['cr_form'], $_POST['cr_item'], $attachmentId, false ) ) {
+										// return to js
+										$return['attachment'] = array(
+											'id' => $attachmentId,
+											'key' => $upload_key
+										);
+									} else {
+										$return['code'] = 504;
+										$return['message'] = 'Error: could not update media in the database.';
+									}
+								} else {
+									$return['code'] = 503;
+									$return['message'] = $_FILES['cr_file']['name'] . ': could not update the upload key.';
+								}
+							} else {
+								$return['code'] = $attachmentId->get_error_code();
+								$return['message'] = $attachmentId->get_error_message();
+							}
+							$return['code'] = 200;
+							$return['message'] = 'OK';
 						}
-					} else {
-						$return['code'] = $attachmentId->get_error_code();
-						$return['message'] = $attachmentId->get_error_message();
 					}
-					$return['code'] = 200;
-					$return['message'] = 'OK';
 				}
 			}
 			wp_send_json( $return );
@@ -232,6 +236,21 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 				}
 			}
 			return $update_result;
+		}
+
+		public static function form_exists( $form_id ) {
+			global $wpdb;
+			$table_name = $wpdb->prefix . CR_Local_Forms::FORMS_TABLE;
+			$form_exists = false;
+			$query = $wpdb->prepare(
+				"SELECT COUNT(*) FROM `$table_name` WHERE `formId` = %s",
+				$form_id
+			);
+			$row_exists = $wpdb->get_var( $query );
+			if ( $row_exists > 0 ) {
+				$form_exists = true;
+			}
+			return $form_exists;
 		}
 
 		private function get_recommended_products() {
