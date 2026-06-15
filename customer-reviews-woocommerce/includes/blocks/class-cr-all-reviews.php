@@ -1029,8 +1029,8 @@ if (! class_exists('CR_All_Reviews')) :
 		public function tags_comments_clauses( $clauses ) {
 			global $wpdb;
 
-			$clauses['join'] .= " INNER JOIN {$wpdb->term_relationships} ON {$wpdb->comments}.comment_ID = {$wpdb->term_relationships}.object_id
-				LEFT JOIN {$wpdb->term_taxonomy} ON {$wpdb->term_relationships}.term_taxonomy_id = {$wpdb->term_taxonomy}.taxonomy = 'cr_tag'";
+			$clauses['join'] .= " INNER JOIN {$wpdb->term_relationships} AS cr_term_rel ON {$wpdb->comments}.comment_ID = cr_term_rel.object_id
+				LEFT JOIN {$wpdb->term_taxonomy} AS cr_term_tax ON cr_term_rel.term_taxonomy_id = cr_term_tax.term_taxonomy_id AND cr_term_tax.taxonomy = 'cr_tag'";
 
 			return $clauses;
 		}

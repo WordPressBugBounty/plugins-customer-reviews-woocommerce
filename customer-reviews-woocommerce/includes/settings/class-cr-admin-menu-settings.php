@@ -813,6 +813,7 @@ if ( ! class_exists( 'CR_Settings_Admin_Menu' ) ):
 									<div class="cr-features-bnr-uls">
 										<ul class="cr-features-bnr-ul">
 											<li>Add unlimited rating criteria and questions to on-site review forms</li>
+											<li>Enable automated geolocation determination to display location proof on published reviews</li>
 										</ul>
 									</div>
 									<div class="cr-features-bnr-sec">Aggregated review forms</div>

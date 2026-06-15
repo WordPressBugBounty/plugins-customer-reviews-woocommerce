@@ -354,6 +354,7 @@ class CR_Reviews_Top_Charts {
 			// there are no cached stats
 			$licenseKey = get_option( 'ivole_license_key', '' );
 			$cusrev_hosted = 'yes' === get_option( 'ivole_verified_reviews', 'no' ) ? true : false;
+			$cusrev_stats = null;
 			// if there is a license key, try to retrieve stats for CusRev-hosted review forms
 			if ( $licenseKey ) {
 				$cusrev_stats = self::get_cusrev_referral_stats( $licenseKey );
