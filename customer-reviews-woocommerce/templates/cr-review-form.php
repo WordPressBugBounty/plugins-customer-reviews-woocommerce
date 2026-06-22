@@ -20,7 +20,7 @@ if( $cr_current_user instanceof WP_User ) {
 }
 ?>
 
-<div class="cr-review-form-wrap">
+<div class="cr-review-form-wrap" data-nonce="<?php echo wp_create_nonce( 'cr-upload-images-frontend' ); ?>">
 
 	<div class="cr-review-form-nav">
 		<div class="cr-nav-left">

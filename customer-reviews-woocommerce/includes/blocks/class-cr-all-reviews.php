@@ -1394,13 +1394,48 @@ if (! class_exists('CR_All_Reviews')) :
 				'code' => 100,
 				'message' => ''
 			);
+			// check if media files attachments are allowed
 			if ( 'yes' !== get_option( 'ivole_attach_image', 'no' ) ) {
 				$return['code'] = 504;
 				$return['message'] = __( 'Error: attachment of media files is disabled in the settings', 'customer-reviews-woocommerce' );
 				wp_send_json( $return );
 				return;
 			}
+			//
+			if ( ! check_ajax_referer( 'cr-upload-images-frontend', 'cr_nonce', false ) ) {
+				$return['code'] = 507;
+				$return['message'] = __( 'Error: nonce validation failed. Please refresh the page and try again.', 'customer-reviews-woocommerce' );
+				wp_send_json( $return );
+				return;
+			}
+			// read settings for review permissions
+			$cr_form_permissions = CR_Forms_Settings::get_default_review_permissions();
+			// check if reviews are allowed
+			if ( ! in_array( $cr_form_permissions, array( 'registered', 'verified', 'anybody' ) ) ) {
+				$return['code'] = 505;
+				$return['message'] = __( 'Currently, we are not accepting new reviews or media files', 'customer-reviews-woocommerce' );
+				wp_send_json( $return );
+				return;
+			}
 			if ( isset( $_POST['cr_item'] ) ) {
+				// check if a user is logged-in and permission is 'registered'
+				// check if a user is logged-in, it is a shop review, and permission is 'verified'
+				if (
+					(
+						'registered' === $cr_form_permissions &&
+						! is_user_logged_in()
+					) ||
+					(
+						'verified' === $cr_form_permissions &&
+						0 > $_POST['cr_item'] &&
+						! is_user_logged_in()
+					)
+				) {
+					$return['code'] = 506;
+					$return['message'] = __( 'You must be logged in to upload media files', 'customer-reviews-woocommerce' );
+					wp_send_json( $return );
+					return;
+				}
 				if ( isset( $_FILES ) && is_array( $_FILES ) && 0 < count( $_FILES ) ) {
 					// check the file size
 					$attach_image_size = get_option( 'ivole_attach_image_size', 25 );

@@ -1342,6 +1342,7 @@
 				formData.append( "action", "cr_upload_media" );
 				formData.append( "cr_file", uploadFiles[0].files[i] );
 				formData.append( "cr_item", jQuery( this ).closest( ".cr-review-form-wrap" ).find( ".cr-review-form-item-id" ).val() );
+				formData.append( "cr_nonce", jQuery( this ).closest( ".cr-review-form-wrap" ).data( "nonce" ) );
 				var currentFileInput = jQuery( this );
 				jQuery.ajax({
 					url: cr_ajax_object.ajax_url,

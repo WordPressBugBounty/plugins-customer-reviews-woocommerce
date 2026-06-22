@@ -1866,6 +1866,8 @@ img.ivole-verified-badge-ext-icon {
 	margin: 0 0 0 0;
 	opacity: 0.3;
 	object-fit: cover;
+	width: 100%;
+	height: 100%;
 }
 .cr-form-item-media-preview .cr-upload-images-containers .cr-upload-video-thumbnail {
 	width: 108px;
