@@ -55,9 +55,9 @@ if (! class_exists('CR_Trust_Badge')) :
 				}
 			}
 			if ( isset( $attributes['color'] ) ) {
-				$color = str_replace( ' ', '', $attributes['color'] );
+				$color = trim( $attributes['color'] );
 				$color = strtolower( $color );
-				if( preg_match( '/#([a-f0-9]{3}){1,2}\b/i', $color ) ) {
+				if ( preg_match( '/^#([a-f0-9]{3}){1,2}$/i', $color ) ) {
 					$attributes['color'] = $color;
 				} else {
 					$attributes['color'] = '';
@@ -127,9 +127,9 @@ if (! class_exists('CR_Trust_Badge')) :
 			$badge_border = $block_attributes['badge_border'] ? 'yes': 'no';
 
 			$badge_color = $block_attributes['badge_color'];
-			$color = str_replace( ' ', '', $badge_color );
+			$color = trim( $badge_color );
 			$color = strtolower( $badge_color );
-			if( !preg_match( '/#([a-f0-9]{3}){1,2}\b/i', $color ) ) {
+			if ( !preg_match( '/^#([a-f0-9]{3}){1,2}$/i', $color ) ) {
 				$color = '';
 			}
 			$storeStats = self::get_store_stats( Ivole_Email::get_blogurl(), false );

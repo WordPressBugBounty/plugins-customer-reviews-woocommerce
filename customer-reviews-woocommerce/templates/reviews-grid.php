@@ -23,8 +23,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 				$country = get_comment_meta( $review->comment_ID, 'ivole_country', true );
 				$country_code = null;
-				if( is_array( $country ) && isset( $country['code'] ) ) {
-					$country_code = $country['code'];
+				$country_desc = '';
+				if ( is_array( $country ) ) {
+					if ( isset( $country['code'] ) ) {
+						$country_code = $country['code'];
+					}
+					if ( isset( $country['desc'] ) ) {
+						$country_desc = $country['desc'];
+					}
 				}
 				$product = wc_get_product( $review->comment_post_ID );
 				if( $product ) {
@@ -115,11 +121,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<div class="reviewer-name">
 									<?php
 									echo esc_html( $author );
-									if( $country_code ) {
+									if ( $country_code ) {
 										echo '<img src="' . CR_Utils::cr_get_plugin_dir_url() . 'img/flags/' .
 											rawurlencode( strtolower( $country_code ) ) .
 											'.svg" class="ivole-grid-country-icon" width="20" height="15" alt="' .
-											esc_attr( strtoupper( $country_code ) ) .
+											esc_attr( strtoupper( $country_code ) ) . '" title="' .
+											esc_attr( $country_desc ) .
 											'">';
 									}
 									?>

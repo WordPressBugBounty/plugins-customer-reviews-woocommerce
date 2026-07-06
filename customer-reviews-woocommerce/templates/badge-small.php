@@ -1,4 +1,4 @@
-<div class="cr-badge badge_size_small<?php echo $badgeClass; ?>" style="<?php echo $badgeStyle; ?>">
+<div class="cr-badge badge_size_small<?php echo $badgeClass; ?>" style="<?php echo esc_attr( $badgeStyle ); ?>">
 
 	<div class="badge__store"><?php echo $storeStats['storeName']; ?></div>
 
