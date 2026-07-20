@@ -884,75 +884,15 @@ if (! class_exists('CR_All_Reviews')) :
 			} else {
 				$output .= '<div class="ivole-summaryBox">';
 			}
-			$output .= '<table class="cr-histogramTable">';
-			$output .= '<tbody>';
-			$output .= '<tr class="ivole-histogramRow">';
-			// five
-			if( $five > 0 ) {
-				$output .= '<td class="ivole-histogramCell1"><span class="cr-histogram-a" data-rating="5">' . __( '5 star', 'customer-reviews-woocommerce' ) . '</span></td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="cr-histogram-a" data-rating="5"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $five_percent . '%">' . $five_percent . '</div></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3"><span class="cr-histogram-a" data-rating="5">' . (string)$five_percent . '%</span></td>';
-			} else {
-				$output .= '<td class="ivole-histogramCell1">' . __('5 star', 'customer-reviews-woocommerce') . '</td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $five_percent . '%"></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3">' . (string)$five_percent . '%</td>';
-			}
-
-			$output .= '</tr>';
-			$output .= '<tr class="ivole-histogramRow">';
-			// four
-			if( $four > 0 ) {
-				$output .= '<td class="ivole-histogramCell1"><span class="cr-histogram-a" data-rating="4">' . __( '4 star', 'customer-reviews-woocommerce' ) . '</span></td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="cr-histogram-a" data-rating="4"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $four_percent . '%">' . $four_percent . '</div></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3"><span class="cr-histogram-a" data-rating="4">' . (string)$four_percent . '%</span></td>';
-			} else {
-				$output .= '<td class="ivole-histogramCell1">' . __('4 star', 'customer-reviews-woocommerce') . '</td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $four_percent . '%"></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3">' . (string)$four_percent . '%</td>';
-			}
-
-			$output .= '</tr>';
-			$output .= '<tr class="ivole-histogramRow">';
-			// three
-			if( $three > 0 ) {
-				$output .= '<td class="ivole-histogramCell1"><span class="cr-histogram-a" data-rating="3">' . __( '3 star', 'customer-reviews-woocommerce' ) . '</span></td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="cr-histogram-a" data-rating="3"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $three_percent . '%">' . $three_percent . '</div></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3"><span class="cr-histogram-a" data-rating="3">' . (string)$three_percent . '%</span></td>';
-			} else {
-				$output .= '<td class="ivole-histogramCell1">' . __('3 star', 'customer-reviews-woocommerce') . '</td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $three_percent . '%"></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3">' . (string)$three_percent . '%</td>';
-			}
-
-			$output .= '</tr>';
-			$output .= '<tr class="ivole-histogramRow">';
-			// two
-			if( $two > 0 ) {
-				$output .= '<td class="ivole-histogramCell1"><span class="cr-histogram-a" data-rating="2">' . __( '2 star', 'customer-reviews-woocommerce' ) . '</span></td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="cr-histogram-a" data-rating="2"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $two_percent . '%">' . $two_percent .'</div></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3"><span class="cr-histogram-a" data-rating="2">' . (string)$two_percent . '%</span></td>';
-			} else {
-				$output .= '<td class="ivole-histogramCell1">' . __('2 star', 'customer-reviews-woocommerce') . '</td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $two_percent . '%"></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3">' . (string)$two_percent . '%</td>';
-			}
-
-			$output .= '</tr>';
-			$output .= '<tr class="ivole-histogramRow">';
-			// one
-			if( $one > 0 ) {
-				$output .= '<td class="ivole-histogramCell1"><span class="cr-histogram-a" data-rating="1">' . __( '1 star', 'customer-reviews-woocommerce' ) . '</span></td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="cr-histogram-a" data-rating="1"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $one_percent . '%">' . $one_percent . '</div></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3"><span class="cr-histogram-a" data-rating="1">' . (string)$one_percent . '%</span></td>';
-			} else {
-				$output .= '<td class="ivole-histogramCell1">' . __('1 star', 'customer-reviews-woocommerce') . '</td>';
-				$output .= '<td class="ivole-histogramCell2"><div class="ivole-meter"><div class="ivole-meter-bar" style="width: ' . $one_percent . '%"></div></div></td>';
-				$output .= '<td class="ivole-histogramCell3">' . (string)$one_percent . '%</td>';
-			}
-
-			$output .= '</tr>';
-			$output .= '</tbody>';
-			$output .= '</table>';
+			$output .= CR_Reviews::get_histogram_html(
+				array(
+					5 => array( 'count' => $five, 'percent' => $five_percent ),
+					4 => array( 'count' => $four, 'percent' => $four_percent ),
+					3 => array( 'count' => $three, 'percent' => $three_percent ),
+					2 => array( 'count' => $two, 'percent' => $two_percent ),
+					1 => array( 'count' => $one, 'percent' => $one_percent ),
+				)
+			);
 			$output .= '</div>';
 			if ( $this->shortcode_atts['add_review'] ) {
 				$output .= '<div class="cr-summary-separator"><div class="cr-summary-separator-int"></div></div>';
@@ -1081,6 +1021,22 @@ if (! class_exists('CR_All_Reviews')) :
 
 		private function include_review_replies( $comments ) {
 			$comments_w_replies = array();
+			$is_filtered = true;
+			global $sitepress;
+
+			if ( has_filter( 'wpml_current_language' ) && ! function_exists( 'pll_current_language' ) ) {
+				$is_filtered = apply_filters(
+					'wpml_is_comment_query_filtered',
+					true,
+					null,
+					(object) array( 'query_vars' => array( 'post_type' => 'product' ) )
+				);
+			}
+
+			if ( false === $is_filtered && $sitepress ) {
+				remove_filter( 'comments_clauses', array( $sitepress, 'comments_clauses' ), 10, 2 );
+			}
+
 			foreach ( $comments as $comment ) {
 				$comments_w_replies[]  = $comment;
 				$args = array(
@@ -1102,6 +1058,11 @@ if (! class_exists('CR_All_Reviews')) :
 					}
 				}
 			}
+
+			if ( false === $is_filtered && $sitepress ) {
+				add_filter( 'comments_clauses', array( $sitepress, 'comments_clauses' ), 10, 2 );
+			}
+
 			return $comments_w_replies;
 		}
 

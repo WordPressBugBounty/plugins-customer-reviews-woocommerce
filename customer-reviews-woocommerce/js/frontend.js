@@ -208,7 +208,7 @@
 				// sorting on a product page
 				var cr_product_id = jQuery(this).parents(".cr-reviews-ajax-comments").find(".commentlist.cr-ajax-reviews-list").attr("data-product");
 				var cr_sort = jQuery(this).children("option:selected").val();
-				var cr_rating = jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-summaryBox-ajax tr.ivole-histogramRow.ivole-histogramRow-s .ivole-histogram-a").attr("data-rating");
+				var cr_rating = jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-summaryBox-ajax .ivole-histogramRow.ivole-histogramRow-s .cr-histogram-a").attr("data-rating");
 				if(!cr_rating){
 					cr_rating = 0;
 				}
@@ -254,7 +254,7 @@
 			}
 		} );
 		// non-ajax filtering of reviews
-		jQuery(".cr-noAjax").on( "click", ".ivole-histogram-a", function (t) {
+		jQuery(".cr-noAjax").on( "click", ".cr-histogram-a", function (t) {
 			t.preventDefault();
 			const parser = new URL(window.location);
 			parser.searchParams.set(cr_ajax_object.rating_filter, jQuery(this).data("rating"));
@@ -262,7 +262,7 @@
 			window.location = parser.href;
 		} );
 		// ajax filtering of reviews
-		jQuery(".cr-reviews-ajax-comments").on("click", ".ivole-histogram-a, .cr-seeAllReviews", function(t){
+		jQuery(".cr-reviews-ajax-comments").on("click", ".cr-histogram-a, .cr-seeAllReviews", function(t){
 			t.preventDefault();
 			let tmpParent = jQuery(this).parents(".cr-reviews-ajax-comments");
 			let cr_product_id = tmpParent.find(".commentlist.cr-ajax-reviews-list").attr("data-product");
@@ -276,9 +276,9 @@
 				"sort": cr_sort,
 				"security": cr_nonce
 			};
-			tmpParent.find(".cr-summaryBox-ajax tr.ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
+			tmpParent.find(".cr-summaryBox-ajax .ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
 			if( cr_rating > 0 ) {
-				jQuery(this).closest("tr.ivole-histogramRow").addClass("ivole-histogramRow-s");
+				jQuery(this).closest(".ivole-histogramRow").addClass("ivole-histogramRow-s");
 			}
 			tmpParent.find(".cr-search-no-reviews").hide();
 			tmpParent.find('.cr-ajax-search input').val("").trigger("change");
@@ -457,9 +457,9 @@
 		jQuery(".cr-all-reviews-shortcode").on("click", ".cr-histogram-a, .cr-seeAllReviews", function(t){
 			t.preventDefault();
 			let cr_rating = jQuery(this).data("rating");
-			jQuery("div.ivole-summaryBox tr.ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
+			jQuery("div.ivole-summaryBox .ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
 			if ( cr_rating > 0 ) {
-				jQuery(this).closest("tr.ivole-histogramRow").addClass("ivole-histogramRow-s");
+				jQuery(this).closest(".ivole-histogramRow").addClass("ivole-histogramRow-s");
 			}
 			jQuery(this).parents(".cr-all-reviews-shortcode").find(".cr-review-tags-filter .cr-tag-selected").removeClass("cr-tag-selected");
 			cr_filter_all_reviews( jQuery(this) );
@@ -471,7 +471,7 @@
 
 			let $this = jQuery(this),
 			$spinner =  $this.next(".cr-show-more-spinner"),
-			cr_rating = $this.parents(".cr-reviews-grid").find(".ivole-summaryBox.cr-grid-reviews-ajax tr.ivole-histogramRow.ivole-histogramRow-s .cr-histogram-a").attr("data-rating"),
+			cr_rating = $this.parents(".cr-reviews-grid").find(".ivole-summaryBox.cr-grid-reviews-ajax .ivole-histogramRow.ivole-histogramRow-s .cr-histogram-a").attr("data-rating"),
 			attributes = $this.parents(".cr-reviews-grid").data("attributes");
 
 			attributes.comment__not_in = $this.parents(".cr-reviews-grid").find(".cr-review-card.cr-card-product").map( function() {
@@ -533,9 +533,9 @@
 				'attributes': attributes
 			};
 
-			$grid.find("div.ivole-summaryBox tr.ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
+			$grid.find("div.ivole-summaryBox .ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
 			if( cr_rating > 0 ) {
-				$this.closest("tr.ivole-histogramRow").addClass("ivole-histogramRow-s");
+				$this.closest(".ivole-histogramRow").addClass("ivole-histogramRow-s");
 			}
 			$grid.find(".cr-reviews-grid-inner").hide();
 			$grid.find(".cr-show-more-button").hide();
@@ -1846,7 +1846,7 @@
 		let cr_nonce = refElement.parents(".cr-reviews-ajax-comments").attr("data-nonce");
 		let cr_page = refElement.parents(".cr-reviews-ajax-comments").attr("data-page");
 		let cr_sort = refElement.parents(".cr-reviews-ajax-comments").find(".cr-ajax-reviews-sort").children("option:selected").val();
-		let cr_rating = refElement.parents(".cr-reviews-ajax-comments").find(".cr-summaryBox-ajax tr.ivole-histogramRow.ivole-histogramRow-s a.ivole-histogram-a").attr("data-rating");
+		let cr_rating = refElement.parents(".cr-reviews-ajax-comments").find(".cr-summaryBox-ajax .ivole-histogramRow.ivole-histogramRow-s a.cr-histogram-a").attr("data-rating");
 		let cr_search = refElement.parents(".cr-reviews-ajax-comments").find(".cr-ajax-search input").val();
 		let cr_tags = [];
 		refElement.parents(".cr-reviews-ajax-comments").find(".cr-review-tags-filter .cr-tags-filter.cr-tag-selected").each(

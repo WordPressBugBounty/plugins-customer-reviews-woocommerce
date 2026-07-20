@@ -112,7 +112,7 @@ if ( ! class_exists( 'CR_Email_Verify' ) ) :
 						'email' => $emailFrom
 					)
 				);
-				$api_url = 'https://api.cusrev.com/v1/production/email-dkim?' . $http_query;
+				$api_url = CR_Utils::cr_api_url() . '/v1/production/email-dkim?' . $http_query;
 				$ch = curl_init();
 				curl_setopt( $ch, CURLOPT_URL, $api_url );
 				curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -170,7 +170,7 @@ if ( ! class_exists( 'CR_Email_Verify' ) ) :
 					'licenseKey' => $licenseKey,
 					'email' => $email
 				);
-				$api_url = 'https://api.cusrev.com/v1/production/email-dkim';
+				$api_url = CR_Utils::cr_api_url() . '/v1/production/email-dkim';
 				$data_string = json_encode($data);
 				$ch = curl_init();
 				curl_setopt( $ch, CURLOPT_URL, $api_url );

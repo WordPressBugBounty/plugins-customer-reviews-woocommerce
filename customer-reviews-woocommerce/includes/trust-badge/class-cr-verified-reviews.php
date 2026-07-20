@@ -22,7 +22,7 @@ if ( ! class_exists( 'CR_Verified_Reviews' ) ) :
 				),
 				'action' => 'status'
 			);
-			$api_url = 'https://api.cusrev.com/v1/production/shop-page';
+			$api_url = CR_Utils::cr_api_url() . '/v1/production/shop-page';
 			$data_string = json_encode($data);
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $api_url );
@@ -70,7 +70,7 @@ if ( ! class_exists( 'CR_Verified_Reviews' ) ) :
 				),
 				'action' => 'enable'
 			);
-			$api_url = 'https://api.cusrev.com/v1/production/shop-page';
+			$api_url = CR_Utils::cr_api_url() . '/v1/production/shop-page';
 			$data_string = json_encode($data);
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $api_url );
@@ -122,7 +122,7 @@ if ( ! class_exists( 'CR_Verified_Reviews' ) ) :
 				),
 				'action' => 'disable'
 			);
-			$api_url = 'https://api.cusrev.com/v1/production/shop-page';
+			$api_url = CR_Utils::cr_api_url() . '/v1/production/shop-page';
 			$data_string = json_encode($data);
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $api_url );

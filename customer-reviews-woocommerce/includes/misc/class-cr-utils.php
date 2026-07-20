@@ -49,6 +49,14 @@ if ( ! class_exists( 'CR_Utils' ) ) :
 			return plugin_dir_url( dirname( dirname( __FILE__ ) ) );
 		}
 
+		/**
+		* Base URL of the CusRev API. Define CR_API_URL in wp-config.php to point it
+		* at a local/dev environment
+		*/
+		public static function cr_api_url() {
+			return defined( 'CR_API_URL' ) ? untrailingslashit( CR_API_URL ) : 'https://api.cusrev.com';
+		}
+
 	}
 
 endif;

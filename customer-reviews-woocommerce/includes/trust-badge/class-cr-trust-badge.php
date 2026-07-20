@@ -369,7 +369,7 @@ if (! class_exists('CR_Trust_Badge')) :
 			if( $refresh || !$cached_stats ) {
 				// if independent verification of reviews is enabled, try to get the stats from the API
 				if( 'yes' === get_option( 'ivole_verified_reviews', 'no' ) ) {
-					$response = wp_remote_get( 'https://api.cusrev.com/v1/production/store-stats?domain=' . $domain );
+					$response = wp_remote_get( CR_Utils::cr_api_url() . '/v1/production/store-stats?domain=' . $domain );
 					if( !is_wp_error( $response ) ) {
 						$response_body = wp_remote_retrieve_body( $response );
 						if( $response_body ) {

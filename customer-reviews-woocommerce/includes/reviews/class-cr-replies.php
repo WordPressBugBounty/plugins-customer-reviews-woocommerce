@@ -10,9 +10,10 @@ use \ivole\Firebase\JWT\JWT;
 if ( ! class_exists( 'CR_Replies' ) ) :
 
 	class CR_Replies {
-		private $api_url = 'https://api.cusrev.com/v1/production/reviews/review-reply/seller';
+		private $api_url;
 
 		public function __construct( $comment_id ) {
+			$this->api_url = CR_Utils::cr_api_url() . '/v1/production/reviews/review-reply/seller';
 			$comment = get_comment( $comment_id );
 			if ( $comment ) {
 				// get parent comment (orignal review) and find order number related to this review

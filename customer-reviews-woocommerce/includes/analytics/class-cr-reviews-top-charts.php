@@ -452,7 +452,7 @@ class CR_Reviews_Top_Charts {
 			'shopDomain' => Ivole_Email::get_blogurl(),
 			'licenseKey' => $license_key
 		);
-		$api_url = 'https://api.cusrev.com/v2/track-referrals';
+		$api_url = CR_Utils::cr_api_url() . '/v2/track-referrals';
 		$data_string = json_encode($data);
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $api_url );

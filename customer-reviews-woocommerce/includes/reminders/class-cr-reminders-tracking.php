@@ -28,7 +28,7 @@ if ( ! class_exists( 'CR_Reminders_Tracking' ) ) :
 							'licenseKey' => $licenseKey,
 							'shopOrderIds' => $orderIds
 						);
-						$api_url = 'https://api.cusrev.com/v2/track-reminders';
+						$api_url = CR_Utils::cr_api_url() . '/v2/track-reminders';
 						$data_string = json_encode($data);
 						$ch = curl_init();
 						curl_setopt( $ch, CURLOPT_URL, $api_url );

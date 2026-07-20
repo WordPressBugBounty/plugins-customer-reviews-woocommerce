@@ -544,7 +544,7 @@ class CR_Wtsap {
 		$data_for_sending = $this->get_data_for_sending( $order_id, $schedule );
 
 		if ( 0 === $data_for_sending[0] ) {
-			$api_url = 'https://api.cusrev.com/v1/production/review-reminder';
+			$api_url = CR_Utils::cr_api_url() . '/v1/production/review-reminder';
 
 			$data_string = json_encode( $data_for_sending[1] );
 			$ch = curl_init();
@@ -641,7 +641,7 @@ class CR_Wtsap {
 			'licenseKey' => strval( get_option( 'ivole_license_key', '' ) )
 		);
 
-		$api_url = 'https://api.cusrev.com/v1/production/review-discount';
+		$api_url = CR_Utils::cr_api_url() . '/v1/production/review-discount';
 
 		$data_string = json_encode( $data );
 		// error_log( print_r($data_string, true) );
@@ -771,7 +771,7 @@ class CR_Wtsap {
 			);
 		}
 
-		$api_url = 'https://api.cusrev.com/v1/production/test-email';
+		$api_url = CR_Utils::cr_api_url() . '/v1/production/test-email';
 
 		$data_string = json_encode( $data );
 		// error_log( print_r($data_string, true) );

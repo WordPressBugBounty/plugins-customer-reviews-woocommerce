@@ -291,10 +291,10 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 				if ( ! $is_test ) {
 					unset( $lean_data['trackOpens'] );
 					unset( $lean_data['schedule'] );
-					$api_url = 'https://api.cusrev.com/v2/review-form';
+					$api_url = CR_Utils::cr_api_url() . '/v2/review-form';
 				} else {
 					unset( $lean_data['order']['items'] );
-					$api_url = 'https://api.cusrev.com/v2/test-form';
+					$api_url = CR_Utils::cr_api_url() . '/v2/test-form';
 				}
 				// get a CusRev form
 				$data_string = json_encode( $lean_data );
@@ -530,10 +530,10 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 				$result['email_id'] = $message['email_id'];
 			} else {
 				// CusRev mailer
-				$api_url = 'https://api.cusrev.com/v2/review-reminder';
+				$api_url = CR_Utils::cr_api_url() . '/v2/review-reminder';
 				if ( $is_test ) {
 					unset( $data['order']['items'] );
-					$api_url = 'https://api.cusrev.com/v2/test-email';
+					$api_url = CR_Utils::cr_api_url() . '/v2/test-email';
 				}
 				$data_string = json_encode( $data );
 				$ch = curl_init();
@@ -606,10 +606,10 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 				$wpmail_result = wp_mail( $data['email']['to'], $data['email']['subject'], $message, $headers );
 				$result = json_encode( array( 'status' => 'OK' ) );
 			} else {
-				$api_url = 'https://api.cusrev.com/v1/production/review-discount';
+				$api_url = CR_Utils::cr_api_url() . '/v1/production/review-discount';
 				if( $is_test ) {
 					unset( $data['order']['items'] );
-					$api_url = 'https://api.cusrev.com/v2/test-email';
+					$api_url = CR_Utils::cr_api_url() . '/v2/test-email';
 				}
 				$data_string = json_encode( $data );
 				$ch = curl_init();
