@@ -20,6 +20,8 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 		private $template_name = '';
 		private $find = array();
 		private $replace = array();
+		private $color_bg = '#0f9d58';
+		private $color_text = '#ffffff';
 
 		public static $qna_reply_def_body = "Hi {customer_name},\n\n{user_name} responded to your question about <b>{product_name}</b>. Here is a copy of their response:\n\n<i>{answer}</i>\n\nYou can view <b>{product_name}</b> here:\n\n{product_button}\n\nBest wishes,\n{site_title} Team";
 
@@ -40,12 +42,14 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 			$this->replace['product-name'] = '';
 			$this->replace['product-link'] = '';
 			$this->replace['answer'] = '';
+			$this->color_bg = get_option( 'ivole_email_qna_color_bg', '#0f9d58' );
+			$this->color_text = get_option( 'ivole_email_qna_color_text', '#ffffff' );
 			$this->replace['product-button'] = apply_filters(
 				'cr_qna_email_product_button',
 				'<table border="0" cellspacing="0" cellpadding="0" style="margin-top: 30px; margin-bottom: 30px;">' .
 				'<tr>' .
-				'<td align="center" style="border-radius: 5px; background-color: #0f9d58;">' .
-				'<a rel="noopener" target="_blank" href="{product_link}" target="_blank" style="float: left; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; font-weight: bold; text-decoration: none; border-radius: 5px; padding: 12px 18px; border: 1px solid #0f9d58; background-color: #0f9d58;">{product_name}</a>' .
+				'<td align="center" style="border-radius: 5px; background-color: ' . esc_attr( $this->color_bg ) . ';">' .
+				'<a rel="noopener" target="_blank" href="{product_link}" target="_blank" style="float: left; font-size: 14px; font-family: Helvetica, Arial, sans-serif; color: ' . esc_attr( $this->color_text ) . '; font-weight: bold; text-decoration: none; border-radius: 5px; padding: 12px 18px; border: 1px solid ' . esc_attr( $this->color_bg ) . '; background-color: ' . esc_attr( $this->color_bg ) . ';">{product_name}</a>' .
 				'</td>' .
 				'</tr>' .
 				'</table>'
@@ -103,10 +107,10 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 			$this->subject = $this->replace_variables( $this->subject );
 			$this->message = $this->get_email_template();
 			$result = $this->send_email( $to );
-			if( $result ) {
+			if ( $result ) {
 				return 0;
 			} else {
-				return -1;
+				return array( -1, __( 'wp_mail failed to send test email', 'customer-reviews-woocommerce' ) );
 			}
 		}
 
@@ -125,6 +129,8 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 			$cr_email_heading = $this->replace_variables( $this->heading );
 			$cr_email_body = $this->replace_variables( $this->body );
 			$cr_email_footer = Ivole_Email::get_blogname();
+			$cr_email_color_bg = $this->color_bg;
+			$cr_email_color_text = $this->color_text;
 			include( $template );
 			$email_template = ob_get_clean();
 			return $email_template;

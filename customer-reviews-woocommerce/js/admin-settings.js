@@ -138,7 +138,8 @@
 			jQuery(this).addClass( "cr-settings-button-spinner" );
 
 			const data = {
-				'action': 'cr_settings_download_addon'
+				'action': 'cr_settings_download_addon',
+				'nonce': cr_settings_object.settings_nonce
 			};
 			jQuery.post(
 				{
@@ -161,7 +162,8 @@
 			jQuery(this).closest( '.cr-features-banner' ).fadeTo( 500, 0.6 );
 			const data = {
 				'action': 'cr_settings_hide_banner',
-				'banner': jQuery(this).data( 'banner' )
+				'banner': jQuery(this).data( 'banner' ),
+				'nonce': cr_settings_object.settings_nonce
 			};
 			jQuery.post(
 				{
@@ -604,7 +606,8 @@
 
 		if ( 0 < jQuery('#ivole_license_status').length ) {
 			let data = {
-				'action': 'ivole_check_license_ajax'
+				'action': 'ivole_check_license_ajax',
+				'nonce': cr_settings_object.settings_nonce
 			};
 
 			jQuery('#ivole_license_status').val( cr_settings_object.checking );
@@ -621,7 +624,8 @@
 		// Load of Review Reminder page and check of From Email verification
 		if( jQuery('#ivole_email_from.cr-email-from-input').length > 0 || jQuery('#ivole_form_rating_bar_status').length > 0 ) {
 			var data = {
-				'action': 'ivole_check_license_email_ajax'
+				'action': 'ivole_check_license_email_ajax',
+				'nonce': cr_settings_object.settings_nonce
 			};
 			jQuery('#ivole_email_from_status').text( cr_settings_object.checking_license );
 			jQuery('#ivole_email_from_name_status').text( cr_settings_object.checking_license );
@@ -695,7 +699,8 @@
 		jQuery('#ivole_email_from_verify_button').click(function() {
 			let data = {
 				'action': 'cr_verify_email_ajax',
-				'email': jQuery('#ivole_email_from').val()
+				'email': jQuery('#ivole_email_from').val(),
+				'nonce': cr_settings_object.settings_nonce
 			};
 			jQuery('#ivole_email_from_verify_button').prop('disabled', true);
 			jQuery('#ivole_email_from_status').text( 'Sending a verification email...' );
@@ -725,7 +730,8 @@
 			jQuery('#ivole_email_from_status').show();
 			let data = {
 				'action': 'cr_verify_dkim_ajax',
-				'email': jQuery('#ivole_email_from').val()
+				'email': jQuery('#ivole_email_from').val(),
+				'nonce': cr_settings_object.settings_nonce
 			};
 			jQuery.post(ajaxurl, data, function(response) {
 				if ( 1 === response.verification ) {
@@ -738,6 +744,20 @@
 				}
 			});
 		} );
+
+		if ( 0 < jQuery('#ivole_age_restriction').length ) {
+			let data = {
+				'action': 'cr_check_age_restriction_ajax',
+				'nonce': cr_settings_object.settings_nonce
+			};
+			jQuery('.cr-verified-badge-status').text('Checking settings...');
+			jQuery('.cr-verified-badge-status').css('visibility', 'visible');
+			jQuery.post(ajaxurl, data, function(response) {
+				jQuery('.cr-verified-badge-status').css('visibility', 'hidden');
+				jQuery('.cr-disabled-checkbox').prop( 'disabled', false );
+				jQuery('#ivole_age_restriction').prop( 'checked', 1 === response.status );
+			}, 'json');
+		}
 
 		jQuery('.cr-help-tip' ).tipTip( {
 			attribute: 'data-tip',

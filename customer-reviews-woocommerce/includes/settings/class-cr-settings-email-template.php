@@ -523,7 +523,7 @@ if ( ! class_exists( 'CR_Email_Template' ) ):
 					$this->name,
 					apply_filters(
 						'cr_settings_email_colors',
-						array( 'review_reminder', 'review_discount' )
+						array( 'review_reminder', 'review_discount', 'qna_reply' )
 					)
 				)
 			) {
@@ -537,6 +537,11 @@ if ( ! class_exists( 'CR_Email_Template' ) ):
 						$id = 'ivole_email_coupon_color_bg';
 						$desc = __( 'Background color for heading of the email.', 'customer-reviews-woocommerce' );
 						$class = 'cr_email_coupon_color_bg';
+						break;
+					case 'qna_reply':
+						$id = 'ivole_email_qna_color_bg';
+						$desc = __( 'Background color for the Q&A reply email header and action button.', 'customer-reviews-woocommerce' );
+						$class = 'cr_email_qna_color_bg';
 						break;
 					default:
 						$id = '';
@@ -564,6 +569,11 @@ if ( ! class_exists( 'CR_Email_Template' ) ):
 						$id = 'ivole_email_coupon_color_text';
 						$desc = __( 'Text color for heading of the email.', 'customer-reviews-woocommerce' );
 						$class = 'cr_email_coupon_color_text';
+						break;
+					case 'qna_reply':
+						$id = 'ivole_email_qna_color_text';
+						$desc = __( 'Text color for the Q&A reply email header and action button.', 'customer-reviews-woocommerce' );
+						$class = 'cr_email_qna_color_text';
 						break;
 					default:
 						$id = '';
@@ -720,27 +730,37 @@ if ( ! class_exists( 'CR_Email_Template' ) ):
 		}
 
 		public function save_fields() {
-			if( ! empty( $_POST ) && isset( $_POST['ivole_email_body'] ) ) {
-				if( empty( preg_replace( '#\s#isUu', '', html_entity_decode( $_POST['ivole_email_body'] ) ) ) ) {
+			if ( ! empty( $_POST ) && isset( $_POST['ivole_email_body'] ) ) {
+				if ( empty( preg_replace( '#\s#isUu', '', html_entity_decode( $_POST['ivole_email_body'] ) ) ) ) {
 					WC_Admin_Settings::add_error( __( '\'Email Body\' field cannot be empty', 'customer-reviews-woocommerce' ) );
 					$_POST['ivole_email_body'] = get_option( 'ivole_email_body' );
 				}
 			}
-			if( ! empty( $_POST ) && isset( $_POST['ivole_email_body_coupon'] ) ) {
-				if( empty( preg_replace( '#\s#isUu', '', html_entity_decode( $_POST['ivole_email_body_coupon'] ) ) ) ) {
+			if ( ! empty( $_POST ) && isset( $_POST['ivole_email_body_coupon'] ) ) {
+				if ( empty( preg_replace( '#\s#isUu', '', html_entity_decode( $_POST['ivole_email_body_coupon'] ) ) ) ) {
 					WC_Admin_Settings::add_error( __( '\'Email Body\' field cannot be empty', 'customer-reviews-woocommerce' ) );
 					$_POST['ivole_email_body_coupon'] = get_option( 'ivole_email_body_coupon' );
 				}
 			}
 			// validate colors (users sometimes remove # or provide invalid hex color codes)
 			if ( ! empty( $_POST ) && isset( $_POST['ivole_email_color_bg'] ) ) {
-				if( ! preg_match_all( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['ivole_email_color_bg'] ) ) {
+				if ( ! preg_match_all( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['ivole_email_color_bg'] ) ) {
 					$_POST['ivole_email_color_bg'] = '#0f9d58';
 				}
 			}
 			if ( ! empty( $_POST ) && isset( $_POST['ivole_email_color_text'] ) ) {
-				if( ! preg_match_all( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['ivole_email_color_text'] ) ) {
+				if ( ! preg_match_all( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['ivole_email_color_text'] ) ) {
 					$_POST['ivole_email_color_text'] = '#ffffff';
+				}
+			}
+			if ( ! empty( $_POST ) && isset( $_POST['ivole_email_qna_color_bg'] ) ) {
+				if ( ! preg_match_all( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['ivole_email_qna_color_bg'] ) ) {
+					$_POST['ivole_email_qna_color_bg'] = '#0f9d58';
+				}
+			}
+			if ( ! empty( $_POST ) && isset( $_POST['ivole_email_qna_color_text'] ) ) {
+				if ( ! preg_match_all( '/#([a-f0-9]{3}){1,2}\b/i', $_POST['ivole_email_qna_color_text'] ) ) {
+					$_POST['ivole_email_qna_color_text'] = '#ffffff';
 				}
 			}
 			//

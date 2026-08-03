@@ -891,6 +891,25 @@ if ( ! class_exists( 'CR_Review_Reminder_Settings' ) ):
 		* Function to check status of the license and verification of email
 		*/
 		public function check_license_email_ajax() {
+			$res = array(
+				'license' => '',
+				'email' => 0,
+				'fromEmail' => '',
+				'fromName' => '',
+				'emailFooter' => '',
+				'dkim' => ''
+			);
+
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json( $res );
+				wp_die();
+			}
+
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json( $res );
+				wp_die();
+			}
+
 			$license = new CR_License();
 			$lval = $license->check_license();
 
@@ -925,7 +944,29 @@ if ( ! class_exists( 'CR_Review_Reminder_Settings' ) ):
 		}
 
 		public function verify_email_ajax() {
-			$email = strval( $_POST['email'] );
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json(
+					array(
+						'verification' => 100,
+						'email' => '',
+						'message' => __( 'Permission denied', 'customer-reviews-woocommerce' )
+					)
+				);
+				wp_die();
+			}
+
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json(
+					array(
+						'verification' => 100,
+						'email' => '',
+						'message' => __( 'Error: nonce expired, please reload the page and try again', 'customer-reviews-woocommerce' )
+					)
+				);
+				wp_die();
+			}
+
+			$email = sanitize_email( wp_unslash( isset( $_POST['email'] ) ? $_POST['email'] : '' ) );
 			$verify = new CR_Email_Verify();
 			$vval = $verify->verify_email( $email );
 			wp_send_json(
@@ -938,7 +979,27 @@ if ( ! class_exists( 'CR_Review_Reminder_Settings' ) ):
 		}
 
 		public function verify_dkim_ajax() {
-			$email = strval( $_POST['email'] );
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json(
+					array(
+						'verification' => 100,
+						'tokens' => array()
+					)
+				);
+				wp_die();
+			}
+
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json(
+					array(
+						'verification' => 100,
+						'tokens' => array()
+					)
+				);
+				wp_die();
+			}
+
+			$email = sanitize_email( wp_unslash( isset( $_POST['email'] ) ? $_POST['email'] : '' ) );
 			$verify = new CR_Email_Verify();
 			$vval = $verify->verify_dkim( $email );
 			wp_send_json(

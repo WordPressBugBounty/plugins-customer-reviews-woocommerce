@@ -247,7 +247,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			$num_reviews = count( $reviews );
 
 			if ( $num_reviews < 1 ) {
-				return __( 'No reviews to show', 'customer-reviews-woocommerce' );
+				return '<div class="cr-no-reviews">' . esc_html__( 'No reviews to show', 'customer-reviews-woocommerce' ) . '</div>';
 			}
 
 			$show_products = $attributes['show_products'];

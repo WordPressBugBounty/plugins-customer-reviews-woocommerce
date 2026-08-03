@@ -20,10 +20,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<tr>
 								<td align="center" valign="top">
 									<!-- Header -->
-									<table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_header" style="background-color:#0f9d58;border-radius: 3px 3px 0 0 !important;color:#FFFFFF;border-bottom:0;font-weight:bold;line-height:100%;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif;">
-										<tr>
-											<td id="header_wrapper" style="padding:36px 48px;display:block;width:100%;box-sizing:border-box;">
-												<h1 style="color:#FFFFFF;line-height:150%;background-color:inherit;"><?php echo $cr_email_heading; ?></h1>
+								<table border="0" cellpadding="0" cellspacing="0" width="100%" id="template_header" style="background-color:<?php echo esc_attr( $cr_email_color_bg ); ?>;border-radius: 3px 3px 0 0 !important;color:<?php echo esc_attr( $cr_email_color_text ); ?>;border-bottom:0;font-weight:bold;line-height:100%;vertical-align:middle;font-family:Helvetica,Roboto,Arial,sans-serif;">
+									<tr>
+										<td id="header_wrapper" style="padding:36px 48px;display:block;width:100%;box-sizing:border-box;">
+											<h1 style="color:<?php echo esc_attr( $cr_email_color_text ); ?>;line-height:150%;background-color:inherit;"><?php echo $cr_email_heading; ?></h1>
 											</td>
 										</tr>
 									</table>

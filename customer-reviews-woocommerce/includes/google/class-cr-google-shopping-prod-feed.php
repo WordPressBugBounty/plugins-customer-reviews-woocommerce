@@ -610,10 +610,10 @@ class CR_Google_Shopping_Prod_Feed {
 				if ( $product->is_on_backorder() ) {
 					$_product->availability = 'backorder';
 				} else {
-					$_product->availability = 'in stock';
+					$_product->availability = 'in_stock';
 				}
 			} else {
-				$_product->availability = 'out of stock';
+				$_product->availability = 'out_of_stock';
 			}
 			$_product->availability = apply_filters(
 				'cr_gs_product_feed_availability',

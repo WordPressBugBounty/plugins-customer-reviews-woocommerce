@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 5.115.0
+Stable tag: 5.116.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,9 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.116.0 =
+* New feature: color settings for the 'Q&A Reply Notification' email template
+* Improvement: capability and nonce protection for several AJAX handler
 = 5.115.0 =
 * Improvement: WPML compatibility to display replies to reviews in all languages for [cusrev_all_reviews] shortcode
 * Improvement: accessibility improvements for the reviews summary bar

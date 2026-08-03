@@ -25,7 +25,6 @@ if ( ! class_exists( 'CR_CusRev_Settings' ) ):
 			add_action( 'woocommerce_admin_field_twocolsmode', array( $this, 'show_twocolsmode' ) );
 			add_action( 'ivole_settings_display_' . $this->tab, array( $this, 'display' ) );
 			add_action( 'cr_save_settings_' . $this->tab, array( $this, 'save' ) );
-			add_action( 'admin_footer', array( $this, 'output_page_javascript' ) );
 			add_action( 'wp_ajax_cr_check_age_restriction_ajax', array( $this, 'check_verified_reviews_ajax' ) );
 			add_action( 'woocommerce_admin_settings_sanitize_option_ivole_verified_live_mode', array( $this, 'save_live_mode' ), 10, 3 );
 			add_action( 'woocommerce_admin_settings_sanitize_option_ivole_age_restriction', array( $this, 'save_age_restriction_checkbox' ), 10, 3 );
@@ -205,6 +204,16 @@ if ( ! class_exists( 'CR_CusRev_Settings' ) ):
 		* Function to check if age restriction is enabled
 		*/
 		public function check_verified_reviews_ajax() {
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json( array( 'status' => 0 ) );
+				wp_die();
+			}
+
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json( array( 'status' => 0 ) );
+				wp_die();
+			}
+
 			$vrevs = new CR_Verified_Reviews();
 			$rval = $vrevs->check_status();
 
@@ -212,30 +221,6 @@ if ( ! class_exists( 'CR_CusRev_Settings' ) ):
 				wp_send_json( array( 'status' => 0 ) );
 			} else {
 				wp_send_json( array( 'status' => 1 ) );
-			}
-		}
-
-		public function output_page_javascript() {
-			if ( $this->is_this_tab() ) {
-				?>
-				<script type="text/javascript">
-				jQuery(function($) {
-					// check age restriction setting
-					if ( jQuery('#ivole_age_restriction').length > 0 ) {
-						let data = {
-							'action': 'cr_check_age_restriction_ajax'
-						};
-						jQuery('.cr-verified-badge-status').text('Checking settings...');
-						jQuery('.cr-verified-badge-status').css('visibility', 'visible');
-						jQuery.post(ajaxurl, data, function(response) {
-							jQuery('.cr-verified-badge-status').css( 'visibility', 'hidden' );
-							jQuery('.cr-disabled-checkbox').prop( 'disabled', false );
-							jQuery('#ivole_age_restriction').prop( 'checked', <?php echo 'yes' === get_option( 'ivole_age_restriction', 'no' ) ? 'true' : 'false'; ?> );
-						});
-					}
-				});
-				</script>
-				<?php
 			}
 		}
 

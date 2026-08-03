@@ -9,4 +9,6 @@ jQuery(document).ready( function($) {
 	jQuery('#ivole_email_coupon_color_text').wpColorPicker(ivole_email_color_options2);
 	jQuery('.cr_email_color_bg').wpColorPicker( ivole_email_color_options1 );
 	jQuery('.cr_email_color_text').wpColorPicker( ivole_email_color_options2 );
+	jQuery('.cr_email_qna_color_bg').wpColorPicker( ivole_email_color_options1 );
+	jQuery('.cr_email_qna_color_text').wpColorPicker( ivole_email_color_options2 );
 } );

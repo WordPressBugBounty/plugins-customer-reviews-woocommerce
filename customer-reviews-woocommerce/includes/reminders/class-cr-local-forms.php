@@ -20,6 +20,7 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 		private $cr_form_color3;
 		private $language;
 		private $extra;
+		private $currency;
 
 		const HEADER_TEMPLATE = 'form-header.php';
 		const ITEM_BLOCK_TEMPLATE = 'form-block-item.php';
@@ -389,7 +390,7 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 				$formId = self::TEST_FORM;
 			} else {
 				// generate unique form id
-				$formId = strtolower( uniqid() );
+				$formId = strtolower( self::generate_unique_id() );
 			}
 
 			// get currency
@@ -524,6 +525,18 @@ if ( ! class_exists( 'CR_Local_Forms' ) ) :
 				);
 			}
 		}
+
+		public static function generate_unique_id() {
+			// 1. Generate 7 random bytes (which converts to 14 hex characters)
+			$randomBytes = random_bytes(7);
+			
+			// 2. Convert bytes to a hexadecimal string
+			$hexString = bin2hex($randomBytes);
+			
+			// 3. Trim to exactly 13 characters to match uniqid() length
+			return substr($hexString, 0, 13);
+		}
+
 
 	}
 

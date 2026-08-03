@@ -135,6 +135,7 @@ if ( ! class_exists( 'CR_Settings_Admin_Menu' ) ):
 					'cr-admin-settings',
 					'cr_settings_object',
 					array(
+						'settings_nonce' => wp_create_nonce( 'cr-settings-ajax' ),
 						'checking' => __( 'Checking...', 'customer-reviews-woocommerce' ),
 						'checking_license' => __( 'Checking license...', 'customer-reviews-woocommerce' ),
 						'yes' => __( 'Yes', 'customer-reviews-woocommerce' ),
@@ -722,15 +723,37 @@ if ( ! class_exists( 'CR_Settings_Admin_Menu' ) ):
 		* Function to check status of the license
 		*/
 		public function check_license_ajax() {
+			// capability check
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json( array( 'code' => -10, 'message' => __( 'Permission denied', 'customer-reviews-woocommerce' ) ) );
+				wp_die();
+			}
+
+			// nonce verification
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json( array( 'code' => -11, 'message' => __( 'Error: nonce expired, please reload the page and try again', 'customer-reviews-woocommerce' ) ) );
+				wp_die();
+			}
+
 			$license = new CR_License();
 			$lval = $license->check_license();
 			wp_send_json( array( 'code' => $lval['code'], 'message' => $lval['info'] ) );
 		}
 
 		public function download_addon() {
-			$res = array(
-				'url' => ''
-			);
+			$res = array( 'url' => '' );
+
+			// capability check
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json( $res );
+				wp_die();
+			}
+
+			// nonce verification
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json( $res );
+				wp_die();
+			}
 
 			$license_key = trim( get_option( 'ivole_license_key', '' ) );
 			if ( $license_key ) {
@@ -888,9 +911,22 @@ if ( ! class_exists( 'CR_Settings_Admin_Menu' ) ):
 
 		public function hide_banner() {
 			$res = 1;
+
+			// capability check
+			if ( ! current_user_can( apply_filters( 'cr_settings_permissions', 'manage_options' ) ) ) {
+				wp_send_json( $res );
+				wp_die();
+			}
+
+			// nonce verification
+			if ( ! check_ajax_referer( 'cr-settings-ajax', 'nonce', false ) ) {
+				wp_send_json( $res );
+				wp_die();
+			}
+
 			$hidden_banners = get_option( 'ivole_hidden_banners', array() );
-			if( isset( $_POST['banner'] ) && $_POST['banner'] ) {
-				$hidden_banners[$_POST['banner']] = 1;
+			if ( isset( $_POST['banner'] ) && $_POST['banner'] ) {
+				$hidden_banners[sanitize_text_field( wp_unslash( $_POST['banner'] ) )] = 1;
 				update_option( 'ivole_hidden_banners', $hidden_banners, false );
 				$res = 0;
 			}

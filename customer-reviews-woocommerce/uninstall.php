@@ -44,6 +44,8 @@ $cr_uninstall_options = array(
 	'ivole_coupon_email_bcc',
 	'ivole_email_coupon_color_bg',
 	'ivole_email_coupon_color_text',
+	'ivole_email_qna_color_bg',
+	'ivole_email_qna_color_text',
 	'ivole_coupon_tiers',
 	'ivole_coupon_prefix',
 	'ivole_coupon__discount_type',
