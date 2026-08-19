@@ -35,7 +35,6 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 			add_filter( 'set-screen-option', array( $this, 'save_screen_options' ), 10, 3 );
 			add_action( 'wp_ajax_cr_get_reviews_top_row_stats', array( 'CR_Reviews_Top_Charts', 'get_reviews_top_row_stats' ) );
 			add_action( 'wp_ajax_cr_get_reviews_top_row_refs', array( 'CR_Reviews_Top_Charts', 'get_reviews_top_row_refs' ) );
-			add_filter( 'wc_get_template', array( $this, 'wc_dashboard_widget_reviews' ), 10, 5 );
 			$cr_reviews_media_meta_box = new CR_Reviews_Media_Meta_Box();
 		}
 
@@ -1096,20 +1095,6 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 				'VN' => __( 'Vietnam', 'customer-reviews-woocommerce' ),
 				'ZW' => __( 'Zimbabwe', 'customer-reviews-woocommerce' ),
 			];
-		}
-
-		public function wc_dashboard_widget_reviews( $located, $template_name, $args, $template_path, $default_path ) {
-			if ( $template_name === 'dashboard-widget-reviews.php' ) {
-				$custom = CR_Utils::cr_locate_template(
-					'cr-dashboard-widget-reviews.php',
-					'customer-reviews-woocommerce',
-					dirname( dirname( dirname( __FILE__ ) ) ) . '/templates/'
-				);
-				if ( file_exists( $custom ) ) {
-					return $custom;
-				}
-			}
-			return $located;
 		}
 
 	}

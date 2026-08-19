@@ -138,6 +138,29 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 				if ( ! empty( $_POST ) && isset( $_POST['ivole_onsite_form_checkbox_text'] ) ) {
 					$ivole_review_forms[0]['chbx_text'] = esc_html( $_POST['ivole_onsite_form_checkbox_text'] );
 				}
+				// save the captcha settings
+				if ( ! empty( $_POST ) ) {
+					$captcha_type = isset( $_POST['cr_captcha_type'] ) ? strval( $_POST['cr_captcha_type'] ) : CR_Captcha::TYPE_NONE;
+					if ( ! array_key_exists( $captcha_type, CR_Captcha::get_types() ) ) {
+						$captcha_type = CR_Captcha::TYPE_NONE;
+					}
+					$captcha_site_key = isset( $_POST['cr_captcha_site_key'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['cr_captcha_site_key'] ) ) ) : '';
+					$captcha_secret_key = isset( $_POST['cr_captcha_secret_key'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['cr_captcha_secret_key'] ) ) ) : '';
+					// validate that both the site and the secret keys are populated
+					if (
+						CR_Captcha::TYPE_NONE !== $captcha_type &&
+						( ! $captcha_site_key || ! $captcha_secret_key )
+					) {
+						WC_Admin_Settings::add_error(
+							__( 'Error: Both the Site Key and the Secret Key are required for a captcha to function properly', 'customer-reviews-woocommerce' )
+						);
+					}
+					$ivole_review_forms[0]['captcha'] = array(
+						'type'       => $captcha_type,
+						'site_key'   => $captcha_site_key,
+						'secret_key' => $captcha_secret_key
+					);
+				}
 				//
 				$ivole_review_forms = apply_filters( 'cr_settings_save_onsite_form', $ivole_review_forms );
 				//
@@ -190,28 +213,8 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 						$_POST['ivole_form_color_text'] = '#ffffff';
 					}
 				}
-				// validate that both reCAPTCHA site and secret keys are populated
-				if (
-					! empty( $_POST ) &&
-					isset( $_POST['ivole_captcha_site_key'] )  &&
-					isset( $_POST['ivole_captcha_secret_key'] )
-				) {
-					if (
-						(
-							trim( $_POST['ivole_captcha_site_key'] ) &&
-							! trim( $_POST['ivole_captcha_secret_key'] )
-						) ||
-						(
-							! trim( $_POST['ivole_captcha_site_key'] ) &&
-							trim( $_POST['ivole_captcha_secret_key'] )
-						)
-					) {
-						WC_Admin_Settings::add_error(
-							__( 'Error: Both the Site key and the Secret key are required for reCAPTCHA to function properly', 'customer-reviews-woocommerce' )
-						);
-					}
-				}
 				WC_Admin_Settings::save_fields( $this->settings );
+				CR_Captcha::reset_settings();
 				CR_Local_Forms::delete_old_forms();
 			}
 		}
@@ -244,7 +247,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'id'    => 'cr_options_onsite_forms'
 				),
 				3 => array(
-					'title'   => __( 'Rating Criteria', 'customer-reviews-woocommerce' ),
+					'title'   => __( 'Rating criteria', 'customer-reviews-woocommerce' ),
 					'desc'    => __( 'Set up additional rating criteria for on-site review forms. Use the additional criteria to let your customers rate various features of products. For example, if you are selling footwear, you might want to ask customers to rate features like comfort, value for money, and style.', 'customer-reviews-woocommerce' ),
 					'id'      => 'ivole_review_forms_rating',
 					'type'    => 'cr_rating_criteria'
@@ -256,14 +259,14 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'type'    => 'cr_customer_attributes'
 				),
 				10 => array(
-					'title'   => __( 'Attach Images/Videos', 'customer-reviews-woocommerce' ),
+					'title'   => __( 'Attach images/videos', 'customer-reviews-woocommerce' ),
 					'desc'    => __( 'Enable attachment of images and videos to reviews left on WooCommerce product pages.', 'customer-reviews-woocommerce' ),
 					'id'      => 'ivole_attach_image',
 					'default' => 'no',
 					'type'    => 'checkbox'
 				),
 				15 => array(
-					'title'    => __( 'Quantity of Media Files', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Quantity of media files', 'customer-reviews-woocommerce' ),
 					'desc'     => __( 'Specify the maximum number of images and videos that can be uploaded for a single review. This setting applies only to reviews submitted on single product pages.', 'customer-reviews-woocommerce' ),
 					'id'       => 'ivole_attach_image_quantity',
 					'default'  => 5,
@@ -271,7 +274,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'desc_tip' => true
 				),
 				20 => array(
-					'title'    => __( 'Maximum Size of Media File', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Maximum size of media file', 'customer-reviews-woocommerce' ),
 					'desc'     => __( 'Specify the maximum size (in MB) of an image or a video that can be uploaded with a review. This setting applies only to reviews submitted on single product pages.', 'customer-reviews-woocommerce' ),
 					'id'       => 'ivole_attach_image_size',
 					'default'  => 25,
@@ -279,7 +282,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'desc_tip' => true
 				),
 				23 => array(
-					'title'    => __( 'Review Permissions', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Review permissions', 'customer-reviews-woocommerce' ),
 					'desc'     => __( 'Specify review permissions for on-site review forms. This setting applies to review forms on single product pages when CusRev visual style is enabled and to review forms added via shortcodes.', 'customer-reviews-woocommerce' ),
 					'id'       => 'ivole_review_permissions',
 					'type'     => 'cr_review_permissions',
@@ -307,30 +310,35 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				25 => array(
-					'title'   => __( 'reCAPTCHA V2 for Reviews', 'customer-reviews-woocommerce' ),
-					'desc'    => __( 'Enable reCAPTCHA to eliminate fake reviews. You must enter Site Key and Secret Key in the fields below if you want to use reCAPTCHA. You will receive Site Key and Secret Key after registration at reCAPTCHA website.', 'customer-reviews-woocommerce' ),
-					'id'      => 'ivole_enable_captcha',
-					'default' => 'no',
-					'type'    => 'checkbox'
+					'title'     => __( 'Captcha for reviews', 'customer-reviews-woocommerce' ),
+					'desc'      => __( 'Select a captcha service to eliminate fake reviews. You must enter the Site Key and the Secret Key in the fields below if you want to use a captcha. You will receive these keys after registration at the website of the selected captcha service.', 'customer-reviews-woocommerce' ),
+					'id'        => 'cr_captcha_type',
+					'type'      => 'select',
+					'options'   => CR_Captcha::get_types(),
+					'default'   => CR_Captcha::TYPE_NONE,
+					'desc_tip'  => true,
+					'is_option' => false
 				),
 				30 => array(
-					'title'    => __( 'reCAPTCHA V2 Site Key', 'customer-reviews-woocommerce' ),
-					'type'     => 'text',
-					'desc'     => __( 'If you want to use reCAPTCHA V2, insert here Site Key that you will receive after registration at reCAPTCHA website.', 'customer-reviews-woocommerce' ),
-					'default'  => '',
-					'id'       => 'ivole_captcha_site_key',
-					'desc_tip' => true
+					'title'     => __( 'Captcha site key', 'customer-reviews-woocommerce' ),
+					'type'      => 'text',
+					'desc'      => __( 'Insert here the Site Key that you will receive after registration at the website of the selected captcha service.', 'customer-reviews-woocommerce' ),
+					'default'   => '',
+					'id'        => 'cr_captcha_site_key',
+					'desc_tip'  => true,
+					'is_option' => false
 				),
 				35 => array(
-					'title'    => __( 'reCAPTCHA V2 Secret Key', 'customer-reviews-woocommerce' ),
-					'type'     => 'text',
-					'desc'     => __( 'If you want to use reCAPTCHA V2, insert here Secret Key that you will receive after registration at reCAPTCHA website.', 'customer-reviews-woocommerce' ),
-					'default'  => '',
-					'id'       => 'ivole_captcha_secret_key',
-					'desc_tip' => true
+					'title'     => __( 'Captcha secret key', 'customer-reviews-woocommerce' ),
+					'type'      => 'text',
+					'desc'      => __( 'Insert here the Secret Key that you will receive after registration at the website of the selected captcha service.', 'customer-reviews-woocommerce' ),
+					'default'   => '',
+					'id'        => 'cr_captcha_secret_key',
+					'desc_tip'  => true,
+					'is_option' => false
 				),
 				37 => array(
-					'title'    => __( 'Terms and Privacy Checkbox', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Terms and privacy checkbox', 'customer-reviews-woocommerce' ),
 					'type'     => 'checkbox',
 					'desc'     => self::get_default_form_onsite_checkbox_text(),
 					'default'  => 'no',
@@ -338,7 +346,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'is_option' => false
 				),
 				38 => array(
-					'title'    => __( 'Terms and Privacy Checkbox Label', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Terms and privacy checkbox label', 'customer-reviews-woocommerce' ),
 					'type'     => 'cr_text_w_links',
 					'desc'     => __( 'Tailor the text to be shown alongside the Terms and Privacy checkbox. Incorporate links directing users to the Terms and Conditions and Privacy Policy pages on your website.', 'customer-reviews-woocommerce' ),
 					'default'  => 'I have read and agree to the Terms and Conditions and Privacy Policy.',
@@ -357,7 +365,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'id'    => 'cr_options_aggregated_forms'
 				),
 				50 => array(
-					'title'    => __( 'Form Header', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Form header', 'customer-reviews-woocommerce' ),
 					'type'     => 'text',
 					'desc'     => __( 'Header of the review form that will be sent to customers.', 'customer-reviews-woocommerce' ),
 					'default'  => 'How did we do?',
@@ -367,7 +375,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				55 => array(
-					'title'    => __( 'Form Body', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Form body', 'customer-reviews-woocommerce' ),
 					'type'     => 'textarea',
 					'desc'     => __( 'Body of the review form that will be sent to customers.', 'customer-reviews-woocommerce' ),
 					'default'  => 'Please review your experience with products and services that you purchased at {site_title}.',
@@ -378,7 +386,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				60 => array(
-					'title'    => __( 'Shop Rating', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Shop rating', 'customer-reviews-woocommerce' ),
 					'type'     => 'checkbox',
 					'id'       => 'ivole_form_shop_rating',
 					'default'  => 'no',
@@ -386,7 +394,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				65 => array(
-					'title'    => __( 'Comment Required', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Comment required', 'customer-reviews-woocommerce' ),
 					'type'     => 'checkbox',
 					'id'       => 'ivole_form_comment_required',
 					'default'  => 'no',
@@ -394,7 +402,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				70 => array(
-					'title'    => __( 'Attach Media', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Attach media', 'customer-reviews-woocommerce' ),
 					'type'     => 'checkbox',
 					'id'       => 'ivole_form_attach_media',
 					'default'  => 'no',
@@ -402,7 +410,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				90 => array(
-					'title'    => __( 'Form Color 1', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Form color 1', 'customer-reviews-woocommerce' ),
 					'type'     => 'text',
 					'id'       => 'ivole_form_color_bg',
 					'default'  => '#2C5E66',
@@ -411,7 +419,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				95 => array(
-					'title'    => __( 'Form Color 2', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Form color 2', 'customer-reviews-woocommerce' ),
 					'type'     => 'text',
 					'id'       => 'ivole_form_color_text',
 					'default'  => '#FFFFFF',
@@ -420,7 +428,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				),
 				100 => array(
-					'title'    => __( 'Form Color 3', 'customer-reviews-woocommerce' ),
+					'title'    => __( 'Form color 3', 'customer-reviews-woocommerce' ),
 					'type'     => 'text',
 					'id'       => 'ivole_form_color_el',
 					'default'  => '#1AB394',
@@ -464,7 +472,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 				$wc_terms_page = wc_get_page_id( 'terms' );
 				$wc_terms_page = $wc_terms_page ? $wc_terms_page : '';
 				$this->settings[75] = array(
-					'title'   => __( 'Terms and Privacy Page', 'customer-reviews-woocommerce' ),
+					'title'   => __( 'Terms and privacy page', 'customer-reviews-woocommerce' ),
 					'type' => 'single_select_page_with_search',
 					'id'      => 'ivole_form_terms_page',
 					'default' => $wc_terms_page,
@@ -482,7 +490,7 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				);
 				$this->settings[105] = array(
-					'title'   => __( 'Expiry Period', 'customer-reviews-woocommerce' ),
+					'title'   => __( 'Expiry period', 'customer-reviews-woocommerce' ),
 					'type'    => 'number',
 					'id'      => 'ivole_form_expiry_period',
 					'default' => 0,
@@ -490,6 +498,12 @@ if ( ! class_exists( 'CR_Forms_Settings' ) ) :
 					'autoload' => false
 				);
 			}
+
+			// captcha settings are stored in the 'ivole_review_forms' option
+			$captcha_settings = CR_Captcha::get_settings();
+			$this->settings[25]['value'] = $captcha_settings['type'];
+			$this->settings[30]['value'] = $captcha_settings['site_key'];
+			$this->settings[35]['value'] = $captcha_settings['secret_key'];
 
 			$form_settings = self::get_default_form_settings();
 			if ( $form_settings ) {

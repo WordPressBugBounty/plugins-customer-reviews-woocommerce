@@ -162,7 +162,11 @@ if ( ! class_exists( 'CR_Settings_Admin_Menu' ) ):
 						'dns_pending' => __( 'Pending', 'customer-reviews-woocommerce' ),
 						'view_email_template' => __( 'View template', 'customer-reviews-woocommerce' ),
 						'hide_email_template' => __( 'Hide template', 'customer-reviews-woocommerce' ),
-						'email_template_delete' => __( 'Are you sure you want to delete this template file?', 'customer-reviews-woocommerce' )
+						'email_template_delete' => __( 'Are you sure you want to delete this template file?', 'customer-reviews-woocommerce' ),
+						/* translators: keep %s as is, it will be automatically replaced with a name of the selected captcha service */
+						'captcha_site_key' => __( '%s site key', 'customer-reviews-woocommerce' ),
+						/* translators: keep %s as is, it will be automatically replaced with a name of the selected captcha service */
+						'captcha_secret_key' => __( '%s secret key', 'customer-reviews-woocommerce' )
 					)
 				);
 				wp_enqueue_script( 'cr-admin-settings' );

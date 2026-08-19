@@ -72,8 +72,8 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			add_action( 'cr_review_after_comment_text', array( $this, 'display_review_image' ), 10 );
 			//
 			add_action( 'comment_form_after_fields', array( $this, 'custom_fields_terms' ) );
-			if( self::is_captcha_enabled() ) {
-				if( ! is_user_logged_in() ) {
+			if ( CR_Captcha::is_enabled() ) {
+				if ( ! is_user_logged_in() ) {
 					add_action( 'comment_form_after_fields', array( $this, 'custom_fields_captcha2' ) );
 					add_action( 'cr_review_form_before_btns', array( $this, 'display_captcha_cr' ) );
 					add_filter( 'preprocess_comment', array( $this, 'validate_captcha' ) );
@@ -140,25 +140,16 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			$comment_form = apply_filters( 'ivole_custom_fields_attachment', $comment_form );
 			return $comment_form;
 		}
-		// public function custom_fields_captcha( $comment_form ) {
-		// 	$site_key = self::captcha_site_key();
-		// 	$comment_form['comment_field'] .= '<div style="clear:both;"></div><div class="cr-recaptcha'
-		// 		. (CR_Qna::is_captcha_enabled() ? '' : ' g-recaptcha')
-		// 		. '" data-sitekey="' . $site_key . '"></div>';
-		// 	return $comment_form;
-		// }
 		public function custom_fields_captcha2() {
-			$site_key = self::captcha_site_key();
+			CR_Captcha::enqueue_scripts();
 			echo '<div style="clear:both;"></div>';
-			echo '<div class="cr-recaptcha' . (CR_Qna::is_captcha_enabled() ? '' : ' g-recaptcha') .
-				'" data-sitekey="' . $site_key . '"></div>';
+			echo CR_Captcha::get_widget_html();
 		}
 		public function display_captcha_cr() {
-			wp_enqueue_script( 'cr-recaptcha' );
-			$site_key = self::captcha_site_key();
-			echo '<div class="cr-review-form-captcha">';
-			echo '<div class="cr-recaptcha' . (CR_Qna::is_captcha_enabled() ? '' : ' g-recaptcha') .
-				'" data-sitekey="' . $site_key . '" data-crcaptchaid="' . substr( str_shuffle( md5( microtime() ) ), 0, 5 ) . '"></div>';
+			CR_Captcha::enqueue_scripts();
+			// reCAPTCHA V3 does not display anything on a review form
+			echo '<div class="cr-review-form-captcha' . ( CR_Captcha::is_invisible() ? ' cr-review-form-captcha-invisible' : '' ) . '">';
+			echo CR_Captcha::get_widget_html();
 			echo '<div class="cr-review-form-field-error">' . __( '* Please confirm that you are not a robot', 'customer-reviews-woocommerce' ) . '</div>';
 			echo '</div>';
 		}
@@ -396,7 +387,7 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 					'cr_ajax_object',
 					array(
 						'ajax_url' => admin_url( 'admin-ajax.php' ),
-						'ivole_recaptcha' => self::is_captcha_enabled() ? 1 : 0,
+						'ivole_recaptcha' => CR_Captcha::is_enabled() ? 1 : 0,
 						'disable_lightbox' => ( $this->disable_lightbox ? 1 : 0 ),
 						'cr_upload_initial' => sprintf( __( 'Upload up to %d images or videos', 'customer-reviews-woocommerce' ), $this->limit_file_count ),
 						'cr_upload_error_file_type' => __( 'Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI', 'customer-reviews-woocommerce' ),
@@ -414,27 +405,9 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		}
 	}
 	public function cr_style_2() {
+		CR_Captcha::register_scripts( $this->lang );
 		if ( is_product() ) {
-			if ( CR_Qna::is_captcha_enabled() ) {
-				$script_file_basename = 'reviews-qa-captcha';
-				$script_id = 'cr-' . $script_file_basename;
-				wp_register_script(
-					$script_id,
-					plugins_url( 'js/' . $script_file_basename . '.js', dirname( dirname( __FILE__ ) ) ),
-					array( 'jquery' ),
-					'4.9',
-					true
-				);
-				wp_localize_script( $script_id, 'crReviewsQaCaptchaConfig', array(
-					'v2Sitekey' => self::captcha_site_key(),
-				) );
-				wp_enqueue_script( $script_id );
-			} else {
-				wp_register_script( 'cr-recaptcha', 'https://www.google.com/recaptcha/api.js?hl=' . $this->lang, array(), null, true );
-				wp_enqueue_script( 'cr-recaptcha' );
-			}
-		} else {
-			wp_register_script( 'cr-recaptcha', 'https://www.google.com/recaptcha/api.js?hl=' . $this->lang, array(), null, true );
+			CR_Captcha::enqueue_scripts();
 		}
 	}
 	public function validate_captcha( $commentdata ) {
@@ -443,18 +416,19 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		}
 		if ( 'cr_qna' !== $commentdata['comment_type'] ) {
 			if ( get_post_type( $commentdata['comment_post_ID'] ) === 'product' ) {
-				if ( !$this->ping_captcha() ) {
+				if ( ! CR_Captcha::verify() ) {
+					$error_message = __( 'Captcha verification failed and your review cannot be saved', 'customer-reviews-woocommerce' );
 					if ( 'yes' === get_option( 'ivole_ajax_reviews', 'no' ) ) {
 						wp_send_json(
 							array(
 								'code' => 7,
-								'description' => __( 'reCAPTCHA vertification failed and your review cannot be saved', 'customer-reviews-woocommerce' ),
+								'description' => $error_message,
 								'button' => __( 'OK', 'customer-reviews-woocommerce' )
 							)
 						);
 					} else {
 						wp_die(
-							__( 'reCAPTCHA vertification failed and your review cannot be saved', 'customer-reviews-woocommerce' ),
+							$error_message,
 							__( 'Add Review Error', 'customer-reviews-woocommerce' ),
 							array( 'back_link' => true )
 						);
@@ -463,20 +437,6 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			}
 		}
 		return $commentdata;
-	}
-	private function ping_captcha( $recaptcha = null ) {
-		if( !$recaptcha && isset( $_POST['g-recaptcha-response'] ) ) {
-			$recaptcha = $_POST['g-recaptcha-response'];
-		}
-		if( $recaptcha ) {
-			$secret_key = get_option( 'ivole_captcha_secret_key', '' );
-			$response = json_decode( wp_remote_retrieve_body( wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', array( 'body' => array( 'secret' => $secret_key, 'response' => $recaptcha ) ) ) ), true );
-			if( $response["success"] )
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 	public function load_custom_comments_template( $template ) {
 		if ( get_post_type() !== 'product' ) {
@@ -1440,24 +1400,6 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		}
 	}
 
-	private static function is_captcha_enabled() {
-		$response = false;
-		$site_key = trim( get_option( 'ivole_captcha_site_key', '' ) );
-		$secret_key = trim( get_option( 'ivole_captcha_secret_key', '' ) );
-		if (
-			$site_key &&
-			$secret_key &&
-			'yes' === get_option( 'ivole_enable_captcha', 'no' )
-		) {
-			$response = true;
-		}
-		return $response;
-	}
-
-	private static function captcha_site_key() {
-		return get_option( 'ivole_captcha_site_key', '' );
-	}
-
 	public function new_ajax_upload() {
 		$return = array(
 			'code' => 100,
@@ -1465,10 +1407,10 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		);
 		if( check_ajax_referer( 'cr-upload-images-frontend', 'cr_nonce', false ) ) {
 			// check captcha
-			if ( self::is_captcha_enabled() && ! is_user_logged_in() ) {
+			if ( CR_Captcha::is_enabled() && ! is_user_logged_in() ) {
 				$captcha_is_wrong = true;
 				if( isset( $_POST['cr_captcha'] ) && $_POST['cr_captcha'] ) {
-					if( $this->ping_captcha( strval( $_POST['cr_captcha'] ) ) ) {
+					if( CR_Captcha::verify( strval( $_POST['cr_captcha'] ) ) ) {
 						$captcha_is_wrong = false;
 					}
 				}

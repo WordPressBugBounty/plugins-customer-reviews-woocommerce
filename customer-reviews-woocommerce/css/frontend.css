@@ -172,6 +172,8 @@ div.iv-comment-image img {
 	filter: brightness(100%);
 }
 .cr-recaptcha { margin-bottom: 1.5em; }
+/* reCAPTCHA V3 has no widget, its token is requested when a form is submitted */
+.cr-captcha-invisible, .cr-review-form-captcha-invisible { display: none; }
 #commentform.comment-form .cr-upload-local-images, .comment-form .cr-upload-local-images { width: 100%; flex: none; }
 #commentform.comment-form .cr-upload-local-images label, .comment-form .cr-upload-local-images label {
 	display: block;
@@ -600,6 +602,7 @@ div.iv-comment-image img {
 	margin: 0;
 	box-sizing: border-box;
 	border-radius: 3px;
+	display: block;
 }
 .cr-all-reviews-shortcode .cr-review-form-comment.cr-review-form-error .cr-review-form-comment-txt,
 .cr-ajax-reviews-review-form .cr-review-form-comment.cr-review-form-error .cr-review-form-comment-txt,
@@ -809,6 +812,7 @@ div.iv-comment-image img {
 	display: flex;
 	flex-direction: column;
 	align-items: start;
+	line-height: 0;
 }
 .cr-all-reviews-shortcode .cr-review-form-captcha .cr-recaptcha,
 .cr-ajax-reviews-review-form .cr-review-form-captcha .cr-recaptcha,

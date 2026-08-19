@@ -7,12 +7,32 @@
 		jQuery("form#commentform").attr( "enctype", "multipart/form-data" ).attr( "encoding", "multipart/form-data" );
 		//prevent review submission if captcha is not solved
 		jQuery("#commentform").on( "submit", function(event) {
-			if( cr_ajax_object.ivole_recaptcha === '1' ) {
-				var recaptcha = jQuery("#g-recaptcha-response").val();
-				if (recaptcha === "") {
-					event.preventDefault();
-					alert("Please confirm that you are not a robot");
+			if( ! crCaptchaEnabled() ) {
+				return;
+			}
+			const commentForm = jQuery( this );
+			if( crCaptcha.isInvisible() ) {
+				if( commentForm.data( "crCaptchaToken" ) ) {
+					commentForm.data( "crCaptchaToken", false );
+					return;
 				}
+				event.preventDefault();
+				crCaptcha.execute( commentForm, function( token ) {
+					if( ! token ) {
+						alert( crCaptcha.errorText() );
+						return;
+					}
+					commentForm.data( "crCaptchaToken", true );
+					const submitButton = commentForm.find( "[type='submit']" ).first();
+					if( submitButton.length ) {
+						submitButton[0].click();
+					} else {
+						HTMLFormElement.prototype.submit.call( commentForm[0] );
+					}
+				} );
+			} else if( "" === crCaptcha.getResponse( commentForm ) ) {
+				event.preventDefault();
+				alert( crCaptcha.errorText() );
 			}
 		} );
 		//show lightbox when click on images attached to reviews
@@ -366,8 +386,25 @@
 		});
 		jQuery(".cr-ajax-reviews-add-review, .cr-nosummary-add").on( "click", function(t) {
 			t.preventDefault();
-			jQuery(this).closest(".cr-reviews-ajax-reviews").find(".cr-reviews-ajax-comments").hide();
-			jQuery(this).closest(".cr-reviews-ajax-reviews").find(".cr-ajax-reviews-review-form").show();
+			var parent = jQuery(this).closest(".cr-reviews-ajax-reviews");
+			parent.find(".cr-reviews-ajax-comments").hide();
+			var reviewForm = parent.find(".cr-ajax-reviews-review-form");
+			reviewForm.show();
+
+			// If captcha script is loaded, reset and render the widget after the form becomes visible.
+			if ( window.crCaptcha && typeof window.crCaptcha.render === 'function' ) {
+				// small delay to allow layout/visibility changes to take effect
+				window.setTimeout( function() {
+					try {
+						if ( typeof window.crCaptcha.reset === 'function' ) {
+							window.crCaptcha.reset( reviewForm );
+						}
+						window.crCaptcha.render( reviewForm );
+					} catch ( e ) {
+						// ignore errors
+					}
+				}, 50 );
+			}
 		} );
 		// click to filter reviews by tags
 		jQuery(".cr-review-tags-filter span.cr-tags-filter").on( "click", function (e) {
@@ -736,7 +773,6 @@
 			let countFiles = uploadFiles[0].files.length;
 			let countUploaded = jQuery(".cr-upload-images-preview .cr-upload-images-containers").length;
 			let lastIndex = 1;
-			let cr_captcha = "";
 			if(jQuery(this).attr("data-lastindex")) {
 				lastIndex = parseInt(jQuery(this).attr("data-lastindex"));
 			}
@@ -794,52 +830,61 @@
 					jQuery(".cr-upload-images-preview").append(container);
 				}
 			}
+
+			let filesToUpload = [];
 			for(let i = 0; i < countFiles; i++) {
-				let formData = new FormData();
-				formData.append("action", "cr_upload_local_images_frontend");
-				formData.append("cr_nonce", jQuery(this).attr("data-nonce"));
-				formData.append("cr_postid", jQuery(this).attr("data-postid"));
-				formData.append("cr_file", uploadFiles[0].files[i]);
-				if(typeof grecaptcha !== "undefined" && cr_ajax_object.ivole_recaptcha === '1') {
-					cr_captcha = grecaptcha.getResponse();
-					grecaptcha.reset();
+				filesToUpload.push(uploadFiles[0].files[i]);
+			}
+			const uploadField = jQuery(this);
+			const crUploadFiles = function( cr_captcha ) {
+				for(let i = 0; i < countFiles; i++) {
+					let formData = new FormData();
+					formData.append("action", "cr_upload_local_images_frontend");
+					formData.append("cr_nonce", uploadField.attr("data-nonce"));
+					formData.append("cr_postid", uploadField.attr("data-postid"));
+					formData.append("cr_file", filesToUpload[i]);
+					formData.append("cr_captcha", cr_captcha);
+					jQuery.ajax({
+						url: cr_ajax_object.ajax_url,
+						data: formData,
+						processData: false,
+						contentType: false,
+						dataType: "json",
+						type: "POST",
+						beforeSend: function() {
+						},
+						xhr: function() {
+							var myXhr = jQuery.ajaxSettings.xhr();
+							if ( myXhr.upload ) {
+								myXhr.upload.addEventListener( 'progress', function(e) {
+									if ( e.lengthComputable ) {
+										let perc = ( e.loaded / e.total ) * 100;
+										perc = perc.toFixed(0);
+										jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i) + " .cr-upload-images-pbar .cr-upload-images-pbarin").width(perc + "%");
+									}
+								}, false );
+							}
+							return myXhr;
+						},
+						success: function(response) {
+							if(200 === response["code"]) {
+								let idkey = JSON.stringify({ id: response["attachment"]["id"], key: response["attachment"]["key"] });
+								jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i) + " input").val(idkey);
+								jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i)).addClass("cr-upload-ok");
+								jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i) + " button").attr("data-delnonce",response["attachment"]["nonce"]);
+							} else if(500 <= response["code"]) {
+								jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i)).remove();
+								jQuery(".cr-upload-images-status").addClass("cr-upload-images-status-error");
+								jQuery(".cr-upload-images-status").text(response["message"]);
+							}
+						}
+					});
 				}
-				formData.append("cr_captcha", cr_captcha);
-				jQuery.ajax({
-					url: cr_ajax_object.ajax_url,
-					data: formData,
-					processData: false,
-					contentType: false,
-					dataType: "json",
-					type: "POST",
-					beforeSend: function() {
-					},
-					xhr: function() {
-						var myXhr = jQuery.ajaxSettings.xhr();
-						if ( myXhr.upload ) {
-							myXhr.upload.addEventListener( 'progress', function(e) {
-								if ( e.lengthComputable ) {
-									let perc = ( e.loaded / e.total ) * 100;
-									perc = perc.toFixed(0);
-									jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i) + " .cr-upload-images-pbar .cr-upload-images-pbarin").width(perc + "%");
-								}
-							}, false );
-						}
-						return myXhr;
-					},
-					success: function(response) {
-						if(200 === response["code"]) {
-							let idkey = JSON.stringify({ id: response["attachment"]["id"], key: response["attachment"]["key"] });
-							jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i) + " input").val(idkey);
-							jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i)).addClass("cr-upload-ok");
-							jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i) + " button").attr("data-delnonce",response["attachment"]["nonce"]);
-						} else if(500 <= response["code"]) {
-							jQuery(".cr-upload-images-preview .cr-upload-images-containers.cr-upload-images-container-" + (lastIndex + i)).remove();
-							jQuery(".cr-upload-images-status").addClass("cr-upload-images-status-error");
-							jQuery(".cr-upload-images-status").text(response["message"]);
-						}
-					}
-				});
+			};
+			if( crCaptchaEnabled() ) {
+				crCaptcha.consume( uploadField.closest( "form" ), crUploadFiles );
+			} else {
+				crUploadFiles( "" );
 			}
 			jQuery(this).attr("data-lastindex", lastIndex + countFiles);
 			uploadFiles.val("");
@@ -1030,13 +1075,6 @@
 						onsiteQuestions[jQuery( this ).attr( 'name' )] = jQuery( this ).val();
 					}
 				)
-				// if available, add captcha to the ajax call
-				let captchaResponse = '';
-				if ( 0 < jQuery( this ).closest( ".cr-review-form-wrap" ).find( '.cr-review-form-captcha .cr-recaptcha' ).length ) {
-					if ( grecaptcha ) {
-						captchaResponse = grecaptcha.getResponse();
-					}
-				}
 				// submit the form if the validation is successful
 				let cr_data = {
 					"action": "cr_submit_review",
@@ -1048,37 +1086,50 @@
 					"onsiteQuestions": onsiteQuestions,
 					"cr-upload-images-ids": jQuery( this ).closest( ".cr-review-form-wrap" ).find( ".cr-form-item-media .cr-upload-images-containers input" ).map( function() {
 						return jQuery( this ).val();
-					} ).get(),
-					'g-recaptcha-response': captchaResponse
+					} ).get()
 				};
 				jQuery( this ).closest( ".cr-review-form-wrap" ).addClass( "cr-review-form-submitting" );
 				jQuery( this ).closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).removeClass( "cr-review-form-success" );
 				jQuery( this ).closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).removeClass( "cr-review-form-error" );
-				jQuery.post(
-					{
-						url: cr_ajax_object.ajax_url,
-						data: cr_data,
-						context: jQuery( this ),
-						success: function( response ) {
-							if ( ! Object.hasOwn( response, 'button' ) ) {
-								response.button = 'OK';
-							}
-							if ( ! Object.hasOwn( response, 'description' ) ) {
-								response.description = 'An unexpected error that could be caused by a third-party plugin';
-							}
-							this.closest( ".cr-review-form-wrap" ).removeClass( "cr-review-form-submitting" );
-							this.closest( ".cr-review-form-wrap" ).addClass( "cr-review-form-res" );
-							this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-result span" ).html( response.description );
-							this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).html( response.button );
-							if( 0 === response.code ) {
-								this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).addClass( "cr-review-form-success" );
-							} else {
-								this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).addClass( "cr-review-form-error" );
-							}
-						},
-						dataType: "json"
-					}
-				);
+				//
+				const postReview = ( token, data, ref ) => {
+					data.cr_captcha_response = token;
+					jQuery.post(
+						{
+							url: cr_ajax_object.ajax_url,
+							data: data,
+							context: jQuery( ref ),
+							success: function( response ) {
+								if ( ! Object.hasOwn( response, 'button' ) ) {
+									response.button = 'OK';
+								}
+								if ( ! Object.hasOwn( response, 'description' ) ) {
+									response.description = 'An unexpected error that could be caused by a third-party plugin';
+								}
+								this.closest( ".cr-review-form-wrap" ).removeClass( "cr-review-form-submitting" );
+								this.closest( ".cr-review-form-wrap" ).addClass( "cr-review-form-res" );
+								this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-result span" ).html( response.description );
+								this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).html( response.button );
+								if( 0 === response.code ) {
+									this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).addClass( "cr-review-form-success" );
+								} else {
+									this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).addClass( "cr-review-form-error" );
+								}
+							},
+							dataType: "json"
+						}
+					);
+				};
+				//
+				const reviewForm = jQuery( this ).closest( ".cr-review-form-wrap" );
+				const submitRef = this;
+				if ( crCaptchaEnabled() ) {
+					crCaptcha.execute( reviewForm, function( token ) {
+						postReview( token, cr_data, submitRef );
+					} );
+				} else {
+					postReview( '', cr_data, submitRef );
+				}
 			};
 		} );
 
@@ -1619,6 +1670,10 @@
 		});
 	}
 
+	function crCaptchaEnabled() {
+		return "undefined" !== typeof crCaptcha && crCaptcha.isEnabled();
+	}
+
 	function cr_validate_review_form( submitBtn ) {
 		let validationResult = true;
 
@@ -1666,31 +1721,11 @@
 				validationResult = false;
 			}
 		}
-		// validate captcha if available
-		if ( 0 < submitBtn.closest( ".cr-review-form-wrap" ).find( '.cr-review-form-captcha .cr-recaptcha' ).length ) {
-			if ( grecaptcha ) {
-				let widgetId = 0;
-				// check if there are multiple captchas on a page
-				if ( 0 < jQuery( ".cr-review-form-captcha .cr-recaptcha" ).length ) {
-					jQuery( ".cr-review-form-captcha .cr-recaptcha" ).each(
-						function( index ) {
-							if (
-								submitBtn.closest( '.cr-review-form-wrap' ).find( '.cr-review-form-captcha .cr-recaptcha' ).data( 'crcaptchaid' ) === jQuery(this).data( 'crcaptchaid' )
-							) {
-								widgetId = index;
-							}
-						}
-					);
-				}
-				//
-				let captchaCheck = "";
-				if ( 0 < widgetId ) {
-					captchaCheck = grecaptcha.getResponse( widgetId );
-				} else {
-					captchaCheck = grecaptcha.getResponse();
-				}
-				if ( ! captchaCheck.length > 0 ) {
-					submitBtn.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-captcha" ).addClass( "cr-review-form-error" );
+		if ( crCaptchaEnabled() && ! crCaptcha.isInvisible() ) {
+			const captchaForm = submitBtn.closest( ".cr-review-form-wrap" );
+			if ( 0 < captchaForm.find( '.cr-review-form-captcha .cr-captcha-widget' ).length ) {
+				if ( "" === crCaptcha.getResponse( captchaForm ) ) {
+					captchaForm.find( ".cr-review-form-captcha" ).addClass( "cr-review-form-error" );
 					validationResult = false;
 				}
 			}
@@ -1784,8 +1819,11 @@
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-terms .cr-review-form-checkbox" ).prop( 'checked', false );
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-terms" ).removeClass( "cr-review-form-error" );
 
-		// reset recaptcha
+		// reset captcha
 		refElement.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-captcha" ).removeClass( "cr-review-form-error" );
+		if ( crCaptchaEnabled() ) {
+			crCaptcha.reset( refElement.closest( ".cr-review-form-wrap" ) );
+		}
 	}
 
 	function cr_reset_qna_form( refElement ) {

@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 5.116.0
+Stable tag: 5.117.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -20,7 +20,7 @@ Enhance the standard WooCommerce reviews with extra features, and reassure custo
 
 The **Customer Reviews for WooCommerce** plugin helps you increase engagement, build loyalty, improve SEO, and get more sales with social proof.
 
-**Localized to 35 languages and installed on over 80,000 stores!**
+**Localized to 36 languages and installed on over 80,000 stores!**
 
 The plugin includes an optional integration with an external service to verify customer reviews. **CusRev** collects reviews from customers and verifies their authenticity.
 
@@ -83,7 +83,7 @@ Plus, benefit from:
 * Video reviews (let customers upload videos with reviews)
 * Additional rating criteria on review forms to rate different features of products
 * Questions about customer attributes on review forms
-* Preventing spam by enabling reCAPTCHA for reviews
+* Preventing spam by enabling a CAPTCHA for reviews (choose from Cloudflare Turnstile, hCaptcha, reCAPTCHA V2 or reCAPTCHA V3)
 * Displaying a terms and privacy checkbox that people need to tick before posting reviews
 * Showing reviews summary bar on product pages
 * Filtering reviews by rating
@@ -197,9 +197,9 @@ https://www.youtube.com/watch?v=VCLsYu4wp8M
 
 Please create a new topic at the support forum and provide detailed information with a screenshot.
 
-= How to get Site Key and Secret Key for reCAPTCHA? =
+= How to get Site Key and Secret Key for the CAPTCHA? =
 
-Please visit [reCAPTCHA website](https://developers.google.com/recaptcha/docs/start) and sign up for an account. Then, you will be able to get API key pair (Site Key and Secret Key) for your website. Copy these keys and paste into the settings of the plugin.
+Please visit a website of the CAPTCHA service that you selected and sign up for an account. Then, you will be able to get API key pair (Site Key and Secret Key) for your website. Copy these keys and paste into the settings of the plugin.
 
 = Will collected reviews be shown as stars in Google? =
 
@@ -234,9 +234,11 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.117.0 =
+* New feature: support of additional captcha services for review forms (Cloudflare Turnstile, hCaptcha, reCAPTCHA V2, reCAPTCHA V3)
 = 5.116.0 =
 * New feature: color settings for the 'Q&A Reply Notification' email template
-* Improvement: capability and nonce protection for several AJAX handler
+* Improvement: capability and nonce protection for several AJAX handlers
 = 5.115.0 =
 * Improvement: WPML compatibility to display replies to reviews in all languages for [cusrev_all_reviews] shortcode
 * Improvement: accessibility improvements for the reviews summary bar

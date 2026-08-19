@@ -13,6 +13,28 @@
 			return false;
 		});
 
+		const crCaptchaType = jQuery( '#cr_captcha_type' );
+		if ( crCaptchaType.length ) {
+			const crCaptchaKeys = jQuery( '#cr_captcha_site_key, #cr_captcha_secret_key' ).closest( 'tr' );
+			const crSetLabelText = function( fieldId, text ) {
+				jQuery( 'label[for="' + fieldId + '"]' ).contents().filter( function() {
+					return 3 === this.nodeType;
+				} ).first().replaceWith( document.createTextNode( text + ' ' ) );
+			};
+			const crToggleCaptchaKeys = function() {
+				if ( crCaptchaType.val() ) {
+					const captchaName = crCaptchaType.find( 'option:selected' ).text();
+					crSetLabelText( 'cr_captcha_site_key', cr_settings_object.captcha_site_key.replace( '%s', captchaName ) );
+					crSetLabelText( 'cr_captcha_secret_key', cr_settings_object.captcha_secret_key.replace( '%s', captchaName ) );
+					crCaptchaKeys.show();
+				} else {
+					crCaptchaKeys.hide();
+				}
+			};
+			crToggleCaptchaKeys();
+			crCaptchaType.on( 'change', crToggleCaptchaKeys );
+		}
+
 		jQuery( '#cr_check_duplicate_site_url' ).on( 'click', function() {
 			let button = jQuery( this );
 			button.next( 'span' ).addClass( 'is-active' );
