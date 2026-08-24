@@ -60,14 +60,138 @@
 			} );
 		} );
 
-		jQuery(".cr-trustbadgea").each(function() {
-			let badge = jQuery(this).find(".cr-badge").eq(0);
-			let scale = jQuery(this).width() / badge.outerWidth();
-			if( 1 > scale ) {
-				badge.css("transform", "scale(" + scale + ")");
+		const scaleTrustBadge = function( container ) {
+			let badge = container.find( '.cr-badge' ).eq( 0 );
+			container.css( 'height', 'auto' );
+			badge.css( 'transform', 'none' );
+			let scale = Math.min( 1, container.width() / badge.outerWidth() );
+			if ( 1 > scale ) {
+				badge.css( 'transform', 'scale(' + scale + ')' );
 			}
-			badge.css("visibility", "visible");
-		});
+			container.height( badge.outerHeight() * scale );
+			badge.css( 'visibility', 'visible' );
+			return {
+				badge: badge,
+				container: container,
+				height: badge.outerHeight() * scale,
+				scale: scale
+			};
+		};
+
+		const normalizeTrustBadgeBrowser = function( browser ) {
+			const scrollTop = window.pageYOffset;
+			const scrollLeft = window.pageXOffset;
+			const preview = browser.find( '.cr-trustbadges-preview' );
+			// percentage widths on an absolutely positioned element resolve against its containing block's padding
+			// edge (not the content edge), so a plain '100%' below would overestimate the available width; use the
+			// actual content-box pixel width instead, which stays consistent once the element is back in normal flow
+			const previewContentWidth = preview.width();
+
+			browser.find( '.cr-trustbadge-panel' ).each( function() {
+				const panel = jQuery( this );
+				const panelWasHidden = panel.is( '[hidden]' );
+				const activeVariation = panel.find( '.cr-trustbadge-variation.is-active' );
+				const panelWasActive = panel.hasClass( 'is-active' );
+				// normalize heights within this panel only, so different badge types can have different heights
+				let commonBadgeHeight = 0;
+				const badgeEntries = [];
+
+				panel.removeAttr( 'hidden' ).removeClass( 'is-active' ).css( {
+					visibility: 'hidden',
+					position: 'absolute',
+					display: 'block',
+					width: previewContentWidth
+				} );
+				panel.find( '.cr-trustbadge-variation' ).removeClass( 'is-active' ).removeAttr( 'hidden' ).css( {
+					display: 'block',
+					visibility: 'hidden',
+					position: 'absolute',
+					width: previewContentWidth
+				} );
+				panel.find( '.cr-trustbadge-variation' ).each( function() {
+					const variation = jQuery( this );
+					const container = variation.find( '.cr-trustbadgea' );
+					const badgeEntry = scaleTrustBadge( container );
+					badgeEntries.push( badgeEntry );
+					commonBadgeHeight = 0 === commonBadgeHeight ? badgeEntry.height : Math.min( commonBadgeHeight, badgeEntry.height );
+				} );
+
+				badgeEntries.forEach( function( badgeEntry ) {
+					const heightScale = commonBadgeHeight / badgeEntry.height;
+					badgeEntry.badge.css( 'transform', 'scale(' + ( badgeEntry.scale * heightScale ) + ')' );
+					badgeEntry.container.height( commonBadgeHeight );
+				} );
+
+				panel.find( '.cr-trustbadge-variation' ).css( {
+					display: '',
+					visibility: '',
+					position: '',
+					width: ''
+				} );
+				panel.css( {
+					visibility: '',
+					position: '',
+					display: '',
+					width: ''
+				} );
+				panel.toggleClass( 'is-active', panelWasActive );
+				if ( panelWasHidden ) {
+					panel.attr( 'hidden', true );
+				}
+				panel.find( '.cr-trustbadge-variation' ).attr( 'hidden', true ).removeClass( 'is-active' );
+				activeVariation.removeAttr( 'hidden' ).addClass( 'is-active' );
+			} );
+
+			preview.css( 'height', 'auto' );
+			window.scrollTo( scrollLeft, scrollTop );
+		};
+
+		const renormalizeAllTrustBadgeBrowsers = function() {
+			jQuery( '.cr-trustbadges-browser' ).each( function() {
+				normalizeTrustBadgeBrowser( jQuery( this ) );
+			} );
+		};
+
+		jQuery( '.cr-trustbadgea:visible' ).each( function() {
+			scaleTrustBadge( jQuery( this ) );
+		} );
+		renormalizeAllTrustBadgeBrowsers();
+		jQuery( window ).on( 'resize', renormalizeAllTrustBadgeBrowsers );
+		// widths measured on ready can be stale once web fonts/images finish loading (common on mobile Safari), so recheck them
+		jQuery( window ).on( 'load', renormalizeAllTrustBadgeBrowsers );
+		if ( document.fonts && document.fonts.ready ) {
+			document.fonts.ready.then( renormalizeAllTrustBadgeBrowsers );
+		}
+
+		jQuery( '.cr-trustbadges-browser' ).on( 'click', '.cr-trustbadge-selector', function() {
+			const selector = jQuery( this );
+			const browser = selector.closest( '.cr-trustbadges-browser' );
+			const badge = selector.data( 'badge' );
+
+			browser.find( '.cr-trustbadge-selector' ).removeClass( 'is-active' ).attr( 'aria-selected', 'false' );
+			browser.find( '.cr-trustbadge-panel' ).removeClass( 'is-active' ).attr( 'hidden', true );
+			selector.addClass( 'is-active' ).attr( 'aria-selected', 'true' );
+			const panel = browser.find( '#cr-trustbadge-panel-' + badge );
+			panel.addClass( 'is-active' ).removeAttr( 'hidden' );
+			scaleTrustBadge( panel.find( '.cr-trustbadgea:visible' ) );
+			normalizeTrustBadgeBrowser( browser );
+		} );
+
+		jQuery( '.cr-trustbadges-browser' ).on( 'change', '.cr-trustbadge-option', function() {
+			const option = jQuery( this );
+			const smallPanel = option.closest( '.cr-trustbadge-panel' );
+			const includeStoreRating = smallPanel.find( '[data-option="store-rating"]' ).prop( 'checked' ) || false;
+			const darkMode = smallPanel.find( '[data-option="dark-mode"]' ).prop( 'checked' );
+			const variation = smallPanel.find( '.cr-trustbadge-variation' ).filter( function() {
+				return String( includeStoreRating ) === jQuery( this ).attr( 'data-store-rating' ) &&
+					String( darkMode ) === jQuery( this ).attr( 'data-dark-mode' );
+			} );
+
+			smallPanel.find( '.cr-trustbadge-variation' ).attr( 'hidden', true ).removeClass( 'is-active' );
+			variation.removeAttr( 'hidden' ).addClass( 'is-active' );
+			scaleTrustBadge( variation.find( '.cr-trustbadgea' ) );
+			normalizeTrustBadgeBrowser( option.closest( '.cr-trustbadges-browser' ) );
+		} );
 
 		jQuery('.cr-test-email-button').on( "click", function() {
 			var is_coupon = '';

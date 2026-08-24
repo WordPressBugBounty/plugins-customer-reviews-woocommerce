@@ -390,6 +390,7 @@
 			parent.find(".cr-reviews-ajax-comments").hide();
 			var reviewForm = parent.find(".cr-ajax-reviews-review-form");
 			reviewForm.show();
+			reviewForm.find( ".cr-review-form-wrap" ).first().trigger( "focus" );
 
 			// If captcha script is loaded, reset and render the widget after the form becomes visible.
 			if ( window.crCaptcha && typeof window.crCaptcha.render === 'function' ) {
@@ -1309,6 +1310,12 @@
 		// upload media trigger
 		jQuery( ".cr-review-form-wrap .cr-form-item-media-none" ).on( "click", function( t ) {
 			jQuery( this ).parent().find( "input.cr-form-item-media-file" ).trigger( "click" );
+		} );
+		jQuery( ".cr-review-form-wrap .cr-form-item-media-none" ).on( "keydown", function( e ) {
+			if ( "Enter" === e.key || " " === e.key ) {
+				e.preventDefault();
+				jQuery( this ).trigger( "click" );
+			}
 		} );
 
 		// upload media trigger

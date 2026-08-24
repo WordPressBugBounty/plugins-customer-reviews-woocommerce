@@ -12,6 +12,8 @@ if (! class_exists('CR_All_Reviews')) :
 		private $shop_page_id;
 		private $search = '';
 		private $tags = array();
+		private $count_ratings_cache = array();
+		private $all_tags_cache = array();
 		private $default_per_page = 10;
 		private $page = 0;
 
@@ -395,15 +397,8 @@ if (! class_exists('CR_All_Reviews')) :
 				$args_media['meta_key'][] = CR_Reviews::REVIEWS_META_VID;
 				$args_media['meta_key'][] = CR_Reviews::REVIEWS_META_LCL_VID;
 				$reviews_w_media = get_comments( $args_media );
-				// get product reviews with tags
-				$args_tags = $args;
-				$args_tags['parent'] = 0;
-				$args_tags['offset'] = 0;
-				$args_tags['comment__not_in'] = '';
-				$args_tags['number'] = '';
-				add_filter( 'comments_clauses', array( $this, 'tags_comments_clauses' ) );
-				$reviews_w_tags = get_comments( $args_tags );
-				remove_filter( 'comments_clauses', array( $this, 'tags_comments_clauses' ) );
+				// Build tags from the full filtered result set (not paginated chunks).
+				$reviews_w_tags = $this->get_all_filtered_tags( $args );
 
 				remove_filter( 'comments_clauses', array( $this, 'merge_comments_clauses' ) );
 
@@ -707,6 +702,16 @@ if (! class_exists('CR_All_Reviews')) :
 		}
 
 		private function count_ratings( $rating ) {
+			$cache_key = md5( serialize( array(
+				'int_rating' => intval( $rating ),
+				'shortcode_atts' => $this->shortcode_atts,
+				'search' => $this->search,
+				'tags' => $this->tags
+			) ) );
+			if ( isset( $this->count_ratings_cache[ $cache_key ] ) ) {
+				return $this->count_ratings_cache[ $cache_key ];
+			}
+
 			$count = 0;
 			if ( $this->shortcode_atts['product_reviews'] || $this->shortcode_atts['shop_reviews'] ) {
 				// tags passed in the shortcode parameters
@@ -796,7 +801,45 @@ if (! class_exists('CR_All_Reviews')) :
 				remove_filter( 'comments_clauses', array( $this, 'modify_comments_clauses' ) );
 				remove_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
 			}
+			$this->count_ratings_cache[ $cache_key ] = $count;
 			return $count;
+		}
+
+		private function get_all_filtered_tags( $args ) {
+			$cache_key = md5( serialize( array(
+				'shortcode_atts' => $this->shortcode_atts,
+				'search' => $this->search,
+				'tags' => $this->tags,
+				'query_var_rating' => get_query_var( CR_Reviews::$rating_get_filter )
+			) ) );
+			if ( isset( $this->all_tags_cache[ $cache_key ] ) ) {
+				return $this->all_tags_cache[ $cache_key ];
+			}
+
+			$args_tags = $args;
+			$args_tags['parent'] = 0;
+			$args_tags['offset'] = 0;
+			$args_tags['comment__not_in'] = '';
+			$args_tags['number'] = '';
+			$args_tags['fields'] = 'ids';
+			$args_tags['orderby'] = 'comment_date_gmt';
+
+			// Sorting by helpful should not affect which tags are available.
+			if ( isset( $args_tags['meta_query']['cr_helpful'] ) ) {
+				unset( $args_tags['meta_query']['cr_helpful'] );
+			}
+
+			$all_review_ids = get_comments( $args_tags );
+			$all_tags = array();
+			if ( is_array( $all_review_ids ) && 0 < count( $all_review_ids ) ) {
+				$all_tags = wp_get_object_terms( $all_review_ids, 'cr_tag' );
+				if ( is_wp_error( $all_tags ) ) {
+					$all_tags = array();
+				}
+			}
+
+			$this->all_tags_cache[ $cache_key ] = $all_tags;
+			return $all_tags;
 		}
 
 		public function show_summary_table() {
@@ -959,18 +1002,6 @@ if (! class_exists('CR_All_Reviews')) :
 			global $wpdb;
 
 			$clauses['where'] .= " AND CHAR_LENGTH({$wpdb->comments}.comment_content) >= " . $this->shortcode_atts['min_chars'];
-
-			return $clauses;
-		}
-
-		/**
-		* Modify the comments query to constrain results to reviews with tags
-		*/
-		public function tags_comments_clauses( $clauses ) {
-			global $wpdb;
-
-			$clauses['join'] .= " INNER JOIN {$wpdb->term_relationships} AS cr_term_rel ON {$wpdb->comments}.comment_ID = cr_term_rel.object_id
-				LEFT JOIN {$wpdb->term_taxonomy} AS cr_term_tax ON cr_term_rel.term_taxonomy_id = cr_term_tax.term_taxonomy_id AND cr_term_tax.taxonomy = 'cr_tag'";
 
 			return $clauses;
 		}

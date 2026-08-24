@@ -5,6 +5,97 @@
 .cr-trustbadgef .cr-trustbadge-border {border: 1px solid #A3D8CD;}
 .cr-trustbadgef .cr-trustbadge-border.badge_color_dark {border: 1px solid #8B8B8B;}
 
+.cr-badge.badge_size_one_line {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	padding: 2.4px 20px;
+	border-radius: 999px;
+	white-space: nowrap;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	line-height: 1;
+}
+.cr-badge.badge_size_one_line .badge__store {
+	font-size: 14px;
+	font-weight: 700;
+	margin: 0;
+}
+.cr-badge.badge_size_one_line .badge__divider {
+	width: 1px;
+	height: 16px;
+	background: #e2e8f0;
+	flex-shrink: 0;
+}
+.cr-badge.badge_size_one_line .badge__stars {
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+	margin: 0;
+}
+.cr-badge.badge_size_one_line .badge__star {
+	width: 18px;
+	height: 18px;
+	margin: 0;
+}
+.cr-badge.badge_size_one_line .badge__rating,
+.cr-badge.badge_size_one_line .badge__reviews {
+	font-size: 14px;
+	font-weight: 600;
+	padding: 0;
+	margin: 0;
+	white-space: nowrap;
+}
+.cr-badge.badge_size_one_line .badge__reviews {
+	font-weight: 400;
+	color: #94a3b8;
+}
+.cr-badge.badge_size_one_line .badge__logo {
+	position: static;
+	display: block;
+	width: 40px;
+	height: 40px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	flex-shrink: 0;
+}
+.cr-badge.badge_size_one_line.badge_color_dark .badge__divider {
+	background: rgba(255, 255, 255, 0.3);
+}
+.cr-badge.badge_size_one_line.badge_color_dark .badge__reviews {
+	color: rgba(255, 255, 255, 0.7);
+}
+.cr-badge.badge_size_one_line .badge__rating + .badge__stars {
+	margin-left: 0;
+}
+
+.cr-badge.badge_size_one_line.badge_size_one_line_sr {
+	gap: 8px;
+	padding: 2.4px 14px;
+	font-size: 12px;
+}
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__store {
+	font-size: 12px;
+}
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__divider {
+	height: 14px;
+}
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__stars {
+	gap: 1px;
+}
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__star {
+	width: 14px;
+	height: 14px;
+}
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__rating,
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__reviews {
+	font-size: 12px;
+}
+.cr-badge.badge_size_one_line.badge_size_one_line_sr .badge__logo {
+	width: 32px;
+	height: 32px;
+}
+
 #cr_floatingtrustbadge {position: fixed; box-sizing: border-box; right: 0px; bottom: 0px; width: 135px; border-radius: 15px; display: block; overflow: hidden; margin: 30px; filter: drop-shadow(0px 4px 54px rgba(0, 0, 0, 0.25)); z-index: 99999; cursor: pointer;}
 #cr_floatingtrustbadge.cr-floatingbadge-big {position: fixed; box-sizing: border-box; right: 0px; bottom: 0px; width: 256px; border-radius: 15px; display: block; overflow: hidden; margin: 0 30px 30px 0; filter: drop-shadow(0px 4px 54px rgba(0, 0, 0, 0.25)); z-index: 99999; cursor: auto;}
 #cr_floatingtrustbadge {border: 1px solid;}

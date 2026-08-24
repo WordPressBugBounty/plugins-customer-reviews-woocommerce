@@ -29,6 +29,7 @@ if ( property_exists( $cr_jquery, 'src' ) && $cr_jquery->src ) {
 			var crMediaUploadMaxSize = "<?php echo intval( $cr_form_media_upload_max_size ); ?>";
 			var crErrorMaxFileSize = "<?php echo strval( $cr_form_error_max_file_size ); ?>";
 			var crErrorFileType = "<?php echo strval( $cr_form_error_file_type ); ?>";
+			var crSubmitNonce = "<?php echo esc_js( wp_create_nonce( 'cr_local_forms_submit' ) ); ?>";
 			var crEventNonce = "<?php echo esc_js( wp_create_nonce( 'cr_click_event' ) ); ?>";
 		</script>
 		<style>

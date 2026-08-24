@@ -86,7 +86,7 @@ require_once( __DIR__ . '/includes/analytics/class-cr-reminders-log.php' );
 require_once( __DIR__ . '/includes/analytics/class-cr-reviews-top-charts.php' );
 
 class Ivole {
-	const CR_VERSION = '5.117.0';
+	const CR_VERSION = '5.118.0';
 
 	public function __construct() {
 		if( function_exists( 'wc' ) ) {

@@ -136,9 +136,9 @@ if ( ! class_exists( 'CR_Endpoint' ) ) :
 						$shop_page_id = wc_get_page_id( 'shop' );
 						if ( $shop_page_id > 0 ) {
 							if ( is_object( $body2->order->shop_comment ) ) {
-								$shop_comment_text = strval( $body2->order->shop_comment->value );
+								$shop_comment_text = wp_kses_post( strval( $body2->order->shop_comment->value ) );
 							} else {
-								$shop_comment_text = strval( $body2->order->shop_comment );
+								$shop_comment_text = wp_kses_post( strval( $body2->order->shop_comment ) );
 							}
 							if ( is_object( $body2->order->shop_rating ) ) {
 								$shop_rating = intval( $body2->order->shop_rating->value );
@@ -305,7 +305,7 @@ if ( ! class_exists( 'CR_Endpoint' ) ) :
 								// check if review text was provided, if not then we will be adding an empty comment
 								$comment_text = '';
 								if( isset( $body2->order->items[$i]->comment ) ) {
-									$comment_text = strval( $body2->order->items[$i]->comment );
+									$comment_text = wp_kses_post( strval( $body2->order->items[$i]->comment ) );
 								}
 
 								// check if media files were provided

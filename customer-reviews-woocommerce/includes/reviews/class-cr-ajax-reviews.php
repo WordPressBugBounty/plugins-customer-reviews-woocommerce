@@ -797,11 +797,18 @@ if (! class_exists('CR_Ajax_Reviews')) :
 
 		public static function get_tags_field( $comments ) {
 			$tags_field = '';
-			$all_reviews = array_map( function ( $r ) { return $r->comment_ID; }, $comments );
-			// get tags based on the list of comment ids
 			$all_tags = array();
-			if ( $all_reviews && is_array( $all_reviews ) && 0 < count( $all_reviews ) ) {
-				$all_tags = wp_get_object_terms( $all_reviews, 'cr_tag' );
+			if ( is_array( $comments ) && 0 < count( $comments ) ) {
+				$first_item = reset( $comments );
+				if ( $first_item instanceof WP_Term ) {
+					$all_tags = $comments;
+				} else {
+					$all_reviews = array_map( function ( $r ) { return $r->comment_ID; }, $comments );
+					// get tags based on the list of comment ids
+					if ( $all_reviews && is_array( $all_reviews ) && 0 < count( $all_reviews ) ) {
+						$all_tags = wp_get_object_terms( $all_reviews, 'cr_tag' );
+					}
+				}
 			}
 			//
 			if ( 0 < count( $all_tags ) ) {

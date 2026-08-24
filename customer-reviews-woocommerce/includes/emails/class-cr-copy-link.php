@@ -10,6 +10,8 @@ class CR_Copy_Link {
 
 	public $to;
 	public $language;
+	public $form_header;
+	public $form_body;
 	public $find = array();
 	public $replace = array();
 	/**

@@ -20,7 +20,7 @@ if( $cr_current_user instanceof WP_User ) {
 }
 ?>
 
-<div class="cr-review-form-wrap" data-nonce="<?php echo wp_create_nonce( 'cr-upload-images-frontend' ); ?>">
+<div class="cr-review-form-wrap" tabindex="-1" data-nonce="<?php echo wp_create_nonce( 'cr-upload-images-frontend' ); ?>">
 
 	<div class="cr-review-form-nav">
 		<div class="cr-nav-left">
@@ -134,11 +134,11 @@ if( $cr_current_user instanceof WP_User ) {
 			<div class="cr-form-item-media cr-form-item-container">
 				<div class="cr-form-item-subcontainer<?php echo ( 0 < count( $cr_form_item_media_array ) ? ' cr-form-visible' : '' ); ?>">
 					<div>
-						<div class="cr-form-item-media-none">
-							<svg class="cr-form-item-media-icon" viewBox="0 0 576 512">
+						<div class="cr-form-item-media-none" role="button" tabindex="0" aria-label="<?php echo esc_attr( $cr_form_item_media_desc ); ?>">
+							<svg class="cr-form-item-media-icon" aria-hidden="true" viewBox="0 0 576 512">
 								<path d="M480 416v16c0 26.51-21.49 48-48 48H48c-26.51 0-48-21.49-48-48V176c0-26.51 21.49-48 48-48h16v208c0 44.112 35.888 80 80 80h336zm96-80V80c0-26.51-21.49-48-48-48H144c-26.51 0-48 21.49-48 48v256c0 26.51 21.49 48 48 48h384c26.51 0 48-21.49 48-48zM256 128c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-96 144l55.515-55.515c4.686-4.686 12.284-4.686 16.971 0L272 256l135.515-135.515c4.686-4.686 12.284-4.686 16.971 0L512 208v112H160v-48z"></path>
 							</svg>
-							<svg class="cr-form-item-media-icon" viewBox="0 0 576 512">
+							<svg class="cr-form-item-media-icon" aria-hidden="true" viewBox="0 0 576 512">
 								<path d="M336.2 64H47.8C21.4 64 0 85.4 0 111.8v288.4C0 426.6 21.4 448 47.8 448h288.4c26.4 0 47.8-21.4 47.8-47.8V111.8c0-26.4-21.4-47.8-47.8-47.8zm189.4 37.7L416 177.3v157.4l109.6 75.5c21.2 14.6 50.4-.3 50.4-25.8V127.5c0-25.4-29.1-40.4-50.4-25.8z"></path>
 							</svg>
 							<span>
@@ -195,11 +195,11 @@ if( $cr_current_user instanceof WP_User ) {
 		?>
 
 		<div class="cr-review-form-buttons">
-			<button type="button" class="cr-review-form-submit">
+			<button type="button" tabindex="0" class="cr-review-form-submit">
 				<span><?php _e( 'Submit', 'customer-reviews-woocommerce' ); ?></span>
 				<img src="<?php echo CR_Utils::cr_get_plugin_dir_url() . 'img/spinner-dots.svg'; ?>" alt="Loading" />
 			</button>
-			<button type="button" class="cr-review-form-cancel">
+			<button type="button" tabindex="0" class="cr-review-form-cancel">
 				<?php _e( 'Cancel', 'customer-reviews-woocommerce' ); ?>
 			</button>
 		</div>

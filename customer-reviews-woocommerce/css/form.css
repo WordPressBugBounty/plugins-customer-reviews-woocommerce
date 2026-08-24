@@ -241,6 +241,9 @@
 	border: 1px dashed #e0e0e0;
 	border-radius: 2px;
 }
+.cr-form-item-media-none:focus:not(:focus-visible) {
+	outline: none;
+}
 .cr-form-visible .cr-form-item-media-none {
 	display: none;
 }

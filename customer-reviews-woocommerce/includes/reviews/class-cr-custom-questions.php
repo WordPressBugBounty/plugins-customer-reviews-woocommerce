@@ -415,7 +415,7 @@ if ( ! class_exists( 'CR_Custom_Questions' ) ) :
 						}
 					?>
 				</div>
-				<div class="cr-review-form-rating-cont<?php if ( $required ) { echo ' cr-review-form-rating-req'; } ?>">
+				<div class="cr-review-form-rating-cont<?php if ( $required ) { echo ' cr-review-form-rating-req'; } ?>"<?php if ( $overall ) { echo ' tabindex="0"'; } ?>>
 					<?php for( $i = 1; $i <= 5; $i++ ): ?>
 						<div class="cr-review-form-rating-inner" data-rating="<?php echo $i; ?>">
 							<svg width="22" height="20" viewBox="0 0 22 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="cr-rating-deact">

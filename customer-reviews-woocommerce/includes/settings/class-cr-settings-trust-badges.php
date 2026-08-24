@@ -23,7 +23,7 @@ if ( ! class_exists( 'Ivole_Trust_Badges' ) ):
 			$this->floating_light = CR_Floating_Trust_Badge::$floating_light;
 			$this->floating_dark = CR_Floating_Trust_Badge::$floating_dark;
 
-			add_action( 'woocommerce_admin_field_trust_badge', array( $this, 'show_trustbadge' ) );
+			add_action( 'woocommerce_admin_field_trust_badge', array( $this, 'show_trustbadges_browser' ) );
 			add_filter( 'cr_settings_tabs', array( $this, 'register_tab' ) );
 			add_action( 'ivole_settings_display_' . $this->tab, array( $this, 'display' ) );
 			add_action( 'cr_save_settings_' . $this->tab, array( $this, 'save' ) );
@@ -80,84 +80,8 @@ if ( ! class_exists( 'Ivole_Trust_Badges' ) ):
 					'id'    => 'ivole_options'
 				),
 				array(
-					'title'    => __( 'Small Light Badge', 'customer-reviews-woocommerce' ),
 					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the small light trust badge.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_sl',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Small Light Badge (with Store Rating)', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the small light trust badge with store rating.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_slp',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Small Dark Badge', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the small dark trust badge.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_sd',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Small Dark Badge (with Store Rating)', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the small dark trust badge with store rating.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_sdp',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Wide Light Badge', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the wide light trust badge. The wide badge has a version for small screens that will be automatically shown when a website is viewed from phones.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_wl',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Wide Light Badge (with Store Rating)', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the wide light trust badge with store rating. The wide badge has a version for small screens that will be automatically shown when a website is viewed from phones.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_wlp',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Wide Dark Badge', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the wide dark trust badge. The wide badge has a version for small screens that will be automatically shown when a website is viewed from phones.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_wd',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Wide Dark Badge (with Store Rating)', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the wide dark trust badge with store rating. The wide badge has a version for small screens that will be automatically shown when a website is viewed from phones.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_wdp',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Compact Light Badge', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the compact light trust badge.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_vsl',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
-				),
-				array(
-					'title'    => __( 'Compact Dark Badge', 'customer-reviews-woocommerce' ),
-					'type'     => 'trust_badge',
-					'desc'     => __( 'Shortcode and preview of the compact dark trust badge.', 'customer-reviews-woocommerce' ),
-					'id'       => 'ivole_trust_badge_vsd',
-					'css'      => 'min-width:400px;',
-					'desc_tip' => true
+					'id'       => 'ivole_trust_badge_browser'
 				),
 				array(
 					'type' => 'sectionend',
@@ -248,95 +172,94 @@ if ( ! class_exists( 'Ivole_Trust_Badges' ) ):
 		/**
 		* Custom field type for trust badges
 		*/
-		public function show_trustbadge( $value ) {
-			$tmp = CR_Admin::cr_get_field_description( $value );
-			$tooltip_html = $tmp['tooltip_html'];
-			$description = $tmp['description'];
-			$shortcode = '';
-			$suffix = '';
-			$l_suffix = '';
-			$site_lang = '';
-			if( 'en' !== $this->language ) {
-				$l_suffix = '-' . $this->language;
-				$site_lang = $this->language . '/';
-			}
-
-			switch( $value['id']  ) {
-				case 'ivole_trust_badge_sl':
-				$shortcode = '[cusrev_trustbadge type="SL" border="yes" color="#FFFFFF"]';
-				$suffix = 'sl';
-				break;
-				case 'ivole_trust_badge_slp':
-				$shortcode = '[cusrev_trustbadge type="SLP" border="yes" color="#FFFFFF"]';
-				$suffix = 'slp';
-				break;
-				case 'ivole_trust_badge_sd':
-				$shortcode = '[cusrev_trustbadge type="SD" border="yes" color="#3D3D3D"]';
-				$suffix = 'sd';
-				break;
-				case 'ivole_trust_badge_sdp':
-				$shortcode = '[cusrev_trustbadge type="SDP" border="yes" color="#3D3D3D"]';
-				$suffix = 'sdp';
-				break;
-				case 'ivole_trust_badge_wl':
-				$shortcode = '[cusrev_trustbadge type="WL" color="#FFFFFF"]';
-				$suffix = 'wl';
-				break;
-				case 'ivole_trust_badge_wlp':
-				$shortcode = '[cusrev_trustbadge type="WLP" color="#FFFFFF"]';
-				$suffix = 'wlp';
-				break;
-				case 'ivole_trust_badge_wd':
-				$shortcode = '[cusrev_trustbadge type="WD" color="#003640"]';
-				$suffix = 'wd';
-				break;
-				case 'ivole_trust_badge_wdp':
-				$shortcode = '[cusrev_trustbadge type="WDP" color="#003640"]';
-				$suffix = 'wdp';
-				break;
-				case 'ivole_trust_badge_vsl':
-				$shortcode = '[cusrev_trustbadge type="VSL" color="#FFFFFF"]';
-				$suffix = 'vsl';
-				break;
-				case 'ivole_trust_badge_vsd':
-				$shortcode = '[cusrev_trustbadge type="VSD" color="#373737"]';
-				$suffix = 'vsd';
-				break;
-				default:
-				$shortcode = '';
-				$suffix = '';
-				break;
-			}
+		public function show_trustbadges_browser( $value ) {
+			$badges = $this->get_trustbadges();
+			$groups = array(
+				'one-line' => array_slice( $badges, 0, 4 ),
+				'small' => array_slice( $badges, 4, 4 ),
+				'wide' => array_slice( $badges, 8, 4 ),
+				'compact' => array_slice( $badges, 12, 2 )
+			);
 			?>
-			<tr valign="top">
-				<th scope="row" class="titledesc">
-					<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-					<?php echo $tooltip_html; ?>
-				</th>
-				<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-					<?php
-						$shortcode_custom_color = '<a href="https://www.google.com/search?q=color+picker" target="_blank">' . __( 'color', 'customer-reviews-woocommerce' ) . '</a>';
-						/* translators: please keep %1$s, %2$s, %3$s, %4$s, %5$s, and %6$s in the translated string */
-						$shortcode_explanation = sprintf(
-							__( 'Use %1$s shortcode to display this badge on your site. If the shortcode includes %2$s argument, you can set it to %3$s or %4$s to display or hide border. If the shortcode includes %5$s argument, you can set it to a custom %6$s (in HEX format).', 'customer-reviews-woocommerce' ),
-							'<code>' . $shortcode . '</code>',
-							'<code>border</code>',
-							'<code>yes</code>',
-							'<code>no</code>',
-							'<code>color</code>',
-							$shortcode_custom_color
-						);
-					?>
-					<p class="cr-trustbadge-desc"><?php echo $shortcode_explanation; ?></p>
-					<div class="cr-trustbadgea">
-						<?php
-							echo CR_Trust_Badge::show_html_trust_badge( $suffix, $this->store_stats, '', '', $this->verified_page );
-						?>
+			<tr class="cr-trustbadges-row">
+				<td colspan="2" class="cr-trustbadges-browser-cell">
+					<div class="cr-trustbadges-browser">
+						<div class="cr-trustbadges-list" role="tablist" aria-label="<?php esc_attr_e( 'Available badges', 'customer-reviews-woocommerce' ); ?>">
+							<?php foreach ( array( 'one-line' => __( 'One-Line Badge', 'customer-reviews-woocommerce' ), 'small' => __( 'Small Badge', 'customer-reviews-woocommerce' ), 'wide' => __( 'Wide Badge', 'customer-reviews-woocommerce' ), 'compact' => __( 'Compact Badge', 'customer-reviews-woocommerce' ) ) as $group_id => $group_title ) : ?>
+								<button type="button" class="cr-trustbadge-selector<?php echo 'one-line' === $group_id ? ' is-active' : ''; ?>" id="cr-trustbadge-selector-<?php echo esc_attr( $group_id ); ?>" data-badge="<?php echo esc_attr( $group_id ); ?>" role="tab" aria-controls="cr-trustbadge-panel-<?php echo esc_attr( $group_id ); ?>" aria-selected="<?php echo 'one-line' === $group_id ? 'true' : 'false'; ?>"><?php echo esc_html( $group_title ); ?></button>
+							<?php endforeach; ?>
+						</div>
+						<div class="cr-trustbadges-preview">
+							<?php $this->render_trustbadge_panel( 'one-line', $groups['one-line'], true ); ?>
+							<?php $this->render_trustbadge_panel( 'small', $groups['small'], false ); ?>
+							<?php $this->render_trustbadge_panel( 'wide', $groups['wide'], false ); ?>
+							<?php $this->render_trustbadge_panel( 'compact', $groups['compact'], false ); ?>
+						</div>
 					</div>
 				</td>
 			</tr>
 			<?php
 		}
+
+		protected function render_trustbadge_panel( $group_id, $badges, $active ) {
+			?>
+			<div id="cr-trustbadge-panel-<?php echo esc_attr( $group_id ); ?>" class="cr-trustbadge-panel cr-trustbadge-panel-options<?php echo $active ? ' is-active' : ''; ?>" role="tabpanel" aria-labelledby="cr-trustbadge-selector-<?php echo esc_attr( $group_id ); ?>"<?php echo $active ? '' : ' hidden'; ?>>
+				<?php if ( 'compact' === $group_id ) : ?>
+					<div class="cr-trustbadge-controls">
+						<label class="cr-trustbadge-switch"><input type="checkbox" class="cr-trustbadge-option" data-option="dark-mode" /><span class="cr-trustbadge-switch-slider" aria-hidden="true"></span><span><?php esc_html_e( 'Dark mode', 'customer-reviews-woocommerce' ); ?></span></label>
+					</div>
+				<?php else : ?>
+					<div class="cr-trustbadge-controls">
+						<label class="cr-trustbadge-switch"><input type="checkbox" class="cr-trustbadge-option" data-option="store-rating" /><span class="cr-trustbadge-switch-slider" aria-hidden="true"></span><span><?php esc_html_e( 'Include store ratings', 'customer-reviews-woocommerce' ); ?></span></label>
+						<label class="cr-trustbadge-switch"><input type="checkbox" class="cr-trustbadge-option" data-option="dark-mode" /><span class="cr-trustbadge-switch-slider" aria-hidden="true"></span><span><?php esc_html_e( 'Dark mode', 'customer-reviews-woocommerce' ); ?></span></label>
+					</div>
+				<?php endif; ?>
+				<?php foreach ( $badges as $index => $badge ) : ?>
+					<div class="cr-trustbadge-variation<?php echo 0 === $index ? ' is-active' : ''; ?>" data-store-rating="<?php echo ( false !== strpos( $badge['suffix'], 'p' ) ? 'true' : 'false' ); ?>" data-dark-mode="<?php echo ( false !== strpos( $badge['suffix'], 'd' ) ? 'true' : 'false' ); ?>"<?php echo 0 === $index ? '' : ' hidden'; ?>>
+						<div class="cr-trustbadgea"><?php echo CR_Trust_Badge::show_html_trust_badge( $badge['suffix'], $this->store_stats, '', '', $this->verified_page ); ?></div>
+						<p class="cr-trustbadge-desc"><?php echo $badge['explanation']; ?></p>
+					</div>
+				<?php endforeach; ?>
+			</div>
+			<?php
+		}
+
+		protected function get_trustbadges() {
+			$badges = array(
+				array( 'id' => 'ivole_trust_badge_ol', 'title' => __( 'One-Line Light Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'ol', 'shortcode' => '[cusrev_trustbadge type="OL" border="yes" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_olp', 'title' => __( 'One-Line Light Badge (with Store Rating)', 'customer-reviews-woocommerce' ), 'suffix' => 'olp', 'shortcode' => '[cusrev_trustbadge type="OLP" border="yes" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_od', 'title' => __( 'One-Line Dark Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'od', 'shortcode' => '[cusrev_trustbadge type="OD" border="yes" color="#3D3D3D"]' ),
+				array( 'id' => 'ivole_trust_badge_odp', 'title' => __( 'One-Line Dark Badge (with Store Rating)', 'customer-reviews-woocommerce' ), 'suffix' => 'odp', 'shortcode' => '[cusrev_trustbadge type="ODP" border="yes" color="#3D3D3D"]' ),
+				array( 'id' => 'ivole_trust_badge_sl', 'title' => __( 'Small Light Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'sl', 'shortcode' => '[cusrev_trustbadge type="SL" border="yes" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_slp', 'title' => __( 'Small Light Badge (with Store Rating)', 'customer-reviews-woocommerce' ), 'suffix' => 'slp', 'shortcode' => '[cusrev_trustbadge type="SLP" border="yes" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_sd', 'title' => __( 'Small Dark Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'sd', 'shortcode' => '[cusrev_trustbadge type="SD" border="yes" color="#3D3D3D"]' ),
+				array( 'id' => 'ivole_trust_badge_sdp', 'title' => __( 'Small Dark Badge (with Store Rating)', 'customer-reviews-woocommerce' ), 'suffix' => 'sdp', 'shortcode' => '[cusrev_trustbadge type="SDP" border="yes" color="#3D3D3D"]' ),
+				array( 'id' => 'ivole_trust_badge_wl', 'title' => __( 'Wide Light Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'wl', 'shortcode' => '[cusrev_trustbadge type="WL" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_wlp', 'title' => __( 'Wide Light Badge (with Store Rating)', 'customer-reviews-woocommerce' ), 'suffix' => 'wlp', 'shortcode' => '[cusrev_trustbadge type="WLP" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_wd', 'title' => __( 'Wide Dark Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'wd', 'shortcode' => '[cusrev_trustbadge type="WD" color="#003640"]' ),
+				array( 'id' => 'ivole_trust_badge_wdp', 'title' => __( 'Wide Dark Badge (with Store Rating)', 'customer-reviews-woocommerce' ), 'suffix' => 'wdp', 'shortcode' => '[cusrev_trustbadge type="WDP" color="#003640"]' ),
+				array( 'id' => 'ivole_trust_badge_vsl', 'title' => __( 'Compact Light Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'vsl', 'shortcode' => '[cusrev_trustbadge type="VSL" color="#FFFFFF"]' ),
+				array( 'id' => 'ivole_trust_badge_vsd', 'title' => __( 'Compact Dark Badge', 'customer-reviews-woocommerce' ), 'suffix' => 'vsd', 'shortcode' => '[cusrev_trustbadge type="VSD" color="#373737"]' )
+			);
+
+			foreach ( $badges as &$badge ) {
+				$shortcode_custom_color = '<a href="https://www.google.com/search?q=color+picker" target="_blank" rel="noopener noreferrer">' . __( 'color', 'customer-reviews-woocommerce' ) . '</a>';
+				/* translators: please keep %1$s, %2$s, %3$s, %4$s, %5$s, and %6$s in the translated string */
+				$badge['explanation'] = sprintf(
+					__( 'Use %1$s shortcode to display this badge on your site. If the shortcode includes %2$s argument, you can set it to %3$s or %4$s to display or hide border. If the shortcode includes %5$s argument, you can set it to a custom %6$s (in HEX format).', 'customer-reviews-woocommerce' ),
+					'<code>' . esc_html( $badge['shortcode'] ) . '</code>',
+					'<code>border</code>',
+					'<code>yes</code>',
+					'<code>no</code>',
+					'<code>color</code>',
+					$shortcode_custom_color
+				);
+			}
+
+			return $badges;
+		}
+
+
 
 		public function load_trustbadges_css( $hook ) {
 			$reviews_screen_id = sanitize_title( __( 'Reviews', 'customer-reviews-woocommerce' ) . Ivole_Reviews_Admin_Menu::$screen_id_bubble );

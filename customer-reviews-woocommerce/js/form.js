@@ -79,6 +79,7 @@
 				} );
 				let crData = {
 					"action": "cr_local_forms_submit",
+					"nonce": crSubmitNonce,
 					"formId": jQuery( ".cr-form" ).data( "formid" ),
 					"displayName": jQuery( ".cr-form-customer-name-preview-name" ).text().trim(),
 					"items": crItems
@@ -111,6 +112,12 @@
 		// upload media trigger
 		jQuery( ".cr-form-item-media-none" ).on( "click", function( t ) {
 			jQuery( this ).parent().find( "input.cr-form-item-media-file" ).trigger( "click" );
+		} );
+		jQuery( ".cr-form-item-media-none" ).on( "keydown", function( e ) {
+			if ( "Enter" === e.key || " " === e.key ) {
+				e.preventDefault();
+				jQuery( this ).trigger( "click" );
+			}
 		} );
 		// upload media trigger
 		jQuery( ".cr-form-item-media-preview" ).on( "click", ".cr-form-item-media-add", function( t ) {

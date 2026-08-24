@@ -37,7 +37,7 @@ if (! class_exists('CR_Trust_Badge')) :
 			if ( isset( $attributes['type'] ) ) {
 				$type = str_replace( ' ', '', $attributes['type'] );
 				$type = strtolower( $type );
-				$allowed_types = array( 'sl', 'slp', 'sd', 'sdp', 'wl', 'wlp', 'wd', 'wdp', 'vsl', 'vsd' );
+				$allowed_types = array( 'ol', 'olp', 'od', 'odp', 'sl', 'slp', 'sd', 'sdp', 'wl', 'wlp', 'wd', 'wdp', 'vsl', 'vsd' );
 				if( in_array( $type, $allowed_types ) ) {
 					$attributes['type'] = $type;
 				} else {
@@ -198,6 +198,29 @@ if (! class_exists('CR_Trust_Badge')) :
 			$templateFile = '';
 
 			switch( $type ) {
+				case 'ol':
+				case 'olp':
+					$separateRatings = 'olp' === $type;
+					$templateFile = 'badge-one-line.php';
+					if( !$backgroundColor ) {
+						$backgroundColor = '#FFFFFF';
+					}
+					if( 'no' !== $borderStyle ) {
+						$badgeClass = ' cr-trustbadge-border';
+					}
+					break;
+				case 'od':
+				case 'odp':
+					$separateRatings = 'odp' === $type;
+					$templateFile = 'badge-one-line.php';
+					$badgeClass = ' badge_color_dark';
+					if( !$backgroundColor ) {
+						$backgroundColor = '#3D3D3D';
+					}
+					if( 'no' !== $borderStyle ) {
+						$badgeClass .= ' cr-trustbadge-border';
+					}
+					break;
 				case 'sl':
 					$separateRatings = false;
 					$templateFile = 'badge-small.php';

@@ -28,6 +28,8 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 		}
 
 		public function submit_form() {
+			check_ajax_referer( 'cr_local_forms_submit', 'nonce' );
+
 			if ( isset( $_POST['formId'] ) ) {
 				// fetch product recommendations
 				$recom_prods = $this->get_recommended_products();

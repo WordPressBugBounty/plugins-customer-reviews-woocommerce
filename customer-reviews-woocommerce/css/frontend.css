@@ -349,6 +349,9 @@ div.iv-comment-image img {
 .cr-qna-block.cr-qna-new-q-form-open .cr-qna-new-q-form {
 	display: block;
 }
+.cr-review-form-wrap:focus {
+	outline: none;
+}
 .cr-all-reviews-shortcode .cr-review-form-wrap .cr-review-form-nav,
 .cr-ajax-reviews-review-form .cr-review-form-wrap .cr-review-form-nav,
 .cr-reviews-grid .cr-review-form-wrap .cr-review-form-nav,
@@ -474,6 +477,9 @@ div.iv-comment-image img {
 	position: relative;
 	height: auto;
 	padding: 5px 0;
+}
+.cr-review-form-rating-overall .cr-review-form-rating-cont:focus:not(:focus-visible) {
+	outline: none;
 }
 .cr-all-reviews-shortcode .cr-review-form-rating .cr-review-form-rating-cont .cr-review-form-rating-inner,
 .cr-onsite-ratings .cr-review-form-rating .cr-review-form-rating-cont .cr-review-form-rating-inner,
@@ -1817,6 +1823,9 @@ img.ivole-verified-badge-ext-icon {
 	border: 1px dashed #D8E2E7;
 	border-radius: 2px;
 }
+.cr-form-item-media-none:focus:not(:focus-visible) {
+	outline: none;
+}
 .cr-review-form-error .cr-form-item-media-none {
 	border-color: #CE2B37;
 }
@@ -1824,8 +1833,8 @@ img.ivole-verified-badge-ext-icon {
 	display: none;
 }
 .cr-form-item-media-none .cr-form-item-media-icon {
-	width: 60px;
-	height: 60px;
+	width: 44px;
+	height: 44px;
 	padding: 8px;
 	border: 1px solid #e0e0e0;
 	fill: #e0e0e0;
