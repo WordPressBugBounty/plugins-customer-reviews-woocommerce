@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 5.118.0
+Stable tag: 5.119.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,10 +234,14 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.119.0 =
+* Improvement: display of Q & A in admin console using nested layout for easier navigation
+* Improvement: performance optimization for verified owner checks
+* Improvement: nonce checks for local aggregated review forms
 = 5.118.0 =
 * New feature: one-line trust badge
 * Improvement: screen reader accessibility of on-site review forms
-* Improvement: minor security improvements
+* Improvement: minor security improvements (credit to rasul)
 * Improvement: performance optimization for [cusrev_all_reviews] shortcode
 = 5.117.0 =
 * New feature: support of additional captcha services for review forms (Cloudflare Turnstile, hCaptcha, reCAPTCHA V2, reCAPTCHA V3)

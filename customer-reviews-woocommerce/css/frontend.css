@@ -2694,7 +2694,7 @@ img.ivole-verified-badge-ext-icon {
 .cr-all-reviews-shortcode .cr-ajax-reviews-cus-images-modal .cr-ajax-reviews-cus-images-close .cr-no-icon {
 	fill: #333333;
 }
-#reviews.cr-reviews-ajax-reviews .cr-ajax-reviews-cus-images-modal .cr-ajax-reviews-slide-main-flex,
+.cr-reviews-ajax-reviews .cr-ajax-reviews-cus-images-modal .cr-ajax-reviews-slide-main-flex,
 .cr-all-reviews-shortcode .cr-ajax-reviews-cus-images-modal .cr-ajax-reviews-slide-main-flex {
 	display: flex;
 	flex-direction: row;

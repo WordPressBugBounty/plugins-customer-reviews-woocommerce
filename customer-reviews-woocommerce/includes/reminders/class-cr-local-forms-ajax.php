@@ -28,72 +28,74 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 		}
 
 		public function submit_form() {
-			check_ajax_referer( 'cr_local_forms_submit', 'nonce' );
+			if ( ! isset( $_POST['formId'] ) || ! is_string( $_POST['formId'] ) ) {
+				wp_die();
+			}
+			$form_id = sanitize_text_field( wp_unslash( $_POST['formId'] ) );
+			check_ajax_referer( 'cr_local_forms_submit_' . $form_id, 'nonce' );
 
-			if ( isset( $_POST['formId'] ) ) {
-				// fetch product recommendations
-				$recom_prods = $this->get_recommended_products();
-				$recommendations = $this->get_recommended_products_html( $recom_prods, $_POST['formId'] );
-				//
-				if( CR_Local_Forms::TEST_FORM === $_POST['formId'] ) {
-					// submission of a test form
-					wp_send_json_success( $recommendations );
-				} else {
-					global $wpdb;
-					$table_name = $wpdb->prefix . CR_Local_Forms::FORMS_TABLE;
-					$record = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `$table_name` WHERE `formId` = %s", $_POST['formId'] ) );
-					if( null !== $record ) {
-						$db_items = json_decode( $record->items, true );
+			// fetch product recommendations
+			$recom_prods = $this->get_recommended_products();
+			$recommendations = $this->get_recommended_products_html( $recom_prods, $form_id );
+			//
+			if( CR_Local_Forms::TEST_FORM === $form_id ) {
+				// submission of a test form
+				wp_send_json_success( $recommendations );
+			} else {
+				global $wpdb;
+				$table_name = $wpdb->prefix . CR_Local_Forms::FORMS_TABLE;
+				$record = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM `$table_name` WHERE `formId` = %s", $form_id ) );
+				if( null !== $record ) {
+					$db_items = json_decode( $record->items, true );
 
-						foreach( $_POST['items'] as $review_item ) {
-							foreach( $db_items as $key => $item ) {
-								if ( intval( $review_item['id'] ) === intval( $item['id'] ) ) {
-									$db_items[$key]['rating'] = intval( $review_item['rating'] );
-									$db_items[$key]['comment'] = wp_kses_post( $review_item['comment'] );
-									if ( isset( $review_item['media'] ) && is_array( $review_item['media'] ) ) {
-										$review_item['media'] = array_map( 'intval', $review_item['media'] );
-										$db_items[$key]['media'] = array_values( $review_item['media'] );
-									} else {
-										$db_items[$key]['media'] = array();
-									}
-									break;
+					foreach( $_POST['items'] as $review_item ) {
+						foreach( $db_items as $key => $item ) {
+							if ( intval( $review_item['id'] ) === intval( $item['id'] ) ) {
+								$db_items[$key]['rating'] = intval( $review_item['rating'] );
+								$db_items[$key]['comment'] = wp_kses_post( $review_item['comment'] );
+								if ( isset( $review_item['media'] ) && is_array( $review_item['media'] ) ) {
+									$review_item['media'] = array_map( 'intval', $review_item['media'] );
+									$db_items[$key]['media'] = array_values( $review_item['media'] );
+								} else {
+									$db_items[$key]['media'] = array();
 								}
+								break;
 							}
 						}
-
-						$req = new stdClass();
-						$req->order = new stdClass();
-						$req->order->id = $record->orderId;
-						$req->order->display_name = sanitize_text_field( $_POST['displayName'] );
-						$req->order->items = array();
-						foreach( $db_items as $item ) {
-							if( -1 === intval( $item['id'] ) ) {
-								$req->order->shop_rating = $item['rating'];
-								$req->order->shop_comment = $item['comment'];
-							} else {
-								$product = new stdClass();
-								$product->id = $item['id'];
-								$product->name = $item['name'];
-								$product->price = $item['price'];
-								$product->rating = $item['rating'];
-								$product->comment = $item['comment'];
-								$product->media = $item['media'];
-								$req->order->items[] = $product;
-							}
-						}
-
-						$db_items = json_encode( $db_items );
-						$update_result = $wpdb->update( $table_name, array(
-							'displayName' => $req->order->display_name,
-							'items' => $db_items
-						), array( 'formId' => $_POST['formId'] ) );
-						if( false !== $update_result ) {
-							CR_Endpoint::create_review( $req, true );
-						};
 					}
-					$this->record_recommendations_views( $recom_prods, $_POST['formId'], 'view' );
-					wp_send_json_success( $recommendations );
+
+					$req = new stdClass();
+					$req->order = new stdClass();
+					$req->order->id = $record->orderId;
+					$req->order->display_name = sanitize_text_field( $_POST['displayName'] );
+					$req->order->items = array();
+					foreach( $db_items as $item ) {
+						if( -1 === intval( $item['id'] ) ) {
+							$req->order->shop_rating = $item['rating'];
+							$req->order->shop_comment = $item['comment'];
+						} else {
+							$product = new stdClass();
+							$product->id = $item['id'];
+							$product->name = $item['name'];
+							$product->price = $item['price'];
+							$product->rating = $item['rating'];
+							$product->comment = $item['comment'];
+							$product->media = $item['media'];
+							$req->order->items[] = $product;
+						}
+					}
+
+					$db_items = json_encode( $db_items );
+					$update_result = $wpdb->update( $table_name, array(
+						'displayName' => $req->order->display_name,
+						'items' => $db_items
+					), array( 'formId' => $form_id ) );
+					if( false !== $update_result ) {
+						CR_Endpoint::create_review( $req, true );
+					};
 				}
+				$this->record_recommendations_views( $recom_prods, $form_id, 'view' );
+				wp_send_json_success( $recommendations );
 			}
 		}
 

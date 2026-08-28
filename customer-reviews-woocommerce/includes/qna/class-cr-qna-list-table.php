@@ -124,6 +124,8 @@ class CR_Qna_List_Table extends WP_List_Table {
 		if ( is_array( $_comments ) ) {
 			update_comment_cache( $_comments );
 
+			$_comments = $this->thread_comments( $_comments );
+
 			$this->items = array_slice( $_comments, 0, $comments_per_page );
 			$this->extra_items = array_slice( $_comments, $comments_per_page );
 
@@ -142,6 +144,50 @@ class CR_Qna_List_Table extends WP_List_Table {
 			'total_items' => $total_comments,
 			'per_page' => $comments_per_page,
 		) );
+	}
+
+	/**
+	* Reorders a flat list of question/answer comments so that each answer
+	* is placed directly after the question it belongs to, keeping questions
+	* in their original (sorted) order.
+	*
+	* @param WP_Comment[] $comments
+	* @return WP_Comment[]
+	*/
+	protected function thread_comments( $comments ) {
+		$by_parent = array();
+		foreach ( $comments as $comment ) {
+			$by_parent[ (int) $comment->comment_parent ][] = $comment;
+		}
+
+		$threaded = array();
+		$add_children = function( $parent_id ) use ( &$add_children, &$by_parent, &$threaded ) {
+			if ( empty( $by_parent[ $parent_id ] ) ) {
+				return;
+			}
+			// Answers are always shown oldest-first, regardless of the questions' sort order.
+			if ( 0 !== $parent_id ) {
+				usort( $by_parent[ $parent_id ], function( $a, $b ) {
+					return strtotime( $a->comment_date ) - strtotime( $b->comment_date );
+				} );
+			}
+			foreach ( $by_parent[ $parent_id ] as $child ) {
+				$threaded[] = $child;
+				$add_children( (int) $child->comment_ID );
+			}
+			unset( $by_parent[ $parent_id ] );
+		};
+
+		$add_children( 0 );
+
+		// Answers whose question isn't part of the current result set (e.g. filtered out by status/search) are appended as-is.
+		foreach ( $by_parent as $children ) {
+			foreach ( $children as $child ) {
+				$threaded[] = $child;
+			}
+		}
+
+		return $threaded;
 	}
 
 	/**
@@ -450,6 +496,10 @@ class CR_Qna_List_Table extends WP_List_Table {
 		}
 		$the_comment_class = join( ' ', get_comment_class( $the_comment_class, $comment, $comment->comment_post_ID ) );
 
+		if ( $comment->comment_parent > 0 ) {
+			$the_comment_class .= ' cr-qna-answer-row';
+		}
+
 		if ( $comment->comment_post_ID > 0 ) {
 			$post = get_post( $comment->comment_post_ID );
 		}
@@ -645,12 +695,15 @@ class CR_Qna_List_Table extends WP_List_Table {
 
 	/**
 	*
-	* @global string $comment_status
-	*
 	* @param WP_Comment $comment The comment object.
 	*/
 	public function column_author( $comment ) {
-		global $comment_status;
+		if ( $comment->comment_parent > 0 ) {
+			echo '<span class="cr-qna-answer-connector"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M4 2V8C4 10.2091 5.79086 12 8 12H13" stroke="#a3d8cd" stroke-width="1.5"/>
+				<path d="M10 9L13 12L10 15" stroke="#a3d8cd" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+				</svg></span>';
+		}
 
 		$author_url = get_comment_author_url( $comment );
 
@@ -675,15 +728,6 @@ class CR_Qna_List_Table extends WP_List_Table {
 				if ( ! empty( $email ) && '@' !== $email ) {
 					printf( '<a href="%1$s">%2$s</a><br />', esc_url( 'mailto:' . $email ), esc_html( $email ) );
 				}
-			}
-
-			$author_ip = get_comment_author_IP( $comment );
-			if ( $author_ip ) {
-				$author_ip_url = add_query_arg( array( 's' => $author_ip, 'mode' => 'detail' ), admin_url( 'admin.php?page=cr-qna' ) );
-				if ( 'spam' === $comment_status ) {
-					$author_ip_url = add_query_arg( 'comment_status', 'spam', $author_ip_url );
-				}
-				printf( '<a href="%1$s">%2$s</a>', esc_url( $author_ip_url ), esc_html( $author_ip ) );
 			}
 		}
 	}

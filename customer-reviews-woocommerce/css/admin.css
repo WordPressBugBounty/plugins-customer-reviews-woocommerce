@@ -33,6 +33,11 @@ td.forminp .cr-admin-shortcodes-large code {font-size: 1.2em;}
 td.forminp.cr-admin-shortcodes-td ul {line-height: 1.6em;}
 .cr-reviews-list-table .column-qna_type {width: 22px;}
 .cr-reviews-list-table #the-comment-list .column-qna_type {vertical-align: top;}
+.cr-reviews-list-table #the-comment-list tr.cr-qna-answer-row td,
+.cr-reviews-list-table #the-comment-list tr.cr-qna-answer-row th {background-color: #f9f9f9;}
+.cr-reviews-list-table #the-comment-list tr.cr-qna-answer-row td:first-child {box-shadow: inset 4px 0 0 0 #a3d8cd;}
+.cr-reviews-list-table #the-comment-list tr.cr-qna-answer-row td.column-author {position: relative; padding-left: 40px;}
+.cr-qna-answer-connector {position: absolute; left: 8px; top: 8px;}
 .cr-upload-local-images label {display: block; margin-bottom: 6px; padding: 3px 5px;}
 .cr-upload-local-images label.cr-upload-local-images-status-error {background-color: #FF4136;}
 .cr-upload-local-images label.cr-upload-local-images-status-warning {background-color: #FFDC00;}

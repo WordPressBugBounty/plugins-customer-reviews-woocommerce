@@ -1760,36 +1760,73 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 	}
 
 	public static function cr_review_is_from_verified_owner( $review ) {
-		$verified = get_comment_meta( $review->comment_ID, 'verified', true );
-		if ( '' === $verified ) {
+		static $verification_cache = array();
+
+		if ( ! is_object( $review ) || ! $review instanceof WP_Comment ) {
+			return false;
+		}
+
+		$comment_id = absint( $review->comment_ID );
+		if ( array_key_exists( $comment_id, $verification_cache ) ) {
+			return $verification_cache[ $comment_id ];
+		}
+
+		$verified = get_comment_meta( $comment_id, 'verified', true );
+		if ( '' !== $verified ) {
+			$verification_cache[ $comment_id ] = (bool) $verified;
+			return $verification_cache[ $comment_id ];
+		}
+
+		global $wpdb;
+		$lock_name = 'cr_review_verify_' . md5( (string) $comment_id );
+		$lock_acquired = (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT GET_LOCK( %s, 0 )',
+				$lock_name
+			)
+		);
+
+		if ( 1 !== $lock_acquired ) {
+			$verification_cache[ $comment_id ] = false;
+			return false;
+		}
+
+		try {
+			$verified = get_comment_meta( $comment_id, 'verified', true );
+			if ( '' !== $verified ) {
+				$verification_cache[ $comment_id ] = (bool) $verified;
+				return $verification_cache[ $comment_id ];
+			}
+
 			$verified = false;
-			if ( is_object( $review ) && $review instanceof WP_Comment ) {
-				$email = $review->user_id ? '' : $review->comment_author_email;
-				if ( 'product' === get_post_type( $review->comment_post_ID ) ) {
-					$verified = wc_customer_bought_product( $email, $review->user_id, $review->comment_post_ID );
-					add_comment_meta( $review->comment_ID, 'verified', (int) $verified, true );
-				} else {
-					if ( $review->comment_post_ID ) {
-						$shop_pages = CR_Reviews_List_Table::get_shop_page();
-						if ( in_array( $review->comment_post_ID, $shop_pages ) ) {
-							// shop reviews
-							$customer_orders = wc_get_orders( array(
-								'limit'         => 1, // we only need to check if at least one order exists
-								'customer_id'   => $review->user_id ? $review->user_id : '',
-								'billing_email' => $email,
-								'status'        => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ),
-								'return'        => 'ids',
-							) );
-							if ( ! empty( $customer_orders ) ) {
-								$verified = true;
-							}
-							add_comment_meta( $review->comment_ID, 'verified', (int) $verified, true );
-						}
-					}
+			$email = $review->user_id ? '' : $review->comment_author_email;
+			if ( 'product' === get_post_type( $review->comment_post_ID ) ) {
+				$verified = wc_customer_bought_product( $email, $review->user_id, $review->comment_post_ID );
+			} elseif ( $review->comment_post_ID ) {
+				$shop_pages = CR_Reviews_List_Table::get_shop_page();
+				if ( in_array( $review->comment_post_ID, $shop_pages ) ) {
+					$customer_orders = wc_get_orders( array(
+						'limit'         => 1,
+						'customer_id'   => $review->user_id ? $review->user_id : '',
+						'billing_email' => $email,
+						'status'        => array( 'wc-completed', 'wc-processing', 'wc-on-hold' ),
+						'return'        => 'ids',
+					) );
+					$verified = ! empty( $customer_orders );
 				}
 			}
+
+			update_comment_meta( $comment_id, 'verified', (int) $verified );
+			$verification_cache[ $comment_id ] = (bool) $verified;
+			return $verification_cache[ $comment_id ];
+		} finally {
+			$wpdb->get_var(
+				$wpdb->prepare(
+					'SELECT RELEASE_LOCK( %s )',
+					$lock_name
+				)
+			);
 		}
-		return (bool) $verified;
 	}
 
 	public function delete_review_media_attachments( $comment_id, $comment ) {
