@@ -12,6 +12,7 @@ if (! class_exists('CR_All_Reviews')) :
 		private $shop_page_id;
 		private $search = '';
 		private $tags = array();
+		private $media = 0;
 		private $count_ratings_cache = array();
 		private $all_tags_cache = array();
 		private $default_per_page = 10;
@@ -57,7 +58,8 @@ if (! class_exists('CR_All_Reviews')) :
 				'avatars' => 'initials',
 				'users' => 'all',
 				'add_review' => 'false',
-				'schema_markup' => 'false'
+				'schema_markup' => 'false',
+				'custom_ratings' => 'true'
 			);
 
 			if ( isset( $attributes['categories'] ) && ! is_array( $attributes['categories'] ) ) {
@@ -148,6 +150,7 @@ if (! class_exists('CR_All_Reviews')) :
 				$this->shortcode_atts['add_review'] = false;
 			}
 			$this->shortcode_atts['schema_markup'] = $this->shortcode_atts['schema_markup'] === 'true' ? true : false;
+			$this->shortcode_atts['custom_ratings'] = $this->shortcode_atts['custom_ratings'] !== 'false';
 		}
 
 		public function render_all_reviews_shortcode( $attributes ) {
@@ -260,6 +263,11 @@ if (! class_exists('CR_All_Reviews')) :
 				}
 
 				$args['comment__in'] = $comment_in;
+
+				// filter by media (only reviews with at least one photo or video attached)
+				if ( $this->media ) {
+					$args['meta_query']['cr_media_filter'] = CR_Ajax_Reviews::get_media_meta_query();
+				}
 
 				if ( ! $this->shortcode_atts['inactive_products'] ) {
 					$args['post_status'] = 'publish';
@@ -483,7 +491,7 @@ if (! class_exists('CR_All_Reviews')) :
 			$return .= CR_Ajax_Reviews::get_search_field( true );
 
 			// show tags
-			$return .= CR_Ajax_Reviews::get_tags_field( $comments_tags );
+			$return .= CR_Ajax_Reviews::get_tags_field( $comments_tags, 0 < count( $comments_media ) );
 
 			// show count of reviews
 			$return .= $this->show_count_row( $top_comments_count, $page, $per_page, 0 == $this->shortcode_atts['show_more'], 0, 0 );
@@ -502,6 +510,7 @@ if (! class_exists('CR_All_Reviews')) :
 			} else {
 				add_filter( 'get_avatar', array( 'CR_Reviews', 'change_avatar_class' ), 10, 6 );
 			}
+			CR_Reviews::$custom_ratings_enabled = $this->shortcode_atts['custom_ratings'];
 			$return .= wp_list_comments( apply_filters('ivole_product_review_list_args', array(
 				'callback' => array( 'CR_Reviews', 'callback_comments' ),
 				'max_depth' => 5,
@@ -512,6 +521,7 @@ if (! class_exists('CR_All_Reviews')) :
 				'cr_show_products' => $this->shortcode_atts['show_products'],
 				'cr_hide_avatars' => $hide_avatars
 			)), $comments );
+			CR_Reviews::$custom_ratings_enabled = true;
 			if ( 'initials' === $this->shortcode_atts['avatars'] ) {
 				remove_filter( 'get_avatar', array( 'CR_Reviews_Grid', 'cr_get_avatar' ) );
 			} else {
@@ -583,6 +593,11 @@ if (! class_exists('CR_All_Reviews')) :
 				$this->tags = array_map( 'intval', $_POST['tags'] );
 			}
 
+			// media
+			if ( isset( $_POST['media'] ) ) {
+				$this->media = ! empty( $_POST['media'] ) ? 1 : 0;
+			}
+
 			$page = intval( $_POST['page'] ) + 1;
 			$html = "";
 			$pagination_required = false;
@@ -615,6 +630,7 @@ if (! class_exists('CR_All_Reviews')) :
 			} else {
 				add_filter( 'get_avatar', array( 'CR_Reviews', 'change_avatar_class' ), 10, 6 );
 			}
+			CR_Reviews::$custom_ratings_enabled = $this->shortcode_atts['custom_ratings'];
 			$html .= wp_list_comments( apply_filters( 'ivole_product_review_list_args', array(
 				'callback' => array( 'CR_Reviews', 'callback_comments' ),
 				'max_depth' => 5,
@@ -625,6 +641,7 @@ if (! class_exists('CR_All_Reviews')) :
 				'cr_show_products' => $this->shortcode_atts['show_products'],
 				'cr_hide_avatars' => $hide_avatars
 			) ), $comments );
+			CR_Reviews::$custom_ratings_enabled = true;
 			if ( 'initials' === $this->shortcode_atts['avatars'] ) {
 				remove_filter( 'get_avatar', array( 'CR_Reviews_Grid', 'cr_get_avatar' ) );
 			} else {

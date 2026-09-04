@@ -113,6 +113,112 @@
 			}, "json");
 		});
 
+		//toggle the actions menu for a custom question/answer row
+		jQuery(".cr-cq-edit-table").on("click", ".cr-cq-button-manage", function (e) {
+			e.stopPropagation();
+			jQuery(this).closest(".cr-cq-edit-table").find(".cr-cq-menu").addClass("cr-generic-hide");
+			jQuery(this).next(".cr-cq-menu").removeClass("cr-generic-hide");
+		});
+
+		//hide the custom question actions menu when clicked anywhere on the page
+		jQuery(document).on("click", function (e) {
+			jQuery(".cr-cq-menu").addClass("cr-generic-hide");
+		});
+
+		//switch a custom question/answer row into edit mode
+		jQuery(".cr-cq-edit-table").on("click", ".cr-cq-menu-edit", function (e) {
+			e.preventDefault();
+			var $row = jQuery(this).closest("tr");
+			$row.find(".cr-cq-display").addClass("cr-generic-hide");
+			$row.find(".cr-cq-edit-fields").removeClass("cr-generic-hide");
+			$row.find(".cr-cq-actions-view").addClass("cr-generic-hide");
+			$row.find(".cr-cq-actions-edit").removeClass("cr-generic-hide");
+		});
+
+		//cancel editing a custom question/answer
+		jQuery(".cr-cq-edit-table").on("click", ".cr-cq-cancel-btn", function (e) {
+			e.preventDefault();
+			var $row = jQuery(this).closest("tr");
+			$row.find(".cr-cq-edit-fields").addClass("cr-generic-hide");
+			$row.find(".cr-cq-display").removeClass("cr-generic-hide");
+			$row.find(".cr-cq-actions-edit").addClass("cr-generic-hide");
+			$row.find(".cr-cq-actions-view").removeClass("cr-generic-hide");
+		});
+
+		//save an edited custom question/answer
+		jQuery(".cr-cq-edit-table").on("click", ".cr-cq-save-btn", function (e) {
+			e.preventDefault();
+			var $btn = jQuery(this);
+			var $row = $btn.closest("tr");
+			var $table = $row.closest(".cr-cq-edit-table");
+			var cr_data = {
+				"review_id": $table.attr("data-review-id"),
+				"index": $row.attr("data-index"),
+				"cr_nonce": $table.attr("data-nonce"),
+				"label": $row.find(".cr-cq-input-label").val(),
+				"action": "cr-save-custom-question"
+			};
+			if ("checkbox" === $row.attr("data-type")) {
+				cr_data.values = $row.find(".cr-cq-input-value").val();
+			} else {
+				cr_data.value = $row.find(".cr-cq-input-value").val();
+			}
+			$btn.prop("disabled", true);
+			jQuery.post(cr_ajax_object.ajax_url, cr_data, function(response) {
+				$btn.prop("disabled", false);
+				if (response.result) {
+					$row.find(".cr-cq-edit-label .cr-cq-display").text(response.label);
+					$row.find(".cr-cq-edit-value .cr-cq-display").html(response.display);
+					$row.find(".cr-cq-edit-fields").addClass("cr-generic-hide");
+					$row.find(".cr-cq-display").removeClass("cr-generic-hide");
+					$row.find(".cr-cq-actions-edit").addClass("cr-generic-hide");
+					$row.find(".cr-cq-actions-view").removeClass("cr-generic-hide");
+				}
+			}, "json");
+		});
+
+		//show the delete confirmation modal for a custom question/answer
+		jQuery(".cr-cq-edit-table").on("click", ".cr-cq-menu-delete", function (e) {
+			e.preventDefault();
+			var $row = jQuery(this).closest("tr");
+			var $wrapper = $row.closest(".cr-cq-metabox-content");
+			$wrapper.find(".cr-cq-modal-title").text($row.find(".cr-cq-edit-label").text());
+			$wrapper.find(".cr-cq-del-modal-cont").data("cr-cq-row", $row).addClass("cr-cq-modal-visible");
+		});
+
+		//close the custom question delete confirmation modal
+		jQuery(".cr-cq-metabox-content").on("click", ".cr-cq-modal-cancel, .cr-cq-modal-close-top", function (e) {
+			e.preventDefault();
+			jQuery(this).closest(".cr-cq-del-modal-cont").removeClass("cr-cq-modal-visible");
+		});
+
+		//confirm deletion of a single custom question/answer from the review edit screen
+		jQuery(".cr-cq-metabox-content").on("click", ".cr-cq-del-modal-cont .cr-cq-modal-save", function (e) {
+			e.preventDefault();
+			var $modalCont = jQuery(this).closest(".cr-cq-del-modal-cont");
+			var $row = $modalCont.data("cr-cq-row");
+			if (! $row) {
+				return;
+			}
+			var $table = $row.closest(".cr-cq-edit-table");
+			var cr_data = {
+				"review_id": $table.attr("data-review-id"),
+				"index": $row.attr("data-index"),
+				"cr_nonce": $table.attr("data-nonce"),
+				"action": "cr-delete-custom-question"
+			};
+			jQuery.post(cr_ajax_object.ajax_url, cr_data, function(response) {
+				$modalCont.removeClass("cr-cq-modal-visible");
+				if (response.result) {
+					$row.remove();
+					//renumber the remaining rows to match the reindexed array on the server
+					$table.find("tr.cr-cq-edit-row").each(function(i) {
+						jQuery(this).attr("data-index", i);
+					});
+				}
+			}, "json");
+		});
+
 		//
 		jQuery("#ivole_replyto_cr_checkbox").change(function() {
 			if(jQuery(this).prop('checked')) {

@@ -31,6 +31,8 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 			add_action( 'edit_comment', array( $this, 'update_cr_review' ), 10, 2 );
 			add_action( 'wp_ajax_cr-feature-review', array( $this, 'wp_ajax_cr_feature_review' ) );
 			add_action( 'wp_ajax_cr-unverify-review', array( $this, 'wp_ajax_cr_unverify_review' ) );
+			add_action( 'wp_ajax_cr-delete-custom-question', array( $this, 'wp_ajax_cr_delete_custom_question' ) );
+			add_action( 'wp_ajax_cr-save-custom-question', array( $this, 'wp_ajax_cr_save_custom_question' ) );
 			add_filter( 'wp_update_comment_data', array( $this, 'update_author_type' ), 10, 3 );
 			add_filter( 'set-screen-option', array( $this, 'save_screen_options' ), 10, 3 );
 			add_action( 'wp_ajax_cr_get_reviews_top_row_stats', array( 'CR_Reviews_Top_Charts', 'get_reviews_top_row_stats' ) );
@@ -628,7 +630,7 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 		public function render_review_meta_box_cq( $comment, $metabox ) {
 			if( isset( $metabox['args'] ) && is_array( $metabox['args'] ) ) {
 				if( count( $metabox['args'] ) > 0 ) {
-					$metabox['args'][0]->output_questions( false, false );
+					$metabox['args'][0]->render_edit_questions( $comment->comment_ID );
 				}
 			}
 		}
@@ -800,6 +802,48 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 						add_comment_meta( $return['review_id'], 'ivole_order_unve', $ivole_order );
 						$return['result'] = true;
 					}
+				}
+			}
+			wp_send_json( $return );
+		}
+
+		public function wp_ajax_cr_delete_custom_question() {
+			$return = array( 'result' => false );
+			$review_id = isset( $_POST['review_id'] ) ? intval( $_POST['review_id'] ) : 0;
+			$index = isset( $_POST['index'] ) ? intval( $_POST['index'] ) : -1;
+			$return['index'] = $index;
+			if (
+				$review_id &&
+				$index >= 0 &&
+				isset( $_POST['cr_nonce'] ) &&
+				wp_verify_nonce( $_POST['cr_nonce'], 'cr-manage-cq_' . $review_id ) &&
+				current_user_can( 'edit_comment', $review_id )
+			) {
+				if ( CR_Custom_Questions::delete_question( $review_id, $index ) ) {
+					$return['result'] = true;
+				}
+			}
+			wp_send_json( $return );
+		}
+
+		public function wp_ajax_cr_save_custom_question() {
+			$return = array( 'result' => false );
+			$review_id = isset( $_POST['review_id'] ) ? intval( $_POST['review_id'] ) : 0;
+			$index = isset( $_POST['index'] ) ? intval( $_POST['index'] ) : -1;
+			$return['index'] = $index;
+			if (
+				$review_id &&
+				$index >= 0 &&
+				isset( $_POST['cr_nonce'] ) &&
+				wp_verify_nonce( $_POST['cr_nonce'], 'cr-manage-cq_' . $review_id ) &&
+				current_user_can( 'edit_comment', $review_id )
+			) {
+				$result = CR_Custom_Questions::save_question( $review_id, $index, $_POST );
+				if ( false !== $result ) {
+					$return['result'] = true;
+					// already safe HTML, produced by CR_Custom_Questions::render_display_value()
+					$return['display'] = $result['display'];
+					$return['label'] = esc_html( $result['label'] );
 				}
 			}
 			wp_send_json( $return );

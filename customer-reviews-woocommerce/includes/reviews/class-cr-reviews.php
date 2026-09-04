@@ -23,6 +23,7 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		public static $onsite_q_types;
 		private $incentivized_badge = false;
 		public static $reviews_tab;
+		public static $custom_ratings_enabled = true;
 
 		const REVIEWS_META_IMG = 'ivole_review_image';
 		const REVIEWS_META_LCL_IMG = 'ivole_review_image2';
@@ -1143,7 +1144,7 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 	}
 
 	public function display_custom_questions( $comment ) {
-		if( 0 === intval( $comment->comment_parent ) ) {
+		if ( self::$custom_ratings_enabled && 0 === intval( $comment->comment_parent ) ) {
 			$custom_questions = new CR_Custom_Questions();
 			$custom_questions->read_questions( $comment->comment_ID );
 			$custom_questions->output_questions( true );
@@ -1162,6 +1163,23 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 
 	public function display_review_media_top_prd( $reviews ) {
 		echo self::display_review_images_top( $reviews[0] );
+	}
+
+	public static function comments_have_media( $comments ) {
+		if ( ! is_array( $comments ) ) {
+			return false;
+		}
+		foreach ( $comments as $comment ) {
+			if (
+				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_IMG ) ||
+				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_LCL_IMG ) ||
+				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_VID ) ||
+				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_LCL_VID )
+			) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static function display_review_images_top( $comments ) {
@@ -1244,7 +1262,7 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		if ( 0 < $count ) :
 			wp_enqueue_script( 'cr-reviews-slider' );
 			$images_top .= '<div class="cr-ajax-reviews-cus-images-div">';
-			$images_top .= '<p class="cr-ajax-reviews-cus-images-title">' . esc_html__( 'Customer Images', 'customer-reviews-woocommerce' ) . '</p>';
+			$images_top .= '<p class="cr-ajax-reviews-cus-images-title">' . esc_html__( 'Customer photos and videos', 'customer-reviews-woocommerce' ) . '</p>';
 			$images_top .= '<div class="cr-ajax-reviews-cus-images-div2">';
 			// show the first ten or less pictures only
 			$count_top = $count > $max_count_top - 1 ? $max_count_top : $count;

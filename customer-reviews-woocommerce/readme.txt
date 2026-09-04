@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 5.119.0
+Stable tag: 5.120.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,11 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.120.0 =
+* New feature: a parameter for [cusrev_all_reviews] and [cusrev_reviews_slider] shortcodes to enable or disable display of custom ratings and questions
+* Improvement: screen options (items per page) menu for the Q & A admin page
+* Improvement: UI for update of custom ratings and questions in WordPress admin console
+* Improvement: an option to filter reviews with media files uploaded by customers
 = 5.119.0 =
 * Improvement: display of Q & A in admin console using nested layout for easier navigation
 * Improvement: performance optimization for verified owner checks

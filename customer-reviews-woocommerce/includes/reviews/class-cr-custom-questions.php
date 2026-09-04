@@ -180,8 +180,8 @@ if ( ! class_exists( 'CR_Custom_Questions' ) ) :
 									$output .= '<p class="cr-sldr-p"><span class="cr-sldr-label">' . $title . '</span> ' . $this->questions[$i]->value . '</p>';
 									$output .= '</div>';
 								} else {
-									$output .= '<p class="iv' . $fr . '-custom-question-p"><span class="iv' . $fr . '-custom-question-radio">' . $title .
-										'</span> ' . $this->questions[$i]->value . '</p>';
+									$output .= '<div class="iv' . $fr . '-custom-question-p"><span class="iv' . $fr . '-custom-question-radio">' . $title .
+										' :</span> ' . $this->questions[$i]->value . '</div>';
 								}
 							}
 							break;
@@ -211,6 +211,181 @@ if ( ! class_exists( 'CR_Custom_Questions' ) ) :
 			if ( $qs ) {
 				echo apply_filters( 'cr_custom_questions', $qs );
 			}
+		}
+
+		// renders an editable table of custom questions/answers, used on the review edit admin screen
+		public function render_edit_questions( $review_id ) {
+			if ( ! $this->has_questions() ) {
+				return;
+			}
+			echo '<div class="cr-cq-metabox-content">';
+			echo '<table class="cr-cq-edit-table widefat striped" data-review-id="' . esc_attr( $review_id ) . '" data-nonce="' . esc_attr( wp_create_nonce( 'cr-manage-cq_' . $review_id ) ) . '">';
+			echo '<tbody>';
+			foreach ( $this->questions as $i => $question ) {
+				if ( ! isset( $question->type ) || ! isset( $question->title ) ) {
+					continue;
+				}
+				$label = ( isset( $question->label ) && $question->label ) ? $question->label : $question->title;
+				echo '<tr class="cr-cq-edit-row" data-index="' . esc_attr( $i ) . '" data-type="' . esc_attr( $question->type ) . '">';
+				echo '<td class="cr-cq-edit-label">';
+				echo '<div class="cr-cq-display">' . esc_html( $label ) . '</div>';
+				echo '<div class="cr-cq-edit-fields cr-generic-hide">';
+				echo '<input type="text" class="cr-cq-edit-text cr-cq-input-label widefat" value="' . esc_attr( $label ) . '">';
+				echo '</div>';
+				echo '</td>';
+				echo '<td class="cr-cq-edit-value">';
+				echo '<div class="cr-cq-display">' . self::render_display_value( $question ) . '</div>';
+				echo '<div class="cr-cq-edit-fields cr-generic-hide">';
+				switch ( $question->type ) {
+					case 'rating':
+						$value = isset( $question->value ) ? intval( $question->value ) : 0;
+						echo '<select class="cr-cq-edit-rating cr-cq-input-value">';
+						for ( $v = 0; $v <= 5; $v++ ) {
+							echo '<option value="' . $v . '"' . selected( $value, $v, false ) . '>' . $v . '</option>';
+						}
+						echo '</select>';
+						break;
+					case 'checkbox':
+						$values = ( isset( $question->values ) && is_array( $question->values ) ) ? $question->values : array();
+						echo '<textarea class="cr-cq-edit-checkbox cr-cq-input-value widefat" rows="3">' . esc_textarea( implode( "\n", $values ) ) . '</textarea>';
+						echo '<p class="description">' . esc_html__( 'One answer per line', 'customer-reviews-woocommerce' ) . '</p>';
+						break;
+					default: // radio, comment, number, text
+						$value = isset( $question->value ) ? $question->value : '';
+						echo '<input type="text" class="cr-cq-edit-text cr-cq-input-value widefat" value="' . esc_attr( $value ) . '">';
+						break;
+				}
+				echo '</div>';
+				echo '</td>';
+				echo '<td class="cr-cq-edit-actions">';
+				echo '<div class="cr-cq-actions-view">';
+				echo '<button type="button" class="cr-cq-button-manage"><span class="dashicons dashicons-ellipsis"></span></button>';
+				echo '<ul class="cr-cq-menu cr-generic-hide">';
+				echo '<li class="cr-cq-menu-edit">' . esc_html__( 'Edit', 'customer-reviews-woocommerce' ) . '</li>';
+				echo '<li class="cr-cq-menu-delete">' . esc_html__( 'Delete', 'customer-reviews-woocommerce' ) . '</li>';
+				echo '</ul>';
+				echo '</div>';
+				echo '<div class="cr-cq-actions-edit cr-generic-hide">';
+				echo '<button type="button" class="button button-primary cr-cq-save-btn">' . esc_html__( 'Save', 'customer-reviews-woocommerce' ) . '</button> ';
+				echo '<button type="button" class="button cr-cq-cancel-btn">' . esc_html__( 'Cancel', 'customer-reviews-woocommerce' ) . '</button>';
+				echo '</div>';
+				echo '</td>';
+				echo '</tr>';
+			}
+			echo '</tbody></table>';
+			$this->render_delete_conf_template();
+			echo '</div>';
+		}
+
+		// renders a confirmation modal used before deleting a custom question/answer, styled after the Review Forms settings tab
+		public function render_delete_conf_template() {
+			echo '<div class="cr-cq-del-modal-cont">';
+			echo '<div class="cr-cq-del-modal">';
+			echo '<div class="cr-cq-del-modal-internal">';
+			echo '<div class="cr-cq-modal-topbar">';
+			echo '<h3 class="cr-cq-modal-title"></h3>';
+			echo '<button type="button" class="cr-cq-modal-close-top"><span>&times;</span></button>';
+			echo '</div>';
+			echo '<div class="cr-cq-modal-section">';
+			echo '<div class="cr-cq-modal-section-row">' . esc_html__( 'Would you like to delete this answer?', 'customer-reviews-woocommerce' ) . '</div>';
+			echo '</div>';
+			echo '<div class="cr-cq-modal-bottombar">';
+			echo '<button type="button" class="cr-cq-modal-cancel">' . esc_html__( 'Cancel', 'customer-reviews-woocommerce' ) . '</button>';
+			echo '<button type="button" class="cr-cq-modal-save">' . esc_html__( 'Confirm', 'customer-reviews-woocommerce' ) . '</button>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+		}
+
+		// returns a safe HTML representation of a question's answer, used both for initial display and after an ajax save
+		public static function render_display_value( $question ) {
+			switch ( $question->type ) {
+				case 'checkbox':
+					$values = ( isset( $question->values ) && is_array( $question->values ) ) ? $question->values : array();
+					return esc_html( implode( ', ', $values ) );
+				case 'rating':
+					$value = isset( $question->value ) ? intval( $question->value ) : 0;
+					$out = '<span class="iv-star-rating">';
+					for ( $j = 1; $j < 6; $j++ ) {
+						$class = ( $j <= $value ) ? 'filled' : 'empty';
+						$out .= '<span class="dashicons dashicons-star-' . $class . '"></span>';
+					}
+					$out .= '</span>';
+					return $out;
+				default:
+					return esc_html( isset( $question->value ) ? $question->value : '' );
+			}
+		}
+
+		// deletes a single custom question/answer by its position in the stored array, used by the admin ajax delete handler
+		public static function delete_question( $review_id, $index ) {
+			$meta = get_comment_meta( $review_id, self::$meta_id, true );
+			if ( ! $meta || ! is_array( $meta ) || ! isset( $meta[ $index ] ) ) {
+				return false;
+			}
+			unset( $meta[ $index ] );
+			$meta = array_values( $meta );
+			if ( ! empty( $meta ) ) {
+				update_comment_meta( $review_id, self::$meta_id, $meta );
+			} else {
+				delete_comment_meta( $review_id, self::$meta_id );
+			}
+			return true;
+		}
+
+		// saves the answer and label of a single custom question by its position in the stored array, used by the admin ajax save handler
+		public static function save_question( $review_id, $index, $data ) {
+			$meta = get_comment_meta( $review_id, self::$meta_id, true );
+			if ( ! $meta || ! is_array( $meta ) || ! isset( $meta[ $index ] ) || ! ( $meta[ $index ] instanceof CR_Custom_Question ) ) {
+				return false;
+			}
+			$question = $meta[ $index ];
+			if ( isset( $data['label'] ) ) {
+				$label = sanitize_text_field( wp_unslash( $data['label'] ) );
+				if ( '' === trim( $label ) ) {
+					return false;
+				}
+				$question->label = $label;
+			}
+			switch ( $question->type ) {
+				case 'checkbox':
+					$values = array();
+					if ( isset( $data['values'] ) ) {
+						$lines = preg_split( '/\r\n|\r|\n/', wp_unslash( $data['values'] ) );
+						foreach ( $lines as $line ) {
+							$line = trim( $line );
+							if ( '' !== $line ) {
+								$values[] = sanitize_text_field( $line );
+							}
+						}
+					}
+					if ( empty( $values ) ) {
+						return false;
+					}
+					$question->values = $values;
+					break;
+				case 'rating':
+					$value = isset( $data['value'] ) ? intval( $data['value'] ) : 0;
+					if ( $value <= 0 ) {
+						return false;
+					}
+					$question->value = $value;
+					break;
+				default: // radio, comment, number, text
+					$value = isset( $data['value'] ) ? sanitize_text_field( wp_unslash( $data['value'] ) ) : '';
+					if ( '' === trim( $value ) ) {
+						return false;
+					}
+					$question->value = $value;
+					break;
+			}
+			$meta[ $index ] = $question;
+			update_comment_meta( $review_id, self::$meta_id, $meta );
+			return array(
+				'display' => self::render_display_value( $question ),
+				'label'   => $question->label,
+			);
 		}
 
 		public function delete_questions( $review_id ) {

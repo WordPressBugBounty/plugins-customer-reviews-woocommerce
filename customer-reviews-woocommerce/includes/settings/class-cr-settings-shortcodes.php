@@ -78,7 +78,7 @@ if ( ! class_exists( 'CR_Shortcodes_Settings' ) ):
 			$shortcodes_desc = '<p class="cr-admin-shortcodes-large"><code>[cusrev_all_reviews]</code></p>' .
 			'<p>' .__( 'Use this shortcode to display a list of all reviews on any page or post. Here are the default parameters of the shortcode:', 'customer-reviews-woocommerce' ) . '</p>' .
 			'<p class="cr-admin-shortcodes"><code>[cusrev_all_reviews sort="DESC" sort_by="date" per_page="10" show_summary_bar="true" show_media="true" ' .
-			'show_products="true" categories="" product_tags="" tags="" products="current" product_reviews="true" shop_reviews="true" inactive_products="false" show_replies="false" show_more="5" min_chars="0" avatars="initials" users="all" add_review="false" schema_markup="false"]</code></p>' .
+			'show_products="true" categories="" product_tags="" tags="" products="current" product_reviews="true" shop_reviews="true" inactive_products="false" show_replies="false" show_more="5" min_chars="0" avatars="initials" users="all" add_review="false" schema_markup="false" custom_ratings="true"]</code></p>' .
 			'<p class="cr-admin-shortcodes"><b>' . __( 'Parameters:', 'customer-reviews-woocommerce' ) . '</b></p>' .
 			'<ul>' .
 			'<li>' . sprintf( __( '%1$s argument defines how reviews are sorted. Possible values are %2$s and %3$s.', 'customer-reviews-woocommerce' ), '<code>sort</code>', '<code>"ASC"</code>', '<code>"DESC"</code>' ) . '</li>' .
@@ -111,6 +111,7 @@ if ( ! class_exists( 'CR_Shortcodes_Settings' ) ):
 				'<code>products</code>',
 				'<code>"current"</code>'
 				) . '</li>' .
+			'<li>' . sprintf( __( '%1$s argument accepts %2$s or %3$s and specifies if custom questions and ratings will be shown for each review when available.', 'customer-reviews-woocommerce' ), '<code>custom_ratings</code>', '<code>"true"</code>', '<code>"false"</code>' ) . '</li>' .
 			'</ul>' . '<br>' .
 
 			'<p class="cr-admin-shortcodes-large"><code>[cusrev_reviews_grid]</code></p>' .
@@ -160,7 +161,7 @@ if ( ! class_exists( 'CR_Shortcodes_Settings' ) ):
 			'<p class="cr-admin-shortcodes-large"><code>[cusrev_reviews_slider]</code></p>' .
 			'<p>' . __( 'Use this shortcode to display a slider with reviews on any page or post. Here are the default parameters of the shortcode:', 'customer-reviews-woocommerce' ) . '</p>' .
 			'<p class="cr-admin-shortcodes"><code>[cusrev_reviews_slider count="5" slides_to_show="3" show_products="true" product_links="true" sort_by="date" sort="DESC" categories="" product_tags="" tags="" ' .
-			'products="current" color_ex_brdr="#ebebeb" color_brdr="#ebebeb" color_ex_bcrd="" color_bcrd="#ffffff" color_pr_bcrd="#f4f4f4" color_stars="#FFBC00" shop_reviews="false" count_shop_reviews="1" inactive_products="false" autoplay="false" avatars="initials" max_chars="0" min_chars="0" show_dots="true"]</code></p>' .
+			'products="current" color_ex_brdr="#ebebeb" color_brdr="#ebebeb" color_ex_bcrd="" color_bcrd="#ffffff" color_pr_bcrd="#f4f4f4" color_stars="#FFBC00" shop_reviews="false" count_shop_reviews="1" inactive_products="false" autoplay="false" avatars="initials" max_chars="0" min_chars="0" show_dots="true" custom_ratings="true"]</code></p>' .
 			'<p class="cr-admin-shortcodes"><b>' . __( 'Parameters:', 'customer-reviews-woocommerce' ) . '</b></p>' .
 			'<ul>' .
 			'<li>' . sprintf( __( '%1$s argument defines the number of product reviews to show. It is recommended to keep it between %2$s and %3$s. If you do not want to show product reviews, set it to %4$s and enable shop reviews (see the parameters below).', 'customer-reviews-woocommerce' ), '<code>count</code>', '<code>"0"</code>', '<code>"5"</code>', '<code>"0"</code>' ) . '</li>' .
@@ -187,6 +188,7 @@ if ( ! class_exists( 'CR_Shortcodes_Settings' ) ):
 			'<li>' . sprintf( __( '%1$s argument limits the number of characters that are displayed by default for each review. A \'Show More\' button will be added to display the remaining content for reviews that exceed this limit. If you do not want to limit the number of characters to display, set this argument to %2$s.', 'customer-reviews-woocommerce' ), '<code>max_chars</code>', '<code>"0"</code>' ) . '</li>' .
 			'<li>' . sprintf( __( '%1$s argument defines the minimum number of characters that a review must have to be displayed. If this argument is %2$s, then all reviews (including rating-only reviews) will be displayed.', 'customer-reviews-woocommerce' ), '<code>min_chars</code>', '<code>"0"</code>' ) . '</li>' .
 			'<li>' . sprintf( __( '%1$s argument accepts %2$s or %3$s and specifies if dot indicators will be shown.', 'customer-reviews-woocommerce' ), '<code>show_dots</code>', '<code>"true"</code>', '<code>"false"</code>' ) . '</li>' .
+			'<li>' . sprintf( __( '%1$s argument accepts %2$s or %3$s and specifies if custom questions and ratings will be shown for each review when available.', 'customer-reviews-woocommerce' ), '<code>custom_ratings</code>', '<code>"true"</code>', '<code>"false"</code>' ) . '</li>' .
 			'</ul>' . '<br>' .
 			sprintf( __( '%1$s shortcode is also available as <strong>Reviews Slider</strong> block in the new WordPress Gutenberg page editor (blocks require WordPress 5.0 or newer).', 'customer-reviews-woocommerce' ), '<code>[cusrev_reviews_slider]</code>' ) . '<br><br>' .
 

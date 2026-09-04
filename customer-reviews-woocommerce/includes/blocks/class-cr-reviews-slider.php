@@ -14,6 +14,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 		private static $sort_order_by;
 		private static $sort_order;
 		private $min_chars;
+		private $custom_ratings;
 
 		/**
 		* Constructor.
@@ -47,6 +48,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 		public function render_reviews_slider( $attributes ) {
 			wp_enqueue_script( 'cr-reviews-slider' );
 			$max_reviews = $attributes['count'];
+			$this->custom_ratings = isset( $attributes['custom_ratings'] ) ? $attributes['custom_ratings'] : true;
 			$order_by = $attributes['sort_by'] === 'date' ? 'comment_date_gmt' : 'rating';
 			$order = strtoupper( $attributes['sort'] );
 			$inactive_products = $attributes['inactive_products'];
@@ -386,6 +388,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				'tags' => array(),
 				'min_chars' => 0,
 				'show_dots' => true,
+				'custom_ratings' => 'true',
 			), $attributes, 'cusrev_reviews_slider' );
 
 			$attributes['slides_to_shows'] = absint( $attributes['slides_to_show'] ) >= absint( $attributes['count'] ) ? absint( $attributes['count'] ) : absint( $attributes['slides_to_show'] );
@@ -399,6 +402,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			$attributes['max_chars'] = absint( $attributes['max_chars'] );
 			$attributes['min_chars'] = intval( $attributes['min_chars'] );
 			$attributes['show_dots'] = ( $attributes['show_dots'] !== 'false' );
+			$attributes['custom_ratings'] = ( $attributes['custom_ratings'] !== 'false' );
 			if( $attributes['min_chars'] < 0 ) {
 				$attributes['min_chars'] = 0;
 			}
@@ -515,7 +519,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 		}
 
 		public function display_custom_questions( $review ) {
-			if( 0 === intval( $review->comment_parent ) ) {
+			if ( $this->custom_ratings && 0 === intval( $review->comment_parent ) ) {
 				$custom_questions = new CR_Custom_Questions();
 				$custom_questions->read_questions( $review->comment_ID );
 				$questions = $custom_questions->get_questions( 2, false );

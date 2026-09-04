@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Disabled, PanelBody, RangeControl, ToggleControl, SelectControl } from '@wordpress/components';
-import { useEffect } from '@wordpress/element'
+import { useRefEffect } from '@wordpress/compose';
 import ServerSideRender from '@wordpress/server-side-render';
 
 import ProductCategoryControl from '../editor-components/product-category-control';
@@ -35,15 +35,14 @@ const { name } = json;
  */
 export default function Edit( { attributes, setAttributes } ) {
 
-	useEffect( () => {
-		//init after render
-		let blockLoaded = false;
+	// scope the query to the block's own element, since the editor canvas is rendered in an iframe
+	const ref = useRefEffect( ( element ) => {
 		let blockLoadedInterval = setInterval( function() {
-			if (jQuery(".cr-reviews-slider").length) {
-				blockLoaded = true;
-				jQuery(".cr-reviews-slider").each(function () {
-					if ( ! jQuery(this).hasClass("slick-initialized") ) jQuery(this).slickk();
-				});
+			const sliders = element.getElementsByClassName( "cr-reviews-slider" );
+			if ( sliders.length ) {
+				jQuery( sliders ).each( function () {
+					if ( ! jQuery( this ).hasClass( "slick-initialized" ) ) jQuery( this ).slickk();
+				} );
 				clearInterval( blockLoadedInterval );
 			}
 		}, 3000 );
@@ -51,7 +50,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	}, [attributes] );
 
 	return (
-		<div { ...useBlockProps() }>
+		<div { ...useBlockProps( { ref } ) }>
 			<InspectorControls key="setting">
 				<PanelBody title={ __( 'Reviews Slider Settings', 'customer-reviews-woocommerce' ) } initialOpen={ true }>
 					<RangeControl
@@ -128,6 +127,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						label={ __( 'Show Dots', 'customer-reviews-woocommerce' ) }
 						checked={ attributes.show_dots }
 						onChange={ () => setAttributes( { show_dots: ! attributes.show_dots } ) }
+					/>
+					<ToggleControl
+						label={ __( 'Custom Questions and Ratings', 'customer-reviews-woocommerce' ) }
+						checked={ attributes.custom_ratings }
+						onChange={ () => setAttributes( { custom_ratings: ! attributes.custom_ratings } ) }
 					/>
 					<SelectControl
 						label={ __( 'Avatars', 'customer-reviews-woocommerce' ) }

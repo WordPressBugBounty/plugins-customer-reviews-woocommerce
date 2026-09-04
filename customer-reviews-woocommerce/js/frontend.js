@@ -232,11 +232,20 @@
 				if(!cr_rating){
 					cr_rating = 0;
 				}
+				var cr_tags = [];
+				jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-review-tags-filter .cr-tags-filter.cr-tag-selected").each(
+					function() {
+						cr_tags.push( jQuery(this).attr("data-crtagid") );
+					}
+				);
+				var cr_media = jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-review-tags-filter .cr-media-pill.cr-tag-selected").length ? 1 : 0;
 				var cr_data = {
 					"action": "cr_sort_reviews",
 					"productID": cr_product_id,
 					"sort": cr_sort,
-					"rating": cr_rating
+					"rating": cr_rating,
+					"tags": cr_tags,
+					"media": cr_media
 				};
 				jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-search-no-reviews").hide();
 				jQuery(this).parents(".cr-reviews-ajax-comments").find('.cr-ajax-search input').val("").trigger("change");
@@ -289,11 +298,20 @@
 			let cr_nonce = tmpParent.find(".cr-summaryBox-ajax").attr("data-nonce");
 			let cr_rating = jQuery(this).attr("data-rating");
 			let cr_sort = tmpParent.find(".cr-ajax-reviews-sort").children("option:selected").val();
+			let cr_tags = [];
+			tmpParent.find(".cr-review-tags-filter .cr-tags-filter.cr-tag-selected").each(
+				function() {
+					cr_tags.push( jQuery(this).attr("data-crtagid") );
+				}
+			);
+			let cr_media = tmpParent.find(".cr-review-tags-filter .cr-media-pill.cr-tag-selected").length ? 1 : 0;
 			let cr_data = {
 				"action": "cr_filter_reviews",
 				"productID": cr_product_id,
 				"rating": cr_rating,
 				"sort": cr_sort,
+				"tags": cr_tags,
+				"media": cr_media,
 				"security": cr_nonce
 			};
 			tmpParent.find(".cr-summaryBox-ajax .ivole-histogramRow.ivole-histogramRow-s").removeClass("ivole-histogramRow-s");
@@ -420,6 +438,20 @@
 				cr_filter_all_reviews( jQuery(this) );
 			} else {
 				// tags filtering on a product page
+				jQuery(this).parents(".cr-reviews-ajax-comments").attr("data-page", 0);
+				jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-ajax-reviews-list").empty();
+				crShowMoreReviewsPrd( jQuery(this) );
+			}
+		} );
+		// click to filter reviews to only show ones with attached photos or videos
+		jQuery(".cr-review-tags-filter span.cr-media-pill").on( "click", function (e) {
+			e.preventDefault();
+			jQuery(this).toggleClass("cr-tag-selected");
+			if ( jQuery(this).parents(".cr-all-reviews-shortcode").length ) {
+				// media filtering in the all reviews shortcode
+				cr_filter_all_reviews( jQuery(this) );
+			} else {
+				// media filtering on a product page
 				jQuery(this).parents(".cr-reviews-ajax-comments").attr("data-page", 0);
 				jQuery(this).parents(".cr-reviews-ajax-comments").find(".cr-ajax-reviews-list").empty();
 				crShowMoreReviewsPrd( jQuery(this) );
@@ -1559,6 +1591,7 @@
 				cr_tags.push( jQuery(this).attr("data-crtagid") );
 			}
 		);
+		let cr_media = refElement.parents(".cr-all-reviews-shortcode").find(".cr-review-tags-filter .cr-media-pill.cr-tag-selected").length ? 1 : 0;
 		let cr_data = {
 			"action": "cr_show_more_all_reviews",
 			"attributes": attributes,
@@ -1566,7 +1599,8 @@
 			"page": 0,
 			"search": cr_search,
 			"sort": cr_sort,
-			"tags": cr_tags
+			"tags": cr_tags,
+			"media": cr_media
 		};
 		//
 		if( show_more ) {
@@ -1899,6 +1933,7 @@
 				cr_tags.push( jQuery(this).attr("data-crtagid") );
 			}
 		);
+		let cr_media = refElement.parents(".cr-reviews-ajax-comments").find(".cr-review-tags-filter .cr-media-pill.cr-tag-selected").length ? 1 : 0;
 		if ( ! cr_rating ){
 			cr_rating = 0;
 		}
@@ -1910,6 +1945,7 @@
 			"rating": cr_rating,
 			"search": cr_search,
 			"tags": cr_tags,
+			"media": cr_media,
 			"security": cr_nonce
 		};
 		refElement.parents(".cr-reviews-ajax-comments").find(".cr-summaryBox-ajax").addClass("cr-summaryBar-updating");

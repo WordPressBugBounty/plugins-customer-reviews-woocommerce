@@ -16,7 +16,7 @@ import {
 } from '@wordpress/element';
 import { compose, withInstanceId } from '@wordpress/compose';
 import { escapeRegExp, findIndex } from 'lodash';
-import NoticeOutlineIcon from 'gridicons/dist/notice-outline';
+import { Icon, info } from '@wordpress/icons';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import './style.scss';
@@ -163,7 +163,8 @@ export const SearchListControl = ( props ) => {
 			return (
 				<div className="cr-search-list__list is-not-found">
 					<span className="cr-search-list__not-found-icon">
-						<NoticeOutlineIcon
+						<Icon
+							icon={ info }
 							role="img"
 							aria-hidden="true"
 							focusable="false"

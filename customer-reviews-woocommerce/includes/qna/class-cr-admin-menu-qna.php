@@ -19,6 +19,7 @@ if ( ! class_exists( 'CR_Qna_Admin_Menu' ) ):
 			add_filter( 'wp_editor_settings', array( $this, 'wp_editor_settings_filter' ), 10, 2 );
 			add_action( 'cr_admin_qna_reply_form', array( $this, 'qna_reply' ) );
 			add_action( 'wp_ajax_cr-replyto-qna', array( $this, 'wp_ajax_cr_replyto_qna' ) );
+			add_filter( 'set-screen-option', array( $this, 'save_screen_options' ), 10, 3 );
 		}
 
 		public function register_qna_menu() {
@@ -32,7 +33,7 @@ if ( ! class_exists( 'CR_Qna_Admin_Menu' ) ):
 				$capability = 'manage_woocommerce';
 			}
 
-			add_submenu_page(
+			$submenu = add_submenu_page(
 				'cr-reviews',
 				__( 'Q & A', 'customer-reviews-woocommerce' ),
 				__( 'Q & A', 'customer-reviews-woocommerce' ) . sprintf( ' <span class="awaiting-mod count-%1$d"><span class="pending-count-qna" aria-hidden="true">%2$d</span></span>', $notification_count, $notification_count ),
@@ -40,6 +41,28 @@ if ( ! class_exists( 'CR_Qna_Admin_Menu' ) ):
 				$this->menu_slug,
 				array( $this, 'display_qna_page' )
 			);
+
+			if ( $submenu ) {
+				add_action( "load-$submenu", array( $this, 'display_screen_options' ) );
+			}
+		}
+
+		public function display_screen_options() {
+			$args = array(
+				'label' => __( 'Questions and answers per page', 'customer-reviews-woocommerce' ),
+				'default' => 10,
+				'option' => 'qna_per_page'
+			);
+			add_screen_option( 'per_page', $args );
+		}
+
+		public function save_screen_options( $screen_option, $option, $value ) {
+			if ( 'qna_per_page' === $option ) {
+				if ( $value < 1 || $value > 999 ) {
+					return false;
+				}
+			}
+			return $value;
 		}
 
 		public function display_qna_page() {

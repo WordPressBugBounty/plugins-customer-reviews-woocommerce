@@ -13,6 +13,7 @@ if (! class_exists('CR_Ajax_Reviews')) :
 		private static $rating = 0;
 		private static $search = '';
 		private static $tags = array();
+		private static $media = 0;
 		const WPML_COOKIE = 'cr_wpml_is_filtered';
 
 		public function __construct()
@@ -163,6 +164,10 @@ if (! class_exists('CR_Ajax_Reviews')) :
 					$args['comment__in'] = $reviews_by_tags;
 				}
 			}
+			// filter by media (only reviews with at least one photo or video attached)
+			if( self::$media ) {
+				$args['meta_query'][] = self::get_media_meta_query();
+			}
 			// exclude qna
 			$args['type__not_in'] = array( 'cr_qna' );
 
@@ -272,7 +277,6 @@ if (! class_exists('CR_Ajax_Reviews')) :
 						self::$sort = $_POST['sort'];
 					}
 					if( isset( $_POST['rating'] ) && ( 0 <= $_POST['rating'] && 6 > $_POST['rating'] ) ) {
-						$all = self::count_ratings( $_POST['productID'], 0 );
 						self::$rating = $_POST['rating'];
 					}
 					//search
@@ -282,6 +286,13 @@ if (! class_exists('CR_Ajax_Reviews')) :
 					//tags
 					if( isset( $_POST['tags'] ) && is_array( $_POST['tags'] ) && count( $_POST['tags'] ) > 0 ) {
 						self::$tags = array_map( 'intval', $_POST['tags'] );
+					}
+					//media
+					if( isset( $_POST['media'] ) ) {
+						self::$media = ! empty( $_POST['media'] ) ? 1 : 0;
+					}
+					if( isset( $_POST['rating'] ) && ( 0 <= $_POST['rating'] && 6 > $_POST['rating'] ) ) {
+						$all = self::count_ratings( $_POST['productID'], 0 );
 					}
 					$page = intval( $_POST['page'] ) + 1;
 					$get_reviews = self::get_reviews( $_POST['productID'] );
@@ -342,6 +353,28 @@ if (! class_exists('CR_Ajax_Reviews')) :
 			return self::$per_page;
 		}
 
+		public static function get_media_meta_query() {
+			return array(
+				'relation' => 'OR',
+				array(
+					'key' => CR_Reviews::REVIEWS_META_IMG,
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key' => CR_Reviews::REVIEWS_META_LCL_IMG,
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key' => CR_Reviews::REVIEWS_META_VID,
+					'compare' => 'EXISTS'
+				),
+				array(
+					'key' => CR_Reviews::REVIEWS_META_LCL_VID,
+					'compare' => 'EXISTS'
+				)
+			);
+		}
+
 		public static function get_sort() {
 			return self::$sort;
 		}
@@ -362,9 +395,17 @@ if (! class_exists('CR_Ajax_Reviews')) :
 						'ratinglow' === $_POST['sort']
 					) {
 						self::$sort = $_POST['sort'];
+						//tags
+						if( isset( $_POST['tags'] ) && is_array( $_POST['tags'] ) && count( $_POST['tags'] ) > 0 ) {
+							self::$tags = array_map( 'intval', $_POST['tags'] );
+						}
+						//media
+						if( isset( $_POST['media'] ) ) {
+							self::$media = ! empty( $_POST['media'] ) ? 1 : 0;
+						}
 						if( isset( $_POST['rating'] ) && ( 0 <= $_POST['rating'] && 6 > $_POST['rating'] ) ) {
-							$all = self::count_ratings( $_POST['productID'], 0 );
 							self::$rating = $_POST['rating'];
+							$all = self::count_ratings( $_POST['productID'], 0 );
 						}
 						$get_reviews = self::get_reviews( $_POST['productID'] );
 						$initials_setting = get_option( 'ivole_avatars', 'standard' );
@@ -435,6 +476,14 @@ if (! class_exists('CR_Ajax_Reviews')) :
 						self::$rating = $_POST['rating'];
 						if( isset( $_POST['sort'] ) && ( 'recent' === $_POST['sort'] || 'helpful' === $_POST['sort'] ) ) {
 							self::$sort = $_POST['sort'];
+						}
+						//tags
+						if( isset( $_POST['tags'] ) && is_array( $_POST['tags'] ) && count( $_POST['tags'] ) > 0 ) {
+							self::$tags = array_map( 'intval', $_POST['tags'] );
+						}
+						//media
+						if( isset( $_POST['media'] ) ) {
+							self::$media = ! empty( $_POST['media'] ) ? 1 : 0;
 						}
 						$get_reviews = self::get_reviews( $_POST['productID'] );
 						$initials_setting = get_option( 'ivole_avatars', 'standard' );
@@ -558,6 +607,21 @@ if (! class_exists('CR_Ajax_Reviews')) :
 					'compare' => '=',
 					'type'    => 'numeric'
 				);
+			}
+			// the count has to respect the other active filters
+			if( 0 < count( self::$tags ) ) {
+				$reviews_by_tags = get_objects_in_term( self::$tags, 'cr_tag' );
+				if( $reviews_by_tags && !is_wp_error( $reviews_by_tags ) && is_array( $reviews_by_tags ) && 0 < count( $reviews_by_tags ) ) {
+					$args['comment__in'] = $reviews_by_tags;
+				}
+			}
+			if( self::$media ) {
+				$args['meta_query'][] = self::get_media_meta_query();
+				// WordPress omits GROUP BY for counting queries, so the extra meta joins would inflate COUNT(*)
+				$args['count'] = false;
+				$args['fields'] = 'ids';
+				$ids = get_comments( $args );
+				return is_array( $ids ) ? count( $ids ) : 0;
 			}
 			return get_comments( $args );
 		}
@@ -743,7 +807,8 @@ if (! class_exists('CR_Ajax_Reviews')) :
 			if( apply_filters( 'cr_ajaxreviews_show_search', true ) ) {
 				echo self::get_search_field( false );
 			}
-			echo self::get_tags_field( $reviews[0] );
+			$has_media = CR_Reviews::comments_have_media( $reviews[0] );
+			echo self::get_tags_field( $reviews[0], $has_media );
 		}
 
 		public static function get_search_field( $search_button ) {
@@ -795,7 +860,7 @@ if (! class_exists('CR_Ajax_Reviews')) :
 			}
 		}
 
-		public static function get_tags_field( $comments ) {
+		public static function get_tags_field( $comments, $has_media = false ) {
 			$tags_field = '';
 			$all_tags = array();
 			if ( is_array( $comments ) && 0 < count( $comments ) ) {
@@ -810,9 +875,13 @@ if (! class_exists('CR_Ajax_Reviews')) :
 					}
 				}
 			}
-			//
+			$output = '';
+			if ( $has_media ) {
+				$output .= '<span class="cr-media-pill cr-tag" data-crmedia="1">';
+				$output .= '<svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>';
+				$output .= '<span>' . esc_html__( 'With media', 'customer-reviews-woocommerce' ) . '</span></span> ';
+			}
 			if ( 0 < count( $all_tags ) ) {
-				$output = '';
 				$unique_tags = array();
 				foreach ($all_tags as $tag) {
 					$tag_exists = false;
@@ -827,9 +896,9 @@ if (! class_exists('CR_Ajax_Reviews')) :
 						$output .= '<span class="cr-tags-filter cr-tag cr-tag-' . $tag->term_id . '" data-crtagid="' . $tag->term_id . '">' . esc_html( $tag->name ) . '</span> ';
 					}
 				}
-				if ( $output ) {
-					$tags_field = '<div class="cr-review-tags-filter">' . $output . '</div>';
-				}
+			}
+			if ( $output ) {
+				$tags_field = '<div class="cr-review-tags-filter">' . $output . '</div>';
 			}
 			return $tags_field;
 		}

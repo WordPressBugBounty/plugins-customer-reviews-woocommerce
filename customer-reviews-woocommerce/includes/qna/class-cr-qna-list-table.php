@@ -111,20 +111,48 @@ class CR_Qna_List_Table extends WP_List_Table {
 			'status' => isset( $status_map[$comment_status] ) ? $status_map[$comment_status] : $comment_status,
 			'search' => $search,
 			'user_id' => $user_id,
-			'offset' => $start,
-			'number' => $number,
 			'post_id' => $post_id,
 			'orderby' => $orderby,
 			'order' => $order,
 			'type' => 'cr_qna'
 		);
 
-		$_comments = get_comments( $args );
+		// Threading requires the full matching set to know where each answer belongs, but we
+		// avoid hydrating full comment objects for it: only IDs + parent/date are fetched here,
+		// full objects are loaded later just for the page being displayed.
+		$_comment_ids = get_comments( array_merge( $args, array(
+			'fields' => 'ids',
+			'offset' => 0,
+			'number' => 0,
+		) ) );
 
-		if ( is_array( $_comments ) ) {
-			update_comment_cache( $_comments );
+		if ( is_array( $_comment_ids ) && ! empty( $_comment_ids ) ) {
+			global $wpdb;
+
+			$id_list = implode( ',', array_map( 'absint', $_comment_ids ) );
+			$rows = $wpdb->get_results( "SELECT comment_ID, comment_parent, comment_date FROM {$wpdb->comments} WHERE comment_ID IN ( $id_list )", OBJECT_K );
+
+			// Re-attach parent/date info, preserving the order established by the filtered/sorted ID query above.
+			$_comments = array();
+			foreach ( $_comment_ids as $comment_id ) {
+				if ( isset( $rows[ $comment_id ] ) ) {
+					$_comments[] = $rows[ $comment_id ];
+				}
+			}
 
 			$_comments = $this->thread_comments( $_comments );
+
+			$total_comments = count( $_comments );
+
+			$page_ids = wp_list_pluck( array_slice( $_comments, $start, $number ), 'comment_ID' );
+
+			$_comments = empty( $page_ids ) ? array() : get_comments( array(
+				'comment__in' => $page_ids,
+				'orderby' => 'comment__in',
+				'type' => 'cr_qna',
+			) );
+
+			update_comment_cache( $_comments );
 
 			$this->items = array_slice( $_comments, 0, $comments_per_page );
 			$this->extra_items = array_slice( $_comments, $comments_per_page );
@@ -132,13 +160,9 @@ class CR_Qna_List_Table extends WP_List_Table {
 			$_comment_post_ids = array_unique( wp_list_pluck( $_comments, 'comment_post_ID' ) );
 
 			$this->pending_count = get_pending_comments_num( $_comment_post_ids );
+		} else {
+			$total_comments = 0;
 		}
-
-		$total_comments = get_comments( array_merge( $args, array(
-			'count'     => true,
-			'offset'    => 0,
-			'number'    => 0
-		) ) );
 
 		$this->set_pagination_args( array(
 			'total_items' => $total_comments,
@@ -196,7 +220,7 @@ class CR_Qna_List_Table extends WP_List_Table {
 	* @return int
 	*/
 	public function get_per_page( $comment_status = 'all' ) {
-		$comments_per_page = $this->get_items_per_page( 'edit_comments_per_page' );
+		$comments_per_page = $this->get_items_per_page( 'qna_per_page', 10 );
 		/**
 		* Filters the number of comments listed per page in the comments list table.
 		*

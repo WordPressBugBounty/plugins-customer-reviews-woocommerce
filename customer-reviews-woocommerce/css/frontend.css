@@ -1673,16 +1673,36 @@ div.ivole-summaryBox.cr-summaryBar-updating,
 }
 .cr-review-tags-filter .cr-tag {
 	font-size: 14px;
-	border-radius: 0.7em;
-	margin-right: 5px;
-	margin-bottom: 7px;
-	border-color: #D0D0D0;
+	line-height: 1.5;
+	font-weight: 500;
+	color: #3F4A52;
+	background-color: #fff;
+	border: 1px solid #DDE1E6;
+	border-radius: 999px;
+	padding: .35em .95em;
+	margin-right: 6px;
+	margin-bottom: 8px;
+	box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
+	transition: color .15s ease, background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
 .cr-review-tags-filter span.cr-tag:hover {
+	color: #1F2937;
 	border-color: #31856C;
+	background-color: #F4FAF7;
+	box-shadow: 0 2px 6px rgba(16, 24, 40, .09);
 	cursor: pointer;
 }
+.cr-review-tags-filter span.cr-tag:active {
+	box-shadow: 0 1px 2px rgba(16, 24, 40, .05);
+}
+.cr-review-tags-filter span.cr-tag:focus-visible {
+	outline: 2px solid #31856C;
+	outline-offset: 2px;
+}
 .cr-review-tags-filter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 	padding-top: 5px;
 	padding-left: 0px;
 	padding-right: 0px;
@@ -1691,12 +1711,24 @@ div.ivole-summaryBox.cr-summaryBar-updating,
 	opacity: 1;
 }
 .cr-review-tags-filter span.cr-tag.cr-tag-selected {
+	color: #fff;
 	border-color: #31856C;
-	background-color: #D3D3D3;
+	background-color: #31856C;
+	box-shadow: 0 1px 3px rgba(49, 133, 108, .35);
+}
+.cr-review-tags-filter span.cr-tag.cr-tag-selected:hover {
+	color: #fff;
+	background-color: #2A7159;
+	border-color: #2A7159;
 }
 div.cr-review-tags-filter.cr-review-tags-filter-disabled {
 	pointer-events: none;
 	opacity: 0.5;
+}
+.cr-review-tags-filter .cr-media-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
 }
 .cr-review-tags {
 	margin-bottom: 1em;
@@ -2613,7 +2645,7 @@ img.ivole-verified-badge-ext-icon {
 #reviews.cr-reviews-ajax-reviews .cr-ajax-reviews-cus-images-div .cr-ajax-reviews-cus-images-title,
 .cr-all-reviews-shortcode .cr-ajax-reviews-cus-images-div .cr-ajax-reviews-cus-images-title {
 	font-size: 1em;
-	margin: 0 auto 5px auto;
+	margin: 0 0 5px 0;
 }
 #reviews.cr-reviews-ajax-reviews .cr-ajax-reviews-cus-images-div2,
 .cr-all-reviews-shortcode .cr-ajax-reviews-cus-images-div2 {
