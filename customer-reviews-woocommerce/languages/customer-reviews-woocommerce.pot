@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Reviews for WooCommerce 5.120.0\n"
+"Project-Id-Version: Customer Reviews for WooCommerce 5.121.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-reviews-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-04T17:11:39+00:00\n"
+"POT-Creation-Date: 2026-09-14T00:07:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: customer-reviews-woocommerce\n"
@@ -240,8 +240,8 @@ msgstr ""
 #: includes/blocks/class-cr-all-reviews.php:542
 #: includes/blocks/class-cr-all-reviews.php:660
 #: includes/reviews/class-cr-ajax-reviews.php:328
-#: includes/reviews/class-cr-ajax-reviews.php:438
-#: includes/reviews/class-cr-ajax-reviews.php:519
+#: includes/reviews/class-cr-ajax-reviews.php:425
+#: includes/reviews/class-cr-ajax-reviews.php:506
 #: templates/cr-ajax-product-reviews.php:116
 #: templates/reviews-grid.php:323
 #, php-format
@@ -259,23 +259,23 @@ msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:960
 #: includes/blocks/class-cr-reviews-grid.php:1016
-#: includes/reviews/class-cr-reviews.php:1680
+#: includes/reviews/class-cr-reviews.php:1685
 #: templates/cr-review-form.php:31
 msgid "Add a review"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1133
-#: includes/reviews/class-cr-reviews.php:1590
+#: includes/reviews/class-cr-reviews.php:1595
 msgid "Sort reviews"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1135
-#: includes/reviews/class-cr-reviews.php:1592
+#: includes/reviews/class-cr-reviews.php:1597
 msgid "Most Recent"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1138
-#: includes/reviews/class-cr-reviews.php:1596
+#: includes/reviews/class-cr-reviews.php:1601
 msgid "Most Helpful"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgid "You must be logged in to upload media files"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1454
-#: includes/reminders/class-cr-local-forms-ajax.php:116
+#: includes/reminders/class-cr-local-forms-ajax.php:128
 #: includes/reminders/class-cr-local-forms.php:163
 #: includes/reviews/class-cr-reviews.php:396
 #, php-format
@@ -408,10 +408,10 @@ msgid "The file cannot be uploaded because its size exceeds the limit of %d MB"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1463
-#: includes/reminders/class-cr-local-forms-ajax.php:125
+#: includes/reminders/class-cr-local-forms-ajax.php:137
 #: includes/reminders/class-cr-local-forms.php:164
 #: includes/reviews/class-cr-reviews.php:394
-#: includes/reviews/class-cr-reviews.php:1455
+#: includes/reviews/class-cr-reviews.php:1460
 msgid "Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI"
 msgstr ""
 
@@ -2646,14 +2646,14 @@ msgid "Form opened"
 msgstr ""
 
 #. translators: %s: rating
-#: includes/reminders/class-cr-local-forms-ajax.php:326
+#: includes/reminders/class-cr-local-forms-ajax.php:338
 #: templates/cr-shortcode-rating.php:35
 #, php-format
 msgid "Rated %s out of 5"
 msgstr ""
 
 #. translators: %s: number of reviews
-#: includes/reminders/class-cr-local-forms-ajax.php:338
+#: includes/reminders/class-cr-local-forms-ajax.php:350
 #: includes/trust-badge/class-cr-trust-badge.php:193
 #: includes/trust-badge/class-cr-trust-badge.php:194
 #: templates/cr-rating.php:44
@@ -2664,7 +2664,7 @@ msgid_plural "%s reviews"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/reminders/class-cr-local-forms-ajax.php:362
+#: includes/reminders/class-cr-local-forms-ajax.php:374
 msgid "View"
 msgstr ""
 
@@ -2702,7 +2702,7 @@ msgstr ""
 
 #: includes/reminders/class-cr-local-forms.php:192
 #: includes/reviews/class-cr-custom-questions.php:624
-#: includes/reviews/class-cr-reviews.php:1676
+#: includes/reviews/class-cr-reviews.php:1681
 #: includes/settings/class-cr-settings-forms-rating.php:64
 #: includes/settings/class-cr-settings-forms-rating.php:161
 #: blocks/build/reviews-grid/index.js:12
@@ -4090,15 +4090,19 @@ msgstr ""
 msgid "Zimbabwe"
 msgstr ""
 
-#: includes/reviews/class-cr-ajax-reviews.php:825
+#: includes/reviews/class-cr-ajax-reviews.php:807
 msgid "Search"
 msgstr ""
 
-#: includes/reviews/class-cr-ajax-reviews.php:834
+#: includes/reviews/class-cr-ajax-reviews.php:816
 msgid "Search customer reviews"
 msgstr ""
 
-#: includes/reviews/class-cr-ajax-reviews.php:882
+#: includes/reviews/class-cr-ajax-reviews.php:862
+msgid "Filter to show only reviews with photos or videos"
+msgstr ""
+
+#: includes/reviews/class-cr-ajax-reviews.php:864
 msgid "With media"
 msgstr ""
 
@@ -4291,8 +4295,8 @@ msgstr ""
 #: includes/reviews/class-cr-reviews-media-meta-box.php:104
 #: includes/reviews/class-cr-reviews.php:238
 #: includes/reviews/class-cr-reviews.php:257
-#: includes/reviews/class-cr-reviews.php:1209
-#: includes/reviews/class-cr-reviews.php:1223
+#: includes/reviews/class-cr-reviews.php:1214
+#: includes/reviews/class-cr-reviews.php:1228
 #: templates/reviews-grid.php:90
 #: templates/reviews-grid.php:97
 #, php-format
@@ -4305,8 +4309,8 @@ msgstr ""
 #: includes/reviews/class-cr-reviews-media-meta-box.php:138
 #: includes/reviews/class-cr-reviews.php:278
 #: includes/reviews/class-cr-reviews.php:300
-#: includes/reviews/class-cr-reviews.php:1237
-#: includes/reviews/class-cr-reviews.php:1251
+#: includes/reviews/class-cr-reviews.php:1242
+#: includes/reviews/class-cr-reviews.php:1256
 #: templates/reviews-grid.php:80
 #: templates/reviews-grid.php:82
 #: templates/reviews-grid.php:94
@@ -4320,7 +4324,7 @@ msgstr ""
 #: includes/reviews/class-cr-reviews-media-meta-box.php:140
 #: includes/reviews/class-cr-reviews.php:280
 #: includes/reviews/class-cr-reviews.php:302
-#: includes/reviews/class-cr-reviews.php:1340
+#: includes/reviews/class-cr-reviews.php:1345
 msgid "Close"
 msgstr ""
 
@@ -4426,23 +4430,23 @@ msgstr ""
 msgid "External link"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1265
+#: includes/reviews/class-cr-reviews.php:1270
 msgid "Customer photos and videos"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1437
+#: includes/reviews/class-cr-reviews.php:1442
 msgid "Error: please solve the CAPTCHA before uploading files"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1446
+#: includes/reviews/class-cr-reviews.php:1451
 msgid "Error: the file(s) is too large"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1600
+#: includes/reviews/class-cr-reviews.php:1605
 msgid "Highest Rating"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1603
+#: includes/reviews/class-cr-reviews.php:1608
 msgid "Lowest Rating"
 msgstr ""
 

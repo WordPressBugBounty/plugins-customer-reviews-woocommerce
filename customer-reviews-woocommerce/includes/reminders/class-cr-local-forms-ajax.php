@@ -54,8 +54,20 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 								$db_items[$key]['rating'] = intval( $review_item['rating'] );
 								$db_items[$key]['comment'] = wp_kses_post( $review_item['comment'] );
 								if ( isset( $review_item['media'] ) && is_array( $review_item['media'] ) ) {
-									$review_item['media'] = array_map( 'intval', $review_item['media'] );
-									$db_items[$key]['media'] = array_values( $review_item['media'] );
+									$validated_media = array();
+									foreach ( $review_item['media'] as $media_item ) {
+										if ( isset( $media_item['id'] ) && $media_item['id'] ) {
+											if ( isset( $media_item['key'] ) && $media_item['key'] ) {
+												$attachmentId = intval( $media_item['id'] );
+												if ( 'attachment' === get_post_type( $attachmentId ) ) {
+													if ( $media_item['key'] === get_post_meta( $attachmentId, 'cr-upload-temp-key', true ) ) {
+														$validated_media[] = $attachmentId;
+													}
+												}
+											}
+										}
+									}
+									$db_items[$key]['media'] = array_values( $validated_media );
 								} else {
 									$db_items[$key]['media'] = array();
 								}

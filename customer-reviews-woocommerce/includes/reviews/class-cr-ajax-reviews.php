@@ -355,23 +355,10 @@ if (! class_exists('CR_Ajax_Reviews')) :
 
 		public static function get_media_meta_query() {
 			return array(
-				'relation' => 'OR',
-				array(
-					'key' => CR_Reviews::REVIEWS_META_IMG,
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key' => CR_Reviews::REVIEWS_META_LCL_IMG,
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key' => CR_Reviews::REVIEWS_META_VID,
-					'compare' => 'EXISTS'
-				),
-				array(
-					'key' => CR_Reviews::REVIEWS_META_LCL_VID,
-					'compare' => 'EXISTS'
-				)
+				'key'     => 'ivole_media_count',
+				'value'   => 0,
+				'compare' => '>',
+				'type'    => 'NUMERIC'
 			);
 		}
 
@@ -617,11 +604,6 @@ if (! class_exists('CR_Ajax_Reviews')) :
 			}
 			if( self::$media ) {
 				$args['meta_query'][] = self::get_media_meta_query();
-				// WordPress omits GROUP BY for counting queries, so the extra meta joins would inflate COUNT(*)
-				$args['count'] = false;
-				$args['fields'] = 'ids';
-				$ids = get_comments( $args );
-				return is_array( $ids ) ? count( $ids ) : 0;
 			}
 			return get_comments( $args );
 		}
@@ -877,7 +859,7 @@ if (! class_exists('CR_Ajax_Reviews')) :
 			}
 			$output = '';
 			if ( $has_media ) {
-				$output .= '<span class="cr-media-pill cr-tag" data-crmedia="1">';
+				$output .= '<span class="cr-media-pill cr-tag" data-crmedia="1" title="' . esc_attr__( 'Filter to show only reviews with photos or videos', 'customer-reviews-woocommerce' ) . '" aria-label="' . esc_attr__( 'Filter to show only reviews with photos or videos', 'customer-reviews-woocommerce' ) . '">';
 				$output .= '<svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/><path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/></svg>';
 				$output .= '<span>' . esc_html__( 'With media', 'customer-reviews-woocommerce' ) . '</span></span> ';
 			}

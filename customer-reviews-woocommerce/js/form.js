@@ -72,8 +72,15 @@
 						"rating": jQuery( this ).find( ".cr-form-item-question-row2 .cr-form-active-radio" ).data( "rating" ),
 						"comment": jQuery( this ).find( ".cr-form-item-comment textarea" ).val().trim(),
 						"media": jQuery( this ).find( ".cr-upload-images-containers input" ).map( function() {
-							let mItem = JSON.parse( jQuery( this ).val() );
-							return mItem.id;
+							let val = jQuery( this ).val();
+							if ( val ) {
+								try {
+									return JSON.parse( val );
+								} catch( e ) {
+									return null;
+								}
+							}
+							return null;
 						} ).get()
 					} )
 				} );

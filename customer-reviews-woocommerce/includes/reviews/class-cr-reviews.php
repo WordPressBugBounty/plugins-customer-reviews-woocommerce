@@ -1170,7 +1170,12 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			return false;
 		}
 		foreach ( $comments as $comment ) {
-			if (
+			$media_count = get_comment_meta( $comment->comment_ID, 'ivole_media_count', true );
+			if ( '' !== $media_count && false !== $media_count ) {
+				if ( intval( $media_count ) > 0 ) {
+					return true;
+				}
+			} elseif (
 				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_IMG ) ||
 				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_LCL_IMG ) ||
 				get_comment_meta( $comment->comment_ID, self::REVIEWS_META_VID ) ||
