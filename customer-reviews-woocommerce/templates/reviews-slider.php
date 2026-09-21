@@ -79,9 +79,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="review-text">
 						<?php
 						// compatibility with WPML / WCML plugins to translate reviews
-						if ( class_exists( 'WCML\Reviews\Translations\FrontEndHooks' ) ) {
+						if ( class_exists( 'WCML\Reviews\Translations\FrontEndHooks' ) && function_exists( 'WPML\Container\make' ) ) {
 							if ( method_exists( 'WCML\Reviews\Translations\FrontEndHooks', 'translateReview' ) ) {
-								( new WCML\Reviews\Translations\FrontEndHooks() )->translateReview( $review );
+								\WPML\Container\make( 'WCML\Reviews\Translations\FrontEndHooks' )?->translateReview( $review );
 							}
 						}
 						$clear_content = wp_strip_all_tags( $review->comment_content );

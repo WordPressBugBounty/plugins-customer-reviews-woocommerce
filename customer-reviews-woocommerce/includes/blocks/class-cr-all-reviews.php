@@ -527,7 +527,7 @@ if (! class_exists('CR_All_Reviews')) :
 			} else {
 				remove_filter( 'get_avatar', array( 'CR_Reviews', 'change_avatar_class' ) );
 			}
-			$return .= '<span class="cr-pagination-review-spinner"></span>';
+			$return .= '<li class="cr-pagination-review-spinner-li" aria-hidden="true"><span class="cr-pagination-review-spinner"></span></li>';
 			$return .= '</ol>';
 
 			if ( $this->shortcode_atts['show_more'] == 0 ) {
@@ -1246,6 +1246,32 @@ if (! class_exists('CR_All_Reviews')) :
 			return ob_get_clean();
 		}
 
+		// checks if a customer (by email and/or user id) has placed any paid order, used for shop-level reviews
+		// where there is no single product to check against with wc_customer_bought_product()
+		private static function cr_customer_has_any_order( $email, $user_id ) {
+			$args = array(
+				'status' => wc_get_is_paid_statuses(),
+				'limit'  => 1,
+				'return' => 'ids',
+			);
+
+			if ( $user_id ) {
+				$orders = wc_get_orders( array_merge( $args, array( 'customer_id' => $user_id ) ) );
+				if ( ! empty( $orders ) ) {
+					return true;
+				}
+			}
+
+			if ( $email && is_email( $email ) ) {
+				$orders = wc_get_orders( array_merge( $args, array( 'billing_email' => $email ) ) );
+				if ( ! empty( $orders ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		public function submit_review() {
 			$return = array(
 				'code' => 2,
@@ -1305,13 +1331,20 @@ if (! class_exists('CR_All_Reviews')) :
 								$name &&
 								is_email( $email )
 							) {
-								// check if a user bought the product in the past and permission is 'verified'
+								// check if a user bought the product (or, for shop reviews, any product) in the past and permission is 'verified'
+								$is_shop_review = ( -1 == $_POST['id'] );
 								if (
 									'verified' === $cr_form_permissions &&
-									! wc_customer_bought_product( $email, get_current_user_id(), $page_id )
+									(
+										$is_shop_review ?
+										! self::cr_customer_has_any_order( $email, get_current_user_id() ) :
+										! wc_customer_bought_product( $email, get_current_user_id(), $page_id )
+									)
 								) {
 									$return['code'] = 5;
-									$return['description'] = __( 'Only customers who have purchased this product may leave a review. Please use the same email address as in your order for this product.', 'customer-reviews-woocommerce' );
+									$return['description'] = $is_shop_review ?
+										__( 'Only customers who have placed an order may leave a review. Please use the same email address as in your order.', 'customer-reviews-woocommerce' ) :
+										__( 'Only customers who have purchased this product may leave a review. Please use the same email address as in your order for this product.', 'customer-reviews-woocommerce' );
 								} else {
 									$user = get_user_by( 'email', $email );
 									if( $user ) {

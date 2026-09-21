@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Reviews for WooCommerce 5.121.0\n"
+"Project-Id-Version: Customer Reviews for WooCommerce 5.122.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-reviews-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-14T00:07:33+00:00\n"
+"POT-Creation-Date: 2026-09-21T00:22:57+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: customer-reviews-woocommerce\n"
@@ -324,11 +324,11 @@ msgstr ""
 msgid "Add photos or video to your review"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1252
+#: includes/blocks/class-cr-all-reviews.php:1278
 msgid "Data validation error"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1253
+#: includes/blocks/class-cr-all-reviews.php:1279
 #: includes/qna/class-cr-admin-menu-qna.php:222
 #: includes/qna/class-cr-qna.php:183
 #: includes/reminders/class-cr-manual.php:441
@@ -337,36 +337,40 @@ msgstr ""
 msgid "OK"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1260
+#: includes/blocks/class-cr-all-reviews.php:1286
 #: templates/cr-review-form.php:78
 msgid "Currently, we are not accepting new reviews"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1284
+#: includes/blocks/class-cr-all-reviews.php:1310
 #: templates/cr-review-form.php:61
 msgid "You must be logged in to post a review"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1314
+#: includes/blocks/class-cr-all-reviews.php:1346
+msgid "Only customers who have placed an order may leave a review. Please use the same email address as in your order."
+msgstr ""
+
+#: includes/blocks/class-cr-all-reviews.php:1347
 msgid "Only customers who have purchased this product may leave a review. Please use the same email address as in your order for this product."
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1341
+#: includes/blocks/class-cr-all-reviews.php:1374
 msgid "Your review could not be added"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1342
+#: includes/blocks/class-cr-all-reviews.php:1375
 #: includes/qna/class-cr-admin-menu-qna.php:221
 #: includes/qna/class-cr-qna.php:185
 #: includes/reviews/class-cr-admin-menu-reviews.php:251
 msgid "Try again"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1343
+#: includes/blocks/class-cr-all-reviews.php:1376
 msgid "Your review has been successfully added"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1344
+#: includes/blocks/class-cr-all-reviews.php:1377
 #: includes/qna/class-cr-qna.php:186
 #: templates/cr-review-form.php:209
 #: templates/qna-list.php:202
@@ -374,32 +378,32 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1371
+#: includes/blocks/class-cr-all-reviews.php:1404
 msgid "Error: no shop page configured in WooCommerce settings (WooCommerce > Settings > Products > Shop page)"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1373
+#: includes/blocks/class-cr-all-reviews.php:1406
 #, php-format
 msgid "Error: no product with ID %d found"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1409
+#: includes/blocks/class-cr-all-reviews.php:1442
 msgid "Error: attachment of media files is disabled in the settings"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1416
+#: includes/blocks/class-cr-all-reviews.php:1449
 msgid "Error: nonce validation failed. Please refresh the page and try again."
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1425
+#: includes/blocks/class-cr-all-reviews.php:1458
 msgid "Currently, we are not accepting new reviews or media files"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1444
+#: includes/blocks/class-cr-all-reviews.php:1477
 msgid "You must be logged in to upload media files"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1454
+#: includes/blocks/class-cr-all-reviews.php:1487
 #: includes/reminders/class-cr-local-forms-ajax.php:128
 #: includes/reminders/class-cr-local-forms.php:163
 #: includes/reviews/class-cr-reviews.php:396
@@ -407,7 +411,7 @@ msgstr ""
 msgid "The file cannot be uploaded because its size exceeds the limit of %d MB"
 msgstr ""
 
-#: includes/blocks/class-cr-all-reviews.php:1463
+#: includes/blocks/class-cr-all-reviews.php:1496
 #: includes/reminders/class-cr-local-forms-ajax.php:137
 #: includes/reminders/class-cr-local-forms.php:164
 #: includes/reviews/class-cr-reviews.php:394

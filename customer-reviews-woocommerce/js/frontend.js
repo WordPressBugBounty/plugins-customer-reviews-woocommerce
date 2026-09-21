@@ -1627,7 +1627,7 @@
 						shcode.find( ".cr-show-more-review-spinner" ).hide();
 						if( response.html !== "" ) {
 							if ( jQuery(this).hasClass( "cr-page-numbers-a" ) ) {
-								shcode.find(".commentlist").find("*").not(".cr-pagination-review-spinner").remove();
+								shcode.find(".commentlist").find("*").not(".cr-pagination-review-spinner-li").not(".cr-pagination-review-spinner").remove();
 								shcode.find(".commentlist").prepend(response.html);
 							} else {
 								shcode.find(".commentlist").append(response.html);

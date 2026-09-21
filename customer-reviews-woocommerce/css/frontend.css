@@ -1787,6 +1787,10 @@ div.cr-review-tags-filter.cr-review-tags-filter-disabled {
 	border: 0;
 	padding: 0;
 }
+.cr-all-reviews-shortcode ol.commentlist li.cr-pagination-review-spinner-li {
+	margin: 0;
+	height: 0;
+}
 .cr-all-reviews-shortcode.cr-all-reviews-new-review ol.commentlist,
 .cr-reviews-grid.cr-reviews-grid-new-review .cr-reviews-grid-inner,
 .cr-all-reviews-shortcode.cr-all-reviews-new-review .cr-review-tags-filter,

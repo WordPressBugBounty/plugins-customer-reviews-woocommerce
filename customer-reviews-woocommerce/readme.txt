@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 5.121.0
+Stable tag: 5.122.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,10 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.122.0 =
+* Bug fix: customers could not submit a shop review from the [cusrev_all_reviews] shortcode when "Reviewers must be verified owners" was enabled
+* Improvement: accessibility fix for the review list markup in the [cusrev_all_reviews] shortcode
+* Improvement: compatibility with newer versions of WPML for translating reviews and replies in review grids and sliders
 = 5.121.0 =
 * Improvement: validation of upload key for media attached in local aggregated review forms
 * Improvement: performance optimization when filtering reviews by media
