@@ -1,5 +1,13 @@
 (function() {
 	jQuery(document).ready(function($) {
+		const crAddCaptionText = function( item, captionElement ) {
+			const caption = captionElement.children[ 0 ];
+			if ( ! caption ) {
+				return false;
+			}
+			caption.textContent = item.title || '';
+			return !! item.title;
+		};
 		// initial resize of [cusrev_reviews_grid] and Trust Badges
 		crResizeAllGridItems();
 		crResizeTrustBadges();
@@ -60,7 +68,8 @@
 							}
 						}
 						var r = {
-							index: inx
+							index: inx,
+							addCaptionHTMLFn: crAddCaptionText,
 						};
 						new PhotoSwipe(o, PhotoSwipeUI_Default, a, r).init();
 					}
@@ -124,7 +133,8 @@
 						}
 					}
 					var r = {
-						index: inx
+						index: inx,
+						addCaptionHTMLFn: crAddCaptionText,
 					};
 					new PhotoSwipe(o, PhotoSwipeUI_Default, a, r).init();
 				}
@@ -168,7 +178,8 @@
 							}
 						}
 						var r = {
-							index: inx
+							index: inx,
+							addCaptionHTMLFn: crAddCaptionText,
 						};
 						new PhotoSwipe(o, PhotoSwipeUI_Default, a, r).init();
 					}

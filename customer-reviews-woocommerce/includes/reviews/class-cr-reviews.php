@@ -142,6 +142,9 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			return $comment_form;
 		}
 		public function custom_fields_captcha2() {
+			if ( 'product' !== get_post_type() ) {
+				return;
+			}
 			CR_Captcha::enqueue_scripts();
 			echo '<div style="clear:both;"></div>';
 			echo CR_Captcha::get_widget_html();
@@ -155,6 +158,9 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			echo '</div>';
 		}
 		public function custom_fields_terms() {
+			if ( 'product' !== get_post_type() ) {
+				return;
+			}
 			$form_settings = CR_Forms_Settings::get_default_form_settings();
 			$cr_form_checkbox = ( 'yes' === CR_Forms_Settings::get_onsite_form_checkbox( $form_settings ) ) ? true : false;
 			$cr_form_checkbox_text = CR_Forms_Settings::get_onsite_form_checkbox_text( $form_settings );

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Reviews for WooCommerce 5.122.0\n"
+"Project-Id-Version: Customer Reviews for WooCommerce 5.123.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-reviews-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-21T00:22:57+00:00\n"
+"POT-Creation-Date: 2026-09-27T23:53:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: customer-reviews-woocommerce\n"
@@ -39,27 +39,27 @@ msgstr ""
 msgid "https://www.cusrev.com/business/"
 msgstr ""
 
-#: class-ivole.php:175
+#: class-ivole.php:178
 msgid "View CusRev documentation"
 msgstr ""
 
-#: class-ivole.php:175
+#: class-ivole.php:178
 msgid "Docs"
 msgstr ""
 
-#: class-ivole.php:176
+#: class-ivole.php:179
 msgid "Visit community forums"
 msgstr ""
 
-#: class-ivole.php:176
+#: class-ivole.php:179
 msgid "Community support"
 msgstr ""
 
-#: class-ivole.php:186
+#: class-ivole.php:189
 msgid "View Customer Reviews settings"
 msgstr ""
 
-#: class-ivole.php:186
+#: class-ivole.php:189
 #: includes/settings/class-cr-admin-menu-settings.php:67
 #: includes/settings/class-cr-admin-menu-settings.php:68
 msgid "Settings"
@@ -74,6 +74,7 @@ msgid "Sent"
 msgstr ""
 
 #: includes/analytics/class-cr-reminders-log.php:386
+#: includes/misc/class-cr-admin-menu-diagnostics.php:364
 #: includes/reminders/class-cr-local-forms.php:298
 #: includes/reminders/class-cr-manual.php:414
 msgid "Error"
@@ -94,8 +95,8 @@ msgstr ""
 #: includes/analytics/class-cr-reminders-log.php:407
 #: includes/google/class-cr-product-fields.php:90
 #: includes/google/class-cr-product-fields.php:259
-#: includes/misc/class-cr-admin-menu-diagnostics.php:248
-#: includes/misc/class-cr-admin-menu-diagnostics.php:340
+#: includes/misc/class-cr-admin-menu-diagnostics.php:276
+#: includes/misc/class-cr-admin-menu-diagnostics.php:414
 #: includes/qna/class-cr-admin-menu-qna.php:217
 #: includes/reminders/class-cr-manual.php:424
 #: includes/reminders/class-cr-manual.php:447
@@ -112,8 +113,8 @@ msgstr ""
 #: includes/analytics/class-cr-reminders-log.php:410
 #: includes/google/class-cr-product-fields.php:91
 #: includes/google/class-cr-product-fields.php:260
-#: includes/misc/class-cr-admin-menu-diagnostics.php:253
-#: includes/misc/class-cr-admin-menu-diagnostics.php:340
+#: includes/misc/class-cr-admin-menu-diagnostics.php:281
+#: includes/misc/class-cr-admin-menu-diagnostics.php:414
 #: includes/qna/class-cr-admin-menu-qna.php:218
 #: includes/reminders/class-cr-manual.php:425
 #: includes/reminders/class-cr-manual.php:448
@@ -233,7 +234,7 @@ msgstr ""
 #: includes/blocks/class-cr-all-reviews.php:500
 #: includes/blocks/class-cr-all-reviews.php:547
 #: templates/cr-ajax-product-reviews.php:130
-#: templates/reviews-grid.php:334
+#: templates/reviews-grid.php:340
 msgid "Sorry, no reviews match your current selections"
 msgstr ""
 
@@ -243,14 +244,14 @@ msgstr ""
 #: includes/reviews/class-cr-ajax-reviews.php:425
 #: includes/reviews/class-cr-ajax-reviews.php:506
 #: templates/cr-ajax-product-reviews.php:116
-#: templates/reviews-grid.php:323
+#: templates/reviews-grid.php:329
 #, php-format
 msgid "Show more reviews (%d)"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:939
 #: includes/blocks/class-cr-reviews-grid.php:994
-#: includes/reviews/class-cr-reviews.php:514
+#: includes/reviews/class-cr-reviews.php:520
 #, php-format
 msgid "Based on %s review"
 msgid_plural "Based on %s reviews"
@@ -259,23 +260,23 @@ msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:960
 #: includes/blocks/class-cr-reviews-grid.php:1016
-#: includes/reviews/class-cr-reviews.php:1685
+#: includes/reviews/class-cr-reviews.php:1691
 #: templates/cr-review-form.php:31
 msgid "Add a review"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1133
-#: includes/reviews/class-cr-reviews.php:1595
+#: includes/reviews/class-cr-reviews.php:1601
 msgid "Sort reviews"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1135
-#: includes/reviews/class-cr-reviews.php:1597
+#: includes/reviews/class-cr-reviews.php:1603
 msgid "Most Recent"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:1138
-#: includes/reviews/class-cr-reviews.php:1601
+#: includes/reviews/class-cr-reviews.php:1607
 msgid "Most Helpful"
 msgstr ""
 
@@ -288,7 +289,7 @@ msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:1159
 #: includes/blocks/class-cr-reviews-grid.php:1025
-#: includes/reviews/class-cr-reviews.php:539
+#: includes/reviews/class-cr-reviews.php:545
 #, php-format
 msgid "See all %d review"
 msgid_plural "See all %d reviews"
@@ -333,7 +334,7 @@ msgstr ""
 #: includes/qna/class-cr-qna.php:183
 #: includes/reminders/class-cr-manual.php:441
 #: includes/reviews/class-cr-admin-menu-reviews.php:252
-#: includes/reviews/class-cr-reviews.php:427
+#: includes/reviews/class-cr-reviews.php:433
 msgid "OK"
 msgstr ""
 
@@ -406,7 +407,7 @@ msgstr ""
 #: includes/blocks/class-cr-all-reviews.php:1487
 #: includes/reminders/class-cr-local-forms-ajax.php:128
 #: includes/reminders/class-cr-local-forms.php:163
-#: includes/reviews/class-cr-reviews.php:396
+#: includes/reviews/class-cr-reviews.php:402
 #, php-format
 msgid "The file cannot be uploaded because its size exceeds the limit of %d MB"
 msgstr ""
@@ -414,14 +415,14 @@ msgstr ""
 #: includes/blocks/class-cr-all-reviews.php:1496
 #: includes/reminders/class-cr-local-forms-ajax.php:137
 #: includes/reminders/class-cr-local-forms.php:164
-#: includes/reviews/class-cr-reviews.php:394
-#: includes/reviews/class-cr-reviews.php:1460
+#: includes/reviews/class-cr-reviews.php:400
+#: includes/reviews/class-cr-reviews.php:1466
 msgid "Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI"
 msgstr ""
 
 #: includes/blocks/class-cr-reviews-grid.php:398
 #: includes/blocks/class-cr-reviews-slider.php:266
-#: includes/reviews/class-cr-admin-menu-reviews.php:662
+#: includes/reviews/class-cr-admin-menu-reviews.php:663
 #: includes/reviews/class-cr-reviews-list-table.php:1265
 #: templates/cr-review.php:123
 msgid "Verified owner"
@@ -436,10 +437,10 @@ msgstr ""
 #: includes/blocks/class-cr-reviews-slider.php:277
 #: includes/blocks/class-cr-reviews-slider.php:279
 #: includes/reviews/class-cr-reviews-list-table.php:655
-#: includes/reviews/class-cr-reviews.php:1042
-#: includes/reviews/class-cr-reviews.php:1044
-#: includes/reviews/class-cr-reviews.php:1111
-#: includes/reviews/class-cr-reviews.php:1113
+#: includes/reviews/class-cr-reviews.php:1048
+#: includes/reviews/class-cr-reviews.php:1050
+#: includes/reviews/class-cr-reviews.php:1117
+#: includes/reviews/class-cr-reviews.php:1119
 msgid "Verified review"
 msgstr ""
 
@@ -447,13 +448,13 @@ msgstr ""
 #: includes/blocks/class-cr-reviews-grid.php:412
 #: includes/blocks/class-cr-reviews-slider.php:273
 #: includes/blocks/class-cr-reviews-slider.php:280
-#: includes/reviews/class-cr-reviews.php:1053
-#: includes/reviews/class-cr-reviews.php:1122
+#: includes/reviews/class-cr-reviews.php:1059
+#: includes/reviews/class-cr-reviews.php:1128
 msgid "view original"
 msgstr ""
 
 #: includes/blocks/class-cr-reviews-grid.php:1024
-#: includes/reviews/class-cr-reviews.php:538
+#: includes/reviews/class-cr-reviews.php:544
 #, php-format
 msgid "Showing %1$d of %2$d review (%3$d star). "
 msgid_plural "Showing %1$d of %2$d reviews (%3$d star). "
@@ -625,9 +626,13 @@ msgid "Comment: %s"
 msgstr ""
 
 #: includes/emails/class-cr-email.php:47
-#: includes/emails/class-cr-woo-emails.php:66
+#: includes/emails/class-cr-woo-emails.php:79
+#: includes/emails/class-cr-woo-emails.php:155
 #: includes/misc/class-cr-wpml.php:12
 #: includes/reviews/class-cr-reviews-list-table.php:438
+#: blocks/build/email-review-button/index.js:1
+#: blocks/src/email-review-button/edit.js:8
+#: blocks/src/email-review-button/edit.js:17
 msgid "Review"
 msgstr ""
 
@@ -744,7 +749,7 @@ msgstr ""
 msgid "CR: a review reminder was cancelled because the order was cancelled."
 msgstr ""
 
-#: includes/emails/class-cr-woo-emails.php:88
+#: includes/emails/class-cr-woo-emails.php:177
 #: includes/reminders/class-cr-manual.php:837
 msgid "Error: could not copy a link to an aggregated review form"
 msgstr ""
@@ -2128,164 +2133,189 @@ msgstr ""
 msgid "Line %1$d >> A media file could not be imported due to its type."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:41
-#: includes/misc/class-cr-admin-menu-diagnostics.php:47
+#: includes/misc/class-cr-admin-menu-diagnostics.php:46
+#: includes/misc/class-cr-admin-menu-diagnostics.php:52
 msgid "Diagnostics Information"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:43
+#: includes/misc/class-cr-admin-menu-diagnostics.php:48
 msgid "Diagnostic report about parameters of your website configuration that are important for Customer Reviews plugin. If there are any errors or warnings below, the plugin might not work properly."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:62
+#: includes/misc/class-cr-admin-menu-diagnostics.php:67
+#: includes/misc/class-cr-admin-menu-diagnostics.php:73
+msgid "Errors"
+msgstr ""
+
+#: includes/misc/class-cr-admin-menu-diagnostics.php:69
+msgid "Errors that occurred during operations of the plugin."
+msgstr ""
+
+#: includes/misc/class-cr-admin-menu-diagnostics.php:89
 msgid "Hidden Reviews"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:64
+#: includes/misc/class-cr-admin-menu-diagnostics.php:91
 msgid "Reviews that are hidden because products were deleted in WooCommerce."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:90
-#: includes/misc/class-cr-admin-menu-diagnostics.php:91
+#: includes/misc/class-cr-admin-menu-diagnostics.php:118
+#: includes/misc/class-cr-admin-menu-diagnostics.php:119
 msgid "Diagnostics"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:135
+#: includes/misc/class-cr-admin-menu-diagnostics.php:163
 msgid "Error code: "
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:141
+#: includes/misc/class-cr-admin-menu-diagnostics.php:169
 msgid "Error message: "
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:148
+#: includes/misc/class-cr-admin-menu-diagnostics.php:176
 msgid "Details: "
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:154
+#: includes/misc/class-cr-admin-menu-diagnostics.php:182
 msgid " Error message: "
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:164
+#: includes/misc/class-cr-admin-menu-diagnostics.php:192
 msgid "WP Version:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:165
+#: includes/misc/class-cr-admin-menu-diagnostics.php:193
 msgid "The version of WordPress installed on your site."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:169
+#: includes/misc/class-cr-admin-menu-diagnostics.php:197
 msgid "WC Version:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:170
+#: includes/misc/class-cr-admin-menu-diagnostics.php:198
 msgid "The version of WooCommerce installed on your site."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:174
+#: includes/misc/class-cr-admin-menu-diagnostics.php:202
 msgid "cURL Version:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:175
+#: includes/misc/class-cr-admin-menu-diagnostics.php:203
 msgid "The version of cURL library installed on your site."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:179
+#: includes/misc/class-cr-admin-menu-diagnostics.php:207
 msgid "WP Cron:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:180
+#: includes/misc/class-cr-admin-menu-diagnostics.php:208
 msgid "Displays whether or not WP Cron Jobs are enabled."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:190
+#: includes/misc/class-cr-admin-menu-diagnostics.php:218
 msgid "WP REST API:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:191
+#: includes/misc/class-cr-admin-menu-diagnostics.php:219
 msgid "Displays whether or not WP REST API is enabled."
 msgstr ""
 
 #. translators: please keep '%s' before 'support article'
-#: includes/misc/class-cr-admin-menu-diagnostics.php:197
+#: includes/misc/class-cr-admin-menu-diagnostics.php:225
 #, php-format
 msgid "The plugin will not be able to receive reviews because REST API is disabled. Additional information can be found in this %ssupport article"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:204
+#: includes/misc/class-cr-admin-menu-diagnostics.php:232
 msgid "WC Slider:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:205
+#: includes/misc/class-cr-admin-menu-diagnostics.php:233
 msgid "Displays whether or not WooCommerce Slider library is enabled."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:205
-#: includes/misc/class-cr-admin-menu-diagnostics.php:214
-#: includes/misc/class-cr-admin-menu-diagnostics.php:223
+#: includes/misc/class-cr-admin-menu-diagnostics.php:233
+#: includes/misc/class-cr-admin-menu-diagnostics.php:242
+#: includes/misc/class-cr-admin-menu-diagnostics.php:251
 msgid "This warning can be safely ignored, if your theme does not use the offical WooCommerce libraries."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:213
+#: includes/misc/class-cr-admin-menu-diagnostics.php:241
 msgid "WC Zoom:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:214
+#: includes/misc/class-cr-admin-menu-diagnostics.php:242
 msgid "Displays whether or not WooCommerce Zoom library is enabled."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:222
+#: includes/misc/class-cr-admin-menu-diagnostics.php:250
 msgid "WC Lightbox:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:223
+#: includes/misc/class-cr-admin-menu-diagnostics.php:251
 msgid "Displays whether or not WooCommerce Lightbox library is enabled."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:231
+#: includes/misc/class-cr-admin-menu-diagnostics.php:259
 msgid "XMLWriter:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:232
+#: includes/misc/class-cr-admin-menu-diagnostics.php:260
 msgid "Displays whether or not XMLWriter extension is enabled. This extension is required to generate XML feeds with products and reviews. If the extension is disabled, please reach out to your hosting support and ask them to enable it."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:240
+#: includes/misc/class-cr-admin-menu-diagnostics.php:268
 msgid "Duplicate Site (disable automatic review reminders):"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:242
+#: includes/misc/class-cr-admin-menu-diagnostics.php:270
 msgid "It looks like this site has moved or is a duplicate site. The plugin has disabled sending automatic review reminder emails on this site to prevent duplicate reminders from a staging or test environment."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:244
+#: includes/misc/class-cr-admin-menu-diagnostics.php:272
 msgid "The plugin checks if this site has moved or is a duplicate site. If the check is positive, the plugin will disable sending automatic review reminder emails to prevent duplicate reminders from a staging or test environment."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:249
+#: includes/misc/class-cr-admin-menu-diagnostics.php:277
 msgid "This is not a duplicate site"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:258
+#: includes/misc/class-cr-admin-menu-diagnostics.php:286
 msgid "WooCommerce Reviews:"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:259
+#: includes/misc/class-cr-admin-menu-diagnostics.php:287
 msgid "The plugin is based on the standard WooCommerce product reviews. Please make sure they are enabled in WooCommerce settings (go to WooCommerce > Settings, then click on the 'Products' tab)."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:267
+#: includes/misc/class-cr-admin-menu-diagnostics.php:295
 msgid "Product ratings will not be displayed because WooCommerce product reviews are disabled."
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:284
+#: includes/misc/class-cr-admin-menu-diagnostics.php:312
 #: includes/qna/class-cr-qna-list-table.php:435
 #: includes/reviews/class-cr-reviews-list-table.php:442
 msgid "Product"
 msgstr ""
 
-#: includes/misc/class-cr-admin-menu-diagnostics.php:285
+#: includes/misc/class-cr-admin-menu-diagnostics.php:313
 msgid "Review(s)"
+msgstr ""
+
+#: includes/misc/class-cr-admin-menu-diagnostics.php:365
+msgid "Action"
+msgstr ""
+
+#: includes/misc/class-cr-admin-menu-diagnostics.php:366
+msgid "Occurrences"
+msgstr ""
+
+#: includes/misc/class-cr-admin-menu-diagnostics.php:367
+msgid "First Occurrence"
+msgstr ""
+
+#: includes/misc/class-cr-admin-menu-diagnostics.php:368
+msgid "Last Occurrence"
 msgstr ""
 
 #: includes/misc/class-cr-captcha.php:26
@@ -2314,6 +2344,18 @@ msgstr ""
 
 #: includes/misc/class-cr-checkout.php:21
 msgid "Would you like to be invited to review your order? Check here to receive a message from CusRev (an independent reviews service) with a review form."
+msgstr ""
+
+#: includes/misc/class-cr-error-notice.php:34
+msgid "Issues Detected"
+msgstr ""
+
+#: includes/misc/class-cr-error-notice.php:44
+msgid "Don't show again"
+msgstr ""
+
+#: includes/misc/class-cr-error-notice.php:49
+msgid "Dismiss"
 msgstr ""
 
 #: includes/misc/class-cr-license.php:18
@@ -2706,7 +2748,7 @@ msgstr ""
 
 #: includes/reminders/class-cr-local-forms.php:192
 #: includes/reviews/class-cr-custom-questions.php:624
-#: includes/reviews/class-cr-reviews.php:1681
+#: includes/reviews/class-cr-reviews.php:1687
 #: includes/settings/class-cr-settings-forms-rating.php:64
 #: includes/settings/class-cr-settings-forms-rating.php:161
 #: blocks/build/reviews-grid/index.js:12
@@ -3149,56 +3191,56 @@ msgstr[1] ""
 msgid "Would you like to remove verification from this review?"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:301
+#: includes/reviews/class-cr-admin-menu-reviews.php:302
 msgid "Reply to Review"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:375
+#: includes/reviews/class-cr-admin-menu-reviews.php:376
 #, php-format
 msgid "Publish a copy of your reply to <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">CusRev</a> portal"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:377
+#: includes/reviews/class-cr-admin-menu-reviews.php:378
 msgid "CusRev (Customer Reviews) portal"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:378
+#: includes/reviews/class-cr-admin-menu-reviews.php:379
 msgid "plugin's settings"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:379
+#: includes/reviews/class-cr-admin-menu-reviews.php:380
 #, php-format
 msgid "A copy of this reply will not be published on %1$s because no license key was entered in the %2$s. A license key (free or professional) is used as a secret token for additional security when communicating with CusRev service."
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:505
+#: includes/reviews/class-cr-admin-menu-reviews.php:506
 msgid "Review Title"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:521
+#: includes/reviews/class-cr-admin-menu-reviews.php:522
 msgid "Reviewer Type"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:537
+#: includes/reviews/class-cr-admin-menu-reviews.php:538
 msgid "Review Location"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:548
+#: includes/reviews/class-cr-admin-menu-reviews.php:549
 msgid "Customer Reviews (CR)"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:561
+#: includes/reviews/class-cr-admin-menu-reviews.php:562
 msgid "Answers to Custom Questions"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:585
-#: includes/reviews/class-cr-admin-menu-reviews.php:587
-#: includes/reviews/class-cr-admin-menu-reviews.php:594
-#: includes/reviews/class-cr-admin-menu-reviews.php:596
-#: includes/reviews/class-cr-admin-menu-reviews.php:603
-#: includes/reviews/class-cr-admin-menu-reviews.php:605
-#: includes/reviews/class-cr-admin-menu-reviews.php:612
-#: includes/reviews/class-cr-admin-menu-reviews.php:614
+#: includes/reviews/class-cr-admin-menu-reviews.php:586
+#: includes/reviews/class-cr-admin-menu-reviews.php:588
+#: includes/reviews/class-cr-admin-menu-reviews.php:595
+#: includes/reviews/class-cr-admin-menu-reviews.php:597
+#: includes/reviews/class-cr-admin-menu-reviews.php:604
+#: includes/reviews/class-cr-admin-menu-reviews.php:606
+#: includes/reviews/class-cr-admin-menu-reviews.php:613
+#: includes/reviews/class-cr-admin-menu-reviews.php:615
 #: includes/reviews/class-cr-reviews-list-table.php:875
 #: includes/reviews/class-cr-reviews-list-table.php:877
 #: includes/reviews/class-cr-reviews-list-table.php:892
@@ -3210,887 +3252,887 @@ msgstr ""
 msgid "CusRev portal"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:589
+#: includes/reviews/class-cr-admin-menu-reviews.php:590
 #: includes/reviews/class-cr-reviews-list-table.php:882
 #, php-format
 msgid "A verified copy of this reply was published on %s"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:598
+#: includes/reviews/class-cr-admin-menu-reviews.php:599
 #: includes/reviews/class-cr-reviews-list-table.php:899
 #, php-format
 msgid "This reply was originally posted on %s. If this copy of the reply is edited, the original reply will NOT be updated. Only the customer can edit the original reply on CusRev portal."
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:607
+#: includes/reviews/class-cr-admin-menu-reviews.php:608
 #: includes/reviews/class-cr-reviews-list-table.php:916
 #, php-format
 msgid "This reply was originally posted on %s. This copy of the reply was modified and might be different from the original published on CusRev portal."
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:616
+#: includes/reviews/class-cr-admin-menu-reviews.php:617
 #: includes/reviews/class-cr-reviews-list-table.php:933
 #, php-format
 msgid "A verified copy published on %s could not be updated because it is not the last reply for the review. The verified copy might be different from this reply."
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:619
+#: includes/reviews/class-cr-admin-menu-reviews.php:620
 #: includes/reviews/class-cr-reviews-list-table.php:939
 msgid "Reply could not be published to CusRev portal. Error "
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:650
+#: includes/reviews/class-cr-admin-menu-reviews.php:651
 #: includes/reviews/class-cr-reviews-list-table.php:1268
 #: templates/cr-review.php:126
 #: templates/reviews-grid.php:142
-#: templates/reviews-grid.php:264
+#: templates/reviews-grid.php:267
 #: templates/reviews-slider.php:52
 msgid "Reviewer"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:669
-#: includes/reviews/class-cr-admin-menu-reviews.php:678
+#: includes/reviews/class-cr-admin-menu-reviews.php:670
+#: includes/reviews/class-cr-admin-menu-reviews.php:679
 #: includes/reviews/class-cr-reviews-list-table.php:1251
 #: templates/cr-review.php:111
-#: templates/reviews-grid.php:260
+#: templates/reviews-grid.php:263
 msgid "Store manager"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:708
+#: includes/reviews/class-cr-admin-menu-reviews.php:709
 msgid "Select a country"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:712
+#: includes/reviews/class-cr-admin-menu-reviews.php:713
 msgid "Country"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:723
+#: includes/reviews/class-cr-admin-menu-reviews.php:724
 msgid "Location"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:740
+#: includes/reviews/class-cr-admin-menu-reviews.php:741
 msgid "This reply was originally posted on CusRev portal. This copy of the reply was modified and might be different from the original reply published on CusRev portal."
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:779
+#: includes/reviews/class-cr-admin-menu-reviews.php:780
 #: includes/reviews/class-cr-reviews-list-table.php:783
 msgid "Feature"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:785
+#: includes/reviews/class-cr-admin-menu-reviews.php:786
 #: includes/reviews/class-cr-reviews-list-table.php:785
 msgid "Unfeature"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:921
+#: includes/reviews/class-cr-admin-menu-reviews.php:922
 msgid "Reviews per page"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:939
+#: includes/reviews/class-cr-admin-menu-reviews.php:940
 msgid "Afghanistan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:940
+#: includes/reviews/class-cr-admin-menu-reviews.php:941
 msgid "Aland Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:941
+#: includes/reviews/class-cr-admin-menu-reviews.php:942
 msgid "Albania"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:942
+#: includes/reviews/class-cr-admin-menu-reviews.php:943
 msgid "Algeria"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:943
+#: includes/reviews/class-cr-admin-menu-reviews.php:944
 msgid "American Samoa"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:944
+#: includes/reviews/class-cr-admin-menu-reviews.php:945
 msgid "Andorra"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:945
+#: includes/reviews/class-cr-admin-menu-reviews.php:946
 msgid "Angola"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:946
+#: includes/reviews/class-cr-admin-menu-reviews.php:947
 msgid "Anguilla"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:947
+#: includes/reviews/class-cr-admin-menu-reviews.php:948
 msgid "Antarctica"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:948
+#: includes/reviews/class-cr-admin-menu-reviews.php:949
 msgid "Antigua and Barbuda"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:949
+#: includes/reviews/class-cr-admin-menu-reviews.php:950
 msgid "Argentina"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:950
+#: includes/reviews/class-cr-admin-menu-reviews.php:951
 msgid "Armenia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:951
+#: includes/reviews/class-cr-admin-menu-reviews.php:952
 msgid "Aruba"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:952
+#: includes/reviews/class-cr-admin-menu-reviews.php:953
 msgid "Australia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:953
+#: includes/reviews/class-cr-admin-menu-reviews.php:954
 msgid "Austria"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:954
+#: includes/reviews/class-cr-admin-menu-reviews.php:955
 msgid "Azerbaijan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:955
+#: includes/reviews/class-cr-admin-menu-reviews.php:956
 msgid "Bahamas"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:956
+#: includes/reviews/class-cr-admin-menu-reviews.php:957
 msgid "Bahrain"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:957
+#: includes/reviews/class-cr-admin-menu-reviews.php:958
 msgid "Bangladesh"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:958
+#: includes/reviews/class-cr-admin-menu-reviews.php:959
 msgid "Barbados"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:959
+#: includes/reviews/class-cr-admin-menu-reviews.php:960
 msgid "Belarus"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:960
+#: includes/reviews/class-cr-admin-menu-reviews.php:961
 msgid "Belgium"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:961
+#: includes/reviews/class-cr-admin-menu-reviews.php:962
 msgid "Belize"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:962
+#: includes/reviews/class-cr-admin-menu-reviews.php:963
 msgid "Benin"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:963
+#: includes/reviews/class-cr-admin-menu-reviews.php:964
 msgid "Bermuda"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:964
+#: includes/reviews/class-cr-admin-menu-reviews.php:965
 msgid "Bhutan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:965
+#: includes/reviews/class-cr-admin-menu-reviews.php:966
 msgid "Bolivia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:966
+#: includes/reviews/class-cr-admin-menu-reviews.php:967
 msgid "Bonaire, Sint Eustatius and Saba"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:967
+#: includes/reviews/class-cr-admin-menu-reviews.php:968
 msgid "Bosnia and Herzegovina"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:968
+#: includes/reviews/class-cr-admin-menu-reviews.php:969
 msgid "Botswana"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:969
+#: includes/reviews/class-cr-admin-menu-reviews.php:970
 msgid "Bouvet Island"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:970
+#: includes/reviews/class-cr-admin-menu-reviews.php:971
 msgid "Brazil"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:971
+#: includes/reviews/class-cr-admin-menu-reviews.php:972
 msgid "British Indian Ocean Territory"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:972
+#: includes/reviews/class-cr-admin-menu-reviews.php:973
 msgid "Brunei Darussalam"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:973
+#: includes/reviews/class-cr-admin-menu-reviews.php:974
 msgid "Bulgaria"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:974
+#: includes/reviews/class-cr-admin-menu-reviews.php:975
 msgid "Burkina Faso"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:975
+#: includes/reviews/class-cr-admin-menu-reviews.php:976
 msgid "Burundi"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:976
+#: includes/reviews/class-cr-admin-menu-reviews.php:977
 msgid "Cambodia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:977
+#: includes/reviews/class-cr-admin-menu-reviews.php:978
 msgid "Cameroon"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:978
+#: includes/reviews/class-cr-admin-menu-reviews.php:979
 msgid "Canada"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:979
+#: includes/reviews/class-cr-admin-menu-reviews.php:980
 msgid "Cape Verde"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:980
+#: includes/reviews/class-cr-admin-menu-reviews.php:981
 msgid "Cayman Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:981
+#: includes/reviews/class-cr-admin-menu-reviews.php:982
 msgid "Central African Republic"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:982
+#: includes/reviews/class-cr-admin-menu-reviews.php:983
 msgid "Chad"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:983
+#: includes/reviews/class-cr-admin-menu-reviews.php:984
 msgid "Chile"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:984
+#: includes/reviews/class-cr-admin-menu-reviews.php:985
 msgid "China"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:985
+#: includes/reviews/class-cr-admin-menu-reviews.php:986
 msgid "Christmas Island"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:986
+#: includes/reviews/class-cr-admin-menu-reviews.php:987
 msgid "Cocos (Keeling) Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:987
+#: includes/reviews/class-cr-admin-menu-reviews.php:988
 msgid "Colombia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:988
+#: includes/reviews/class-cr-admin-menu-reviews.php:989
 msgid "Comoros"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:989
+#: includes/reviews/class-cr-admin-menu-reviews.php:990
 msgid "Congo"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:990
+#: includes/reviews/class-cr-admin-menu-reviews.php:991
 msgid "Congo, Democratic Republic of the"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:991
+#: includes/reviews/class-cr-admin-menu-reviews.php:992
 msgid "Cook Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:992
+#: includes/reviews/class-cr-admin-menu-reviews.php:993
 msgid "Costa Rica"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:993
+#: includes/reviews/class-cr-admin-menu-reviews.php:994
 msgid "Cote dIvoire"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:994
+#: includes/reviews/class-cr-admin-menu-reviews.php:995
 msgid "Croatia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:995
+#: includes/reviews/class-cr-admin-menu-reviews.php:996
 msgid "Cuba"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:996
+#: includes/reviews/class-cr-admin-menu-reviews.php:997
 msgid "Curacao"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:997
+#: includes/reviews/class-cr-admin-menu-reviews.php:998
 msgid "Cyprus"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:998
+#: includes/reviews/class-cr-admin-menu-reviews.php:999
 msgid "Czech Republic"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:999
+#: includes/reviews/class-cr-admin-menu-reviews.php:1000
 msgid "Denmark"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1000
+#: includes/reviews/class-cr-admin-menu-reviews.php:1001
 msgid "Djibouti"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1001
+#: includes/reviews/class-cr-admin-menu-reviews.php:1002
 msgid "Dominica"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1002
+#: includes/reviews/class-cr-admin-menu-reviews.php:1003
 msgid "Dominican Republic"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1003
+#: includes/reviews/class-cr-admin-menu-reviews.php:1004
 msgid "Ecuador"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1004
+#: includes/reviews/class-cr-admin-menu-reviews.php:1005
 msgid "Egypt"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1005
+#: includes/reviews/class-cr-admin-menu-reviews.php:1006
 msgid "El Salvador"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1006
+#: includes/reviews/class-cr-admin-menu-reviews.php:1007
 msgid "Equatorial Guinea"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1007
+#: includes/reviews/class-cr-admin-menu-reviews.php:1008
 msgid "Eritrea"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1008
+#: includes/reviews/class-cr-admin-menu-reviews.php:1009
 msgid "Estonia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1009
+#: includes/reviews/class-cr-admin-menu-reviews.php:1010
 msgid "Ethiopia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1010
+#: includes/reviews/class-cr-admin-menu-reviews.php:1011
 msgid "Falkland Islands (Malvinas)"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1011
+#: includes/reviews/class-cr-admin-menu-reviews.php:1012
 msgid "Faroe Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1012
+#: includes/reviews/class-cr-admin-menu-reviews.php:1013
 msgid "Fiji"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1013
+#: includes/reviews/class-cr-admin-menu-reviews.php:1014
 msgid "Finland"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1014
+#: includes/reviews/class-cr-admin-menu-reviews.php:1015
 msgid "France"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1015
+#: includes/reviews/class-cr-admin-menu-reviews.php:1016
 msgid "French Guiana"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1016
+#: includes/reviews/class-cr-admin-menu-reviews.php:1017
 msgid "French Polynesia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1017
+#: includes/reviews/class-cr-admin-menu-reviews.php:1018
 msgid "French Southern Territories"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1018
+#: includes/reviews/class-cr-admin-menu-reviews.php:1019
 msgid "Gabon"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1019
+#: includes/reviews/class-cr-admin-menu-reviews.php:1020
 msgid "Gambia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1020
+#: includes/reviews/class-cr-admin-menu-reviews.php:1021
 msgid "Georgia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1021
+#: includes/reviews/class-cr-admin-menu-reviews.php:1022
 msgid "Germany"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1022
+#: includes/reviews/class-cr-admin-menu-reviews.php:1023
 msgid "Ghana"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1023
+#: includes/reviews/class-cr-admin-menu-reviews.php:1024
 msgid "Gibraltar"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1024
+#: includes/reviews/class-cr-admin-menu-reviews.php:1025
 msgid "Greece"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1025
+#: includes/reviews/class-cr-admin-menu-reviews.php:1026
 msgid "Greenland"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1026
+#: includes/reviews/class-cr-admin-menu-reviews.php:1027
 msgid "Grenada"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1027
+#: includes/reviews/class-cr-admin-menu-reviews.php:1028
 msgid "Guadeloupe"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1028
+#: includes/reviews/class-cr-admin-menu-reviews.php:1029
 msgid "Guam"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1029
+#: includes/reviews/class-cr-admin-menu-reviews.php:1030
 msgid "Guatemala"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1030
+#: includes/reviews/class-cr-admin-menu-reviews.php:1031
 msgid "Guernsey"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1031
+#: includes/reviews/class-cr-admin-menu-reviews.php:1032
 msgid "Guinea"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1032
+#: includes/reviews/class-cr-admin-menu-reviews.php:1033
 msgid "Guinea-Bissau"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1033
+#: includes/reviews/class-cr-admin-menu-reviews.php:1034
 msgid "Guyana"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1034
+#: includes/reviews/class-cr-admin-menu-reviews.php:1035
 msgid "Haiti"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1035
+#: includes/reviews/class-cr-admin-menu-reviews.php:1036
 msgid "Heard Island and McDonald Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1036
+#: includes/reviews/class-cr-admin-menu-reviews.php:1037
 msgid "Vatican City State"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1037
+#: includes/reviews/class-cr-admin-menu-reviews.php:1038
 msgid "Honduras"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1038
+#: includes/reviews/class-cr-admin-menu-reviews.php:1039
 msgid "Hong Kong"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1039
+#: includes/reviews/class-cr-admin-menu-reviews.php:1040
 msgid "Hungary"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1040
+#: includes/reviews/class-cr-admin-menu-reviews.php:1041
 msgid "Iceland"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1041
+#: includes/reviews/class-cr-admin-menu-reviews.php:1042
 msgid "India"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1042
+#: includes/reviews/class-cr-admin-menu-reviews.php:1043
 msgid "Indonesia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1043
+#: includes/reviews/class-cr-admin-menu-reviews.php:1044
 msgid "Iran"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1044
+#: includes/reviews/class-cr-admin-menu-reviews.php:1045
 msgid "Iraq"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1045
+#: includes/reviews/class-cr-admin-menu-reviews.php:1046
 msgid "Ireland"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1046
+#: includes/reviews/class-cr-admin-menu-reviews.php:1047
 msgid "Isle of Man"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1047
+#: includes/reviews/class-cr-admin-menu-reviews.php:1048
 msgid "Israel"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1048
+#: includes/reviews/class-cr-admin-menu-reviews.php:1049
 msgid "Italy"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1049
+#: includes/reviews/class-cr-admin-menu-reviews.php:1050
 msgid "Jamaica"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1050
+#: includes/reviews/class-cr-admin-menu-reviews.php:1051
 msgid "Japan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1051
+#: includes/reviews/class-cr-admin-menu-reviews.php:1052
 msgid "Jersey"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1052
+#: includes/reviews/class-cr-admin-menu-reviews.php:1053
 msgid "Jordan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1053
+#: includes/reviews/class-cr-admin-menu-reviews.php:1054
 msgid "Kazakhstan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1054
+#: includes/reviews/class-cr-admin-menu-reviews.php:1055
 msgid "Kenya"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1055
+#: includes/reviews/class-cr-admin-menu-reviews.php:1056
 msgid "Kiribati"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1056
+#: includes/reviews/class-cr-admin-menu-reviews.php:1057
 msgid "Korea, North"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1057
+#: includes/reviews/class-cr-admin-menu-reviews.php:1058
 msgid "Korea, South"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1058
+#: includes/reviews/class-cr-admin-menu-reviews.php:1059
 msgid "Kuwait"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1059
+#: includes/reviews/class-cr-admin-menu-reviews.php:1060
 msgid "Kyrgyzstan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1060
+#: includes/reviews/class-cr-admin-menu-reviews.php:1061
 msgid "Laos"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1061
+#: includes/reviews/class-cr-admin-menu-reviews.php:1062
 msgid "Latvia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1062
+#: includes/reviews/class-cr-admin-menu-reviews.php:1063
 msgid "Lebanon"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1063
+#: includes/reviews/class-cr-admin-menu-reviews.php:1064
 msgid "Lesotho"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1064
+#: includes/reviews/class-cr-admin-menu-reviews.php:1065
 msgid "Liberia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1065
+#: includes/reviews/class-cr-admin-menu-reviews.php:1066
 msgid "Libya"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1066
+#: includes/reviews/class-cr-admin-menu-reviews.php:1067
 msgid "Liechtenstein"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1067
+#: includes/reviews/class-cr-admin-menu-reviews.php:1068
 msgid "Lithuania"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1068
+#: includes/reviews/class-cr-admin-menu-reviews.php:1069
 msgid "Luxembourg"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1069
+#: includes/reviews/class-cr-admin-menu-reviews.php:1070
 msgid "Macao"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1070
+#: includes/reviews/class-cr-admin-menu-reviews.php:1071
 msgid "North Macedonia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1071
+#: includes/reviews/class-cr-admin-menu-reviews.php:1072
 msgid "Madagascar"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1072
+#: includes/reviews/class-cr-admin-menu-reviews.php:1073
 msgid "Malawi"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1073
+#: includes/reviews/class-cr-admin-menu-reviews.php:1074
 msgid "Malaysia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1074
+#: includes/reviews/class-cr-admin-menu-reviews.php:1075
 msgid "Maldives"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1075
+#: includes/reviews/class-cr-admin-menu-reviews.php:1076
 msgid "Mali"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1076
+#: includes/reviews/class-cr-admin-menu-reviews.php:1077
 msgid "Malta"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1077
+#: includes/reviews/class-cr-admin-menu-reviews.php:1078
 msgid "Marshall Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1078
+#: includes/reviews/class-cr-admin-menu-reviews.php:1079
 msgid "Martinique"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1079
+#: includes/reviews/class-cr-admin-menu-reviews.php:1080
 msgid "Mauritania"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1080
+#: includes/reviews/class-cr-admin-menu-reviews.php:1081
 msgid "Mauritius"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1081
+#: includes/reviews/class-cr-admin-menu-reviews.php:1082
 msgid "Mayotte"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1082
+#: includes/reviews/class-cr-admin-menu-reviews.php:1083
 msgid "Mexico"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1083
+#: includes/reviews/class-cr-admin-menu-reviews.php:1084
 msgid "Micronesia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1084
+#: includes/reviews/class-cr-admin-menu-reviews.php:1085
 msgid "Moldova"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1085
+#: includes/reviews/class-cr-admin-menu-reviews.php:1086
 msgid "Monaco"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1086
+#: includes/reviews/class-cr-admin-menu-reviews.php:1087
 msgid "Mongolia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1087
+#: includes/reviews/class-cr-admin-menu-reviews.php:1088
 msgid "Montenegro"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1088
+#: includes/reviews/class-cr-admin-menu-reviews.php:1089
 msgid "Montserrat"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1089
+#: includes/reviews/class-cr-admin-menu-reviews.php:1090
 msgid "Morocco"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1090
+#: includes/reviews/class-cr-admin-menu-reviews.php:1091
 msgid "Mozambique"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1091
+#: includes/reviews/class-cr-admin-menu-reviews.php:1092
 msgid "Myanmar"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1092
+#: includes/reviews/class-cr-admin-menu-reviews.php:1093
 msgid "Namibia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1093
+#: includes/reviews/class-cr-admin-menu-reviews.php:1094
 msgid "Nauru"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1094
+#: includes/reviews/class-cr-admin-menu-reviews.php:1095
 msgid "Nepal"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1095
+#: includes/reviews/class-cr-admin-menu-reviews.php:1096
 msgid "Netherlands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1096
+#: includes/reviews/class-cr-admin-menu-reviews.php:1097
 msgid "New Caledonia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1097
+#: includes/reviews/class-cr-admin-menu-reviews.php:1098
 msgid "New Zealand"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1098
+#: includes/reviews/class-cr-admin-menu-reviews.php:1099
 msgid "Nicaragua"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1099
+#: includes/reviews/class-cr-admin-menu-reviews.php:1100
 msgid "Niger"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1100
+#: includes/reviews/class-cr-admin-menu-reviews.php:1101
 msgid "Nigeria"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1101
+#: includes/reviews/class-cr-admin-menu-reviews.php:1102
 msgid "Niue"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1102
+#: includes/reviews/class-cr-admin-menu-reviews.php:1103
 msgid "Norfolk Island"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1103
+#: includes/reviews/class-cr-admin-menu-reviews.php:1104
 msgid "Northern Mariana Islands"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1104
+#: includes/reviews/class-cr-admin-menu-reviews.php:1105
 msgid "Norway"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1105
+#: includes/reviews/class-cr-admin-menu-reviews.php:1106
 msgid "Oman"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1106
+#: includes/reviews/class-cr-admin-menu-reviews.php:1107
 msgid "Pakistan"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1107
+#: includes/reviews/class-cr-admin-menu-reviews.php:1108
 msgid "Palau"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1108
+#: includes/reviews/class-cr-admin-menu-reviews.php:1109
 msgid "Palestine"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1109
+#: includes/reviews/class-cr-admin-menu-reviews.php:1110
 msgid "Panama"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1110
+#: includes/reviews/class-cr-admin-menu-reviews.php:1111
 msgid "Papua New Guinea"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1111
+#: includes/reviews/class-cr-admin-menu-reviews.php:1112
 msgid "Paraguay"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1112
+#: includes/reviews/class-cr-admin-menu-reviews.php:1113
 msgid "Peru"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1113
+#: includes/reviews/class-cr-admin-menu-reviews.php:1114
 msgid "Philippines"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1114
+#: includes/reviews/class-cr-admin-menu-reviews.php:1115
 msgid "Pitcairn"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1115
+#: includes/reviews/class-cr-admin-menu-reviews.php:1116
 msgid "Poland"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1116
+#: includes/reviews/class-cr-admin-menu-reviews.php:1117
 msgid "Portugal"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1117
+#: includes/reviews/class-cr-admin-menu-reviews.php:1118
 msgid "Puerto Rico"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1118
+#: includes/reviews/class-cr-admin-menu-reviews.php:1119
 msgid "Qatar"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1119
+#: includes/reviews/class-cr-admin-menu-reviews.php:1120
 msgid "Reunion"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1120
+#: includes/reviews/class-cr-admin-menu-reviews.php:1121
 msgid "Romania"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1121
+#: includes/reviews/class-cr-admin-menu-reviews.php:1122
 msgid "Russia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1122
+#: includes/reviews/class-cr-admin-menu-reviews.php:1123
 msgid "Rwanda"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1123
+#: includes/reviews/class-cr-admin-menu-reviews.php:1124
 msgid "Samoa"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1124
+#: includes/reviews/class-cr-admin-menu-reviews.php:1125
 msgid "San Marino"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1125
+#: includes/reviews/class-cr-admin-menu-reviews.php:1126
 msgid "Saudi Arabia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1126
+#: includes/reviews/class-cr-admin-menu-reviews.php:1127
 msgid "Serbia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1127
+#: includes/reviews/class-cr-admin-menu-reviews.php:1128
 msgid "Singapore"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1128
+#: includes/reviews/class-cr-admin-menu-reviews.php:1129
 msgid "Slovakia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1129
+#: includes/reviews/class-cr-admin-menu-reviews.php:1130
 msgid "Slovenia"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1130
+#: includes/reviews/class-cr-admin-menu-reviews.php:1131
 msgid "South Africa"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1131
+#: includes/reviews/class-cr-admin-menu-reviews.php:1132
 msgid "Spain"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1132
+#: includes/reviews/class-cr-admin-menu-reviews.php:1133
 msgid "Sweden"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1133
+#: includes/reviews/class-cr-admin-menu-reviews.php:1134
 msgid "Switzerland"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1134
+#: includes/reviews/class-cr-admin-menu-reviews.php:1135
 msgid "Turkey"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1135
+#: includes/reviews/class-cr-admin-menu-reviews.php:1136
 msgid "Ukraine"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1136
+#: includes/reviews/class-cr-admin-menu-reviews.php:1137
 msgid "United Arab Emirates"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1137
+#: includes/reviews/class-cr-admin-menu-reviews.php:1138
 msgid "United Kingdom"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1138
+#: includes/reviews/class-cr-admin-menu-reviews.php:1139
 msgid "United States"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1139
+#: includes/reviews/class-cr-admin-menu-reviews.php:1140
 msgid "Vietnam"
 msgstr ""
 
-#: includes/reviews/class-cr-admin-menu-reviews.php:1140
+#: includes/reviews/class-cr-admin-menu-reviews.php:1141
 msgid "Zimbabwe"
 msgstr ""
 
@@ -4279,7 +4321,7 @@ msgid "A verified copy of this reply was published on %1$s. If this reply is del
 msgstr ""
 
 #: includes/reviews/class-cr-reviews-list-table.php:979
-#: includes/reviews/class-cr-reviews.php:1140
+#: includes/reviews/class-cr-reviews.php:1146
 #: templates/cr-review.php:138
 msgid "Featured Review"
 msgstr ""
@@ -4297,10 +4339,10 @@ msgstr ""
 #: includes/reviews/class-cr-reviews-list-table.php:1072
 #: includes/reviews/class-cr-reviews-media-meta-box.php:56
 #: includes/reviews/class-cr-reviews-media-meta-box.php:104
-#: includes/reviews/class-cr-reviews.php:238
-#: includes/reviews/class-cr-reviews.php:257
-#: includes/reviews/class-cr-reviews.php:1214
-#: includes/reviews/class-cr-reviews.php:1228
+#: includes/reviews/class-cr-reviews.php:244
+#: includes/reviews/class-cr-reviews.php:263
+#: includes/reviews/class-cr-reviews.php:1220
+#: includes/reviews/class-cr-reviews.php:1234
 #: templates/reviews-grid.php:90
 #: templates/reviews-grid.php:97
 #, php-format
@@ -4311,10 +4353,10 @@ msgstr ""
 #: includes/reviews/class-cr-reviews-list-table.php:1119
 #: includes/reviews/class-cr-reviews-media-meta-box.php:74
 #: includes/reviews/class-cr-reviews-media-meta-box.php:138
-#: includes/reviews/class-cr-reviews.php:278
-#: includes/reviews/class-cr-reviews.php:300
-#: includes/reviews/class-cr-reviews.php:1242
-#: includes/reviews/class-cr-reviews.php:1256
+#: includes/reviews/class-cr-reviews.php:284
+#: includes/reviews/class-cr-reviews.php:306
+#: includes/reviews/class-cr-reviews.php:1248
+#: includes/reviews/class-cr-reviews.php:1262
 #: templates/reviews-grid.php:80
 #: templates/reviews-grid.php:82
 #: templates/reviews-grid.php:94
@@ -4326,9 +4368,9 @@ msgstr ""
 #: includes/reviews/class-cr-reviews-list-table.php:1121
 #: includes/reviews/class-cr-reviews-media-meta-box.php:76
 #: includes/reviews/class-cr-reviews-media-meta-box.php:140
-#: includes/reviews/class-cr-reviews.php:280
-#: includes/reviews/class-cr-reviews.php:302
-#: includes/reviews/class-cr-reviews.php:1345
+#: includes/reviews/class-cr-reviews.php:286
+#: includes/reviews/class-cr-reviews.php:308
+#: includes/reviews/class-cr-reviews.php:1351
 msgid "Close"
 msgstr ""
 
@@ -4397,60 +4439,60 @@ msgid "Number"
 msgstr ""
 
 #: includes/reviews/class-cr-reviews.php:135
-#: includes/reviews/class-cr-reviews.php:393
+#: includes/reviews/class-cr-reviews.php:399
 #, php-format
 msgid "Upload up to %d images or videos"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:154
+#: includes/reviews/class-cr-reviews.php:157
 msgid "* Please confirm that you are not a robot"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:181
+#: includes/reviews/class-cr-reviews.php:187
 #, php-format
 msgid "Error: You tried to upload too many files. The maximum number of files that you can upload is %d."
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:182
+#: includes/reviews/class-cr-reviews.php:188
 #, php-format
 msgid "Go back to: %s"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:395
+#: includes/reviews/class-cr-reviews.php:401
 #, php-format
 msgid "Error: You tried to upload too many files. The maximum number of files that can be uploaded is %d."
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:421
+#: includes/reviews/class-cr-reviews.php:427
 msgid "Captcha verification failed and your review cannot be saved"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:433
+#: includes/reviews/class-cr-reviews.php:439
 msgid "Add Review Error"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1054
-#: includes/reviews/class-cr-reviews.php:1123
+#: includes/reviews/class-cr-reviews.php:1060
+#: includes/reviews/class-cr-reviews.php:1129
 msgid "External link"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1270
+#: includes/reviews/class-cr-reviews.php:1276
 msgid "Customer photos and videos"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1442
+#: includes/reviews/class-cr-reviews.php:1448
 msgid "Error: please solve the CAPTCHA before uploading files"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1451
+#: includes/reviews/class-cr-reviews.php:1457
 msgid "Error: the file(s) is too large"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1605
+#: includes/reviews/class-cr-reviews.php:1611
 msgid "Highest Rating"
 msgstr ""
 
-#: includes/reviews/class-cr-reviews.php:1608
+#: includes/reviews/class-cr-reviews.php:1614
 msgid "Lowest Rating"
 msgstr ""
 
@@ -5241,6 +5283,8 @@ msgstr ""
 #: includes/settings/class-cr-settings-forms-rating.php:172
 #: includes/settings/class-cr-settings-forms.php:570
 #: includes/settings/class-cr-settings-forms.php:681
+#: blocks/build/email-review-button/index.js:1
+#: blocks/src/email-review-button/edit.js:15
 msgid "Label"
 msgstr ""
 
@@ -7239,16 +7283,16 @@ msgstr ""
 msgid "Age Restriction setting update error #99."
 msgstr ""
 
-#: ivole.php:157
+#: ivole.php:158
 #, php-format
 msgid "It looks like this site has moved or is a duplicate site. %1$sCustomer Reviews for WooCommerce%2$s has disabled sending automatic review reminder emails on this site to prevent duplicate reminders from a staging or test environment."
 msgstr ""
 
-#: ivole.php:159
+#: ivole.php:160
 msgid "Hide this message (but don't enable automatic review reminders)"
 msgstr ""
 
-#: ivole.php:160
+#: ivole.php:161
 msgid "Enable automatic review reminders"
 msgstr ""
 
@@ -7274,7 +7318,7 @@ msgstr ""
 msgid "Edit Review"
 msgstr ""
 
-#: templates/all-reviews-admin-page.php:128
+#: templates/all-reviews-admin-page.php:130
 msgid "Search reviews"
 msgstr ""
 
@@ -7626,28 +7670,28 @@ msgstr ""
 msgid "Are you sure you want to delete selected log record(s)?"
 msgstr ""
 
-#: templates/reviews-grid.php:177
-#: templates/reviews-grid.php:283
-#: templates/reviews-slider.php:91
+#: templates/reviews-grid.php:180
+#: templates/reviews-grid.php:289
+#: templates/reviews-slider.php:94
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/src/reviews-grid/edit.js:83
 msgid "Show More"
 msgstr ""
 
-#: templates/reviews-grid.php:178
-#: templates/reviews-grid.php:284
-#: templates/reviews-slider.php:92
+#: templates/reviews-grid.php:181
+#: templates/reviews-grid.php:290
+#: templates/reviews-slider.php:95
 msgid "Show Less"
 msgstr ""
 
-#: templates/reviews-grid.php:196
-#: templates/reviews-slider.php:111
+#: templates/reviews-grid.php:199
+#: templates/reviews-slider.php:114
 #, php-format
 msgctxt "%s = human-readable time difference"
 msgid "%s ago"
 msgstr ""
 
-#: templates/reviews-grid.php:223
+#: templates/reviews-grid.php:226
 msgid "Reply"
 msgid_plural "Replies"
 msgstr[0] ""
@@ -7686,6 +7730,28 @@ msgstr ""
 #: admin/build/index.js:1
 #: admin/src/Reminders.jsx:46
 msgid "Review invitations have been sent"
+msgstr ""
+
+#: blocks/build/email-review-button/index.js:1
+#: blocks/src/email-review-button/edit.js:13
+msgid "Review Button Settings"
+msgstr ""
+
+#: blocks/build/email-review-button/index.js:1
+#: blocks/src/email-review-button/edit.js:21
+msgid "Border Radius"
+msgstr ""
+
+#: blocks/build/email-review-button/index.js:1
+#: blocks/build/trust-badge/index.js:1
+#: blocks/src/email-review-button/edit.js:26
+#: blocks/src/trust-badge/edit.js:101
+msgid "Background Color"
+msgstr ""
+
+#: blocks/build/email-review-button/index.js:1
+#: blocks/src/email-review-button/edit.js:32
+msgid "Text Color"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:1
@@ -8101,13 +8167,20 @@ msgid "No badge border"
 msgstr ""
 
 #: blocks/build/trust-badge/index.js:1
-#: blocks/src/trust-badge/edit.js:101
-msgid "Background Color"
-msgstr ""
-
-#: blocks/build/trust-badge/index.js:1
 #: blocks/src/trust-badge/edit.js:102
 msgid "Set a custom background color for the badge"
+msgstr ""
+
+#: blocks/build/email-review-button/block.json
+#: blocks/src/email-review-button/block.json
+msgctxt "block title"
+msgid "CusRev Review Button"
+msgstr ""
+
+#: blocks/build/email-review-button/block.json
+#: blocks/src/email-review-button/block.json
+msgctxt "block description"
+msgid "Display a button that links to a review form for the products of the order."
 msgstr ""
 
 #: blocks/build/reviews-grid/block.json

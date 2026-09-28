@@ -122,6 +122,8 @@
 			>
 		</div>
 
+		<?php CR_Error_Notice::output_notice(); ?>
+
 		<?php $list_table->views(); ?>
 
 		<form id="comments-form" method="get">

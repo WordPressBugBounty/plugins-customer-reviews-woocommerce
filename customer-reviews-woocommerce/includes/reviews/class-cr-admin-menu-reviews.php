@@ -256,7 +256,8 @@ if ( ! class_exists( 'Ivole_Reviews_Admin_Menu' ) ):
 						'unverify_yes' => __( 'Yes', 'customer-reviews-woocommerce' ),
 						'unverify_no' => __( 'No', 'customer-reviews-woocommerce' ),
 						'videoicon' => plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'img/video.svg',
-						'flags_path' => plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'img/flags/'
+						'flags_path' => plugin_dir_url( dirname( dirname( __FILE__ ) ) ) . 'img/flags/',
+						'dismiss_error_nonce' => wp_create_nonce( CR_Error_Notice::NONCE )
 					)
 				);
 				wp_enqueue_script( 'cr-all-reviews' );

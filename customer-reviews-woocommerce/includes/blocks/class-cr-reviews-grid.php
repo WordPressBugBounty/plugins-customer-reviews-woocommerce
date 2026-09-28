@@ -1119,6 +1119,7 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 					$tmp_name = $id_or_email->comment_author;
 				}
 			}
+			$tmp_name = wp_strip_all_tags( wp_specialchars_decode( $tmp_name, ENT_QUOTES ) );
 			if ( $tmp_name ) {
 				if ( function_exists( 'mb_ereg_replace' ) ) {
 					$author = trim( mb_ereg_replace( '[\.,]', ' ', $tmp_name ) );
@@ -1161,9 +1162,9 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 						</svg>
 					';
 
-					$svg = sprintf( $svg_template, $size, $size, $size, $size, $size/2, $initials );
+					$svg = sprintf( $svg_template, $size, $size, $size, $size, $size/2, esc_html( $initials ) );
 
-					$avatar = sprintf( '<img alt="%s" src="%s" width="%d" height="%d" class="%s"><div class="cr-avatar-check">%s</div>', $alt, 'data:image/svg+xml;base64,' . base64_encode( $svg ), $size, $size, 'cr-avatar', $svg_avatar_check );
+					$avatar = sprintf( '<img alt="%s" src="%s" width="%d" height="%d" class="%s"><div class="cr-avatar-check">%s</div>', esc_attr( $alt ), 'data:image/svg+xml;base64,' . base64_encode( $svg ), $size, $size, 'cr-avatar', $svg_avatar_check );
 				}
 			}
 			return $avatar;

@@ -3,7 +3,7 @@
 Plugin Name: Customer Reviews for WooCommerce
 Description: Customer Reviews for WooCommerce plugin helps you get more customer reviews for your shop by sending automated reminders and coupons.
 Plugin URI: https://wordpress.org/plugins/customer-reviews-woocommerce/
-Version: 5.122.0
+Version: 5.123.0
 Author: CusRev
 Author URI: https://www.cusrev.com/business/
 Text Domain: customer-reviews-woocommerce
@@ -93,7 +93,8 @@ if (
 				exit();
 			}
 		} elseif (
-			1 === preg_match( '~' . CR_Local_Forms::PIXEL_SLUG . '/(?P<pixel>[\w]{16}).png|' . CR_Local_Forms::PIXEL_SLUG . '/(?P<pixel>' . CR_Local_Forms::TEST_FORM . ').png~iJ', $_SERVER['REQUEST_URI'], $matches )
+			// the length of the pixel id varies: locally generated ids are 16 characters long, ids issued by the CusRev service are shorter
+			1 === preg_match( '~' . CR_Local_Forms::PIXEL_SLUG . '/(?P<pixel>[\w]{8,32})\.png|' . CR_Local_Forms::PIXEL_SLUG . '/(?P<pixel>' . CR_Local_Forms::TEST_FORM . ')\.png~iJ', $_SERVER['REQUEST_URI'], $matches )
 		) {
 			if ( isset( $matches['pixel'] ) ) {
 				CR_Local_Forms::render_pixel( $matches['pixel'] );

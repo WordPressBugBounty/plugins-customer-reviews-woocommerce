@@ -28,6 +28,11 @@ if ( ! class_exists( 'CR_Diagnostics_Admin_Menu' ) ):
 		*/
 		private $deleted_reviews;
 
+		/**
+		* @var array The recorded plugin errors
+		*/
+		private $errors;
+
 		public function __construct() {
 			$this->menu_slug = 'cr-reviews-diagnostics';
 			$this->deleted_reviews = null;
@@ -56,6 +61,28 @@ if ( ! class_exists( 'CR_Diagnostics_Admin_Menu' ) ):
 			);
 
 			if( $this->is_this_page() ) {
+				$this->errors = $this->get_errors();
+				if( $this->errors ) {
+					$this->settings[] = array(
+						'title' => __( 'Errors', 'customer-reviews-woocommerce' ),
+						'type' => 'title',
+						'desc' => __( 'Errors that occurred during operations of the plugin.', 'customer-reviews-woocommerce' ),
+						'id' => 'cr_diagnostics_errors_title'
+					);
+					$this->settings[] = array(
+						'name' => __( 'Errors', 'customer-reviews-woocommerce' ),
+						'type' => 'crerrors',
+						'desc' => '',
+						'id'   => 'cr_diagnostics_errors'
+					);
+					$this->settings[] = array(
+						'type' => 'sectionend',
+						'id'   => 'cr_diagnostics_errors_title'
+					);
+				}
+			}
+
+			if( $this->is_this_page() ) {
 				$this->get_deleted_reviews();
 				if( $this->deleted_reviews && is_array( $this->deleted_reviews ) && 0 < count( $this->deleted_reviews ) ) {
 					$this->settings[] = array(
@@ -81,6 +108,7 @@ if ( ! class_exists( 'CR_Diagnostics_Admin_Menu' ) ):
 			add_action( 'admin_menu', array( $this, 'register_diagnostics_menu' ), 11 );
 			add_action( 'woocommerce_admin_field_crdiag', array( $this, 'show_report' ) );
 			add_action( 'woocommerce_admin_field_crdiagdelprod', array( $this, 'show_delprod' ) );
+			add_action( 'woocommerce_admin_field_crerrors', array( $this, 'show_errors' ) );
 			add_action( 'wp_ajax_cr_check_duplicate_site_url', array( $this, 'cr_check_duplicate_site_url' ) );
 		}
 
@@ -313,6 +341,52 @@ if ( ! class_exists( 'CR_Diagnostics_Admin_Menu' ) ):
 			<?php
 		}
 
+		// dismissed errors are listed here too, so that this report is always complete
+		private function get_errors() {
+			$errors = get_option( CR_Error_Log::OPTION, array() );
+			if ( ! is_array( $errors ) || ! $errors ) {
+				return array();
+			}
+
+			uasort( $errors, function( $a, $b ) {
+				return intval( $b['last_seen'] ) - intval( $a['last_seen'] );
+			} );
+
+			return $errors;
+		}
+
+		public function show_errors( $value ) {
+			$date_format = get_option( 'date_format' ) . ' ' . get_option( 'time_format' );
+			?>
+			<table class="wc_status_table widefat" cellspacing="0" id="crerrors">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Error', 'customer-reviews-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Action', 'customer-reviews-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Occurrences', 'customer-reviews-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'First Occurrence', 'customer-reviews-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Last Occurrence', 'customer-reviews-woocommerce' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $this->errors as $error ) : ?>
+						<tr>
+							<td><?php echo esc_html( $error['message'] ); ?></td>
+							<td>
+								<?php if ( ! empty( $error['action'] ) ) : ?>
+									<a href="<?php echo esc_url( $error['action']['url'] ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( $error['action']['label'] ); ?><span class="dashicons dashicons-external"></span></a>
+								<?php endif; ?>
+							</td>
+							<td><?php echo esc_html( intval( $error['count'] ) ); ?></td>
+							<td><?php echo esc_html( wp_date( $date_format, $error['first_seen'] ) ); ?></td>
+							<td><?php echo esc_html( wp_date( $date_format, $error['last_seen'] ) ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<?php
+		}
+
 		private function get_woo_version_number() {
 			// If get_plugins() isn't available, require it
 			if ( ! function_exists( 'get_plugins' ) )
@@ -349,6 +423,7 @@ if ( ! class_exists( 'CR_Diagnostics_Admin_Menu' ) ):
 		public function include_scripts() {
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === $this->menu_slug ) {
 				wp_enqueue_script( 'cr-admin-settings', plugins_url('js/admin-settings.js', dirname( dirname( __FILE__ ) ) ), array(), Ivole::CR_VERSION, false );
+				wp_enqueue_style( 'cr-admin-css', plugins_url( 'css/admin.css', dirname( dirname( __FILE__ ) ) ), array(), Ivole::CR_VERSION );
 			}
 		}
 

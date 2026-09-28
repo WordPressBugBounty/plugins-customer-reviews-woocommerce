@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once( __DIR__ . '/includes/misc/class-cr-utils.php' );
 require_once( __DIR__ . '/includes/misc/class-cr-captcha.php' );
+require_once( __DIR__ . '/includes/misc/class-cr-error-log.php' );
+require_once( __DIR__ . '/includes/misc/class-cr-error-notice.php' );
 require_once( __DIR__ . '/includes/emails/class-cr-email-func.php' );
 require_once( __DIR__ . '/includes/emails/class-cr-sender.php' );
 require_once( __DIR__ . '/includes/emails/class-cr-email.php' );
@@ -86,7 +88,7 @@ require_once( __DIR__ . '/includes/analytics/class-cr-reminders-log.php' );
 require_once( __DIR__ . '/includes/analytics/class-cr-reviews-top-charts.php' );
 
 class Ivole {
-	const CR_VERSION = '5.122.0';
+	const CR_VERSION = '5.123.0';
 
 	public function __construct() {
 		if( function_exists( 'wc' ) ) {
@@ -116,6 +118,7 @@ class Ivole {
 			$cr_qna_shortcode = new CR_Qna_Shortcode( $cr_qna );
 
 			if ( is_admin() ) {
+				$cr_error_notice = new CR_Error_Notice();
 				$reviews_admin_menu = new Ivole_Reviews_Admin_Menu();
 				$reminders_admin_menu = new CR_Reminders_Admin_Menu();
 				$tags_admin_menu = new CR_Tags_Admin_Menu();

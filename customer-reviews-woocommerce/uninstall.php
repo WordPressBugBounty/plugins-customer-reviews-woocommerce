@@ -168,12 +168,15 @@ $cr_uninstall_options = array(
 	'ivole_review_login_url',
 	'ivole_qna_settings',
 	'ivole_form_terms_page',
-	'ivole_form_expiry_period'
+	'ivole_form_expiry_period',
+	'ivole_errors'
 );
 
 foreach ( $cr_uninstall_options as $uninstall_option ) {
 	delete_option( $uninstall_option );
 }
+
+delete_metadata( 'user', 0, 'cr_dismissed_errors', '', true );
 
 global $wpdb;
 $forms_table = $wpdb->prefix . 'cr_local_forms';

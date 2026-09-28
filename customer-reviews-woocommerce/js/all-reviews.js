@@ -1,5 +1,13 @@
 (function(){
 	jQuery(function($) {
+		const crAddCaptionText = function( item, captionElement ) {
+			const caption = captionElement.children[ 0 ];
+			if ( ! caption ) {
+				return false;
+			}
+			caption.textContent = item.title || '';
+			return !! item.title;
+		};
 		jQuery(".cr-comment-a").click(function(t) {
 			t.preventDefault();
 			const oo = jQuery(".pswp");
@@ -22,7 +30,8 @@
 						}
 					}
 					var r = {
-						index: inx
+						index: inx,
+						addCaptionHTMLFn: crAddCaptionText,
 					};
 					new PhotoSwipe(o,PhotoSwipeUI_Default,a,r).init();
 				}
@@ -767,6 +776,36 @@
 		jQuery( ".cr-review-loc-country" ).select2( {
 			templateResult: cr_formatCountry,
 			templateSelection: cr_formatCountry
+		} );
+
+		const crDismissErrors = function( types, never ) {
+			jQuery.post( cr_ajax_object.ajax_url, {
+				action: 'cr_dismiss_error',
+				nonce: cr_ajax_object.dismiss_error_nonce,
+				types: types,
+				never: never ? 1 : 0
+			} );
+		};
+
+		jQuery( document ).on( 'click', '.cr-errors-notice-never', function( e ) {
+			e.preventDefault();
+			const item = jQuery( this ).closest( '.cr-errors-notice-item' );
+			const notice = item.closest( '.cr-errors-notice' );
+			crDismissErrors( [ item.data( 'error-type' ) ], true );
+			item.remove();
+			if ( ! notice.find( '.cr-errors-notice-item' ).length ) {
+				notice.remove();
+			}
+		} );
+
+		jQuery( document ).on( 'click', '.cr-errors-notice-close', function( e ) {
+			e.preventDefault();
+			const notice = jQuery( this ).closest( '.cr-errors-notice' );
+			const types = notice.find( '.cr-errors-notice-item' ).map( function() {
+				return jQuery( this ).data( 'error-type' );
+			} ).get();
+			crDismissErrors( types, false );
+			notice.remove();
 		} );
 
 	});
