@@ -571,7 +571,14 @@ if ( ! class_exists( 'CR_Endpoint' ) ) :
 									w3tc_dbcache_flush();
 								}
 							}
-							if( $coupon_id > 0 && get_post_type( $coupon_id ) === 'shop_coupon' && get_post_status( $coupon_id ) === 'publish' ) {
+							if ( is_wp_error( $coupon_id ) ) {
+								$order->add_order_note(
+									sprintf(
+										__( 'CR: a discount coupon could not be created. Error: %s', 'customer-reviews-woocommerce' ),
+										$coupon_id->get_error_message()
+									)
+								);
+							} elseif( $coupon_id > 0 && get_post_type( $coupon_id ) === 'shop_coupon' && get_post_status( $coupon_id ) === 'publish' ) {
 								$coupon_code = get_post_field( 'post_title', $coupon_id );
 								$discount_type = get_post_meta( $coupon_id, 'discount_type', true );
 								$discount_amount = get_post_meta( $coupon_id, 'coupon_amount', true );
@@ -621,6 +628,17 @@ if ( ! class_exists( 'CR_Endpoint' ) ) :
 									}
 								}
 								$order->add_order_note( 'CR: ' . $coupon_res[1] );
+							} elseif ( 'static' === $coupon_type ) {
+								$order->add_order_note(
+									sprintf(
+										__( 'CR: the configured discount coupon could not be used because it does not exist or is not a published coupon. Coupon ID: %d.', 'customer-reviews-woocommerce' ),
+										$coupon_id
+									)
+								);
+							} else {
+								$order->add_order_note(
+									__( 'CR: a discount coupon could not be created or is not a published coupon.', 'customer-reviews-woocommerce' )
+								);
 							}
 						}
 

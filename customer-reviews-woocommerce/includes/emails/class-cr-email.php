@@ -550,6 +550,38 @@ class Ivole_Email {
 
 		if( isset( $result['status'] ) && $result['status'] === 'OK' ) {
 			self::update_reminders_meta( $order_id, $schedule );
+			if ( ! $is_test && ! $schedule ) {
+				$context = array(
+					'mailer' => $result['mailer'],
+					'template_id' => $this->id,
+					'email_id' => isset( $result['email_id'] ) ? $result['email_id'] : '',
+					'review_url' => '',
+				);
+				if (
+					'wp' === $result['mailer'] &&
+					isset( $result['message']['form_link'] )
+				) {
+					$context['review_url'] = $result['message']['form_link'];
+				}
+
+				/**
+				 * Fires after WordPress sends a review reminder email or CusRev accepts
+				 * an immediate-send request. This does not confirm delivery.
+				 *
+				 * Excludes test emails and future scheduling requests.
+				 *
+				 * @since 5.124.0
+				 *
+				 * @param int   $order_id Order ID.
+				 * @param array $context {
+				 *     @type string $mailer      Mailer used: wp or cr.
+				 *     @type string $template_id Email template ID.
+				 *     @type string $email_id    Email identifier, or empty when unavailable.
+				 *     @type string $review_url  Review form URL, or empty when unavailable.
+				 * }
+				 */
+				do_action( 'cr_review_reminder_sent', (int) $order_id, $context );
+			}
 			return array(
 				0,
 				$result['status'],

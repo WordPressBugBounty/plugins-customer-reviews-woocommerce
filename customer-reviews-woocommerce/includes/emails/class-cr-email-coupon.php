@@ -235,7 +235,10 @@ class CR_Email_Coupon {
 			'post_author' 	=> 1,
 			'post_type'     => 'shop_coupon'
 		);
-		$coupon_id = wp_insert_post( $coupon_args );
+		$coupon_id = wp_insert_post( $coupon_args, true );
+		if ( is_wp_error( $coupon_id ) ) {
+			return $coupon_id;
+		}
 		if( $coupon_id > 0 ){
 			$type = $coupon['cr_coupon__discount_type'];
 			update_post_meta( $coupon_id, 'discount_type', $type );
@@ -490,6 +493,7 @@ class CR_Email_Coupon {
 					}
 				}
 				if (
+					! is_wp_error( $coupon_id ) &&
 					0 < $coupon_id &&
 					'shop_coupon' === get_post_type( $coupon_id ) &&
 					'publish' === get_post_status( $coupon_id )

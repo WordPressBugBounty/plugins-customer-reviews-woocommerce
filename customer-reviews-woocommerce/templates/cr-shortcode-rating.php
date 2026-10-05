@@ -4,10 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! wc_review_ratings_enabled() ) {
-	return;
-}
-
 $count_answered = 0;
 $rating_count   = 0;
 $review_count   = 0;

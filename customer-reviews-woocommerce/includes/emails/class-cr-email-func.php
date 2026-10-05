@@ -557,6 +557,7 @@ if ( ! class_exists( 'CR_Email_Func' ) ) :
 					$result['email_id'] = $result['extId'];
 				}
 			}
+			$result['mailer'] = 'wp' === $mailer ? 'wp' : 'cr';
 			$result['data'] = $data;
 			return $result;
 		}

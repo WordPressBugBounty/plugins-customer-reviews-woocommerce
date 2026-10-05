@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 5.123.0
+Stable tag: 5.124.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -234,6 +234,14 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.124.0 =
+* New feature: 'Theme' option for visual style setting that preserves the default review template from WooCommerce and current WordPress theme
+* Improvement: 'cr_review_reminder_sent' action hook for integrations after successful reminder email sending, excluding tests and scheduling requests
+* Improvement: 'cr_review_approved' action hook for integrations when a pending review is approved
+* Improvement: 'cr_review_created' action hook for integrations, including review approval status, submission source, and associated order ID
+* Improvement: logging of errors during creation of discount coupons
+* Improvement: [cusrev_reviews_rating] shortcode displays ratings even when product ratings are disabled in WooCommerce settings
+* Bug fix: trashed Q & A were missing from their admin views
 = 5.123.0 =
 * New feature: a review button block in WooCommerce block-enabled email editor
 * Bug fix: compatibility with WPML sites running PHP 7

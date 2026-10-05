@@ -149,6 +149,7 @@ class CR_Qna_List_Table extends WP_List_Table {
 			$_comments = empty( $page_ids ) ? array() : get_comments( array(
 				'comment__in' => $page_ids,
 				'orderby' => 'comment__in',
+				'status' => $args['status'],
 				'type' => 'cr_qna',
 			) );
 

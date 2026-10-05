@@ -83,9 +83,12 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			}
 			add_action( 'init', array( $this, 'add_query_var' ), 20 );
 			if (
-				'yes' === $this->ivole_reviews_histogram ||
-				'yes' === $this->ivole_ajax_reviews ||
-				$onsite_questions
+				'theme' !== $this->ivole_ajax_reviews &&
+				(
+					'yes' === $this->ivole_reviews_histogram ||
+					'yes' === $this->ivole_ajax_reviews ||
+					$onsite_questions
+				)
 			) {
 				add_filter( 'comments_template', array( $this, 'load_custom_comments_template' ), 100 );
 			}
@@ -119,6 +122,8 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 			add_filter( 'cr_review_form_before_comment', array( 'CR_Custom_Questions', 'review_form_questions' ), 10, 2 );
 			add_action( 'wp_insert_comment', array( 'CR_Custom_Questions', 'submit_onsite_questions' ) );
 			add_action( 'comment_post', array( $this, 'action_after_review_added' ), 10, 3 );
+			add_action( 'comment_post', array( $this, 'notify_review_created' ), 20, 1 );
+			add_action( 'comment_unapproved_to_approved', array( $this, 'notify_review_approved' ), 20, 1 );
 			add_action( 'cr_review_form_rating', array( 'CR_Custom_Questions', 'review_form_rating' ), 10, 2 );
 			// standard WooCommerce review template
 			add_action( 'woocommerce_review_after_comment_text', array( $this, 'display_incentivized_badge' ), 8 );
@@ -1662,6 +1667,82 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 				}
 			}
 		}
+	}
+
+	public function notify_review_created( $comment_id ) {
+		$review = get_comment( $comment_id );
+		if (
+			! $review ||
+			'review' !== $review->comment_type ||
+			0 !== (int) $review->comment_parent ||
+			! in_array( (string) $review->comment_approved, array( '0', '1' ), true )
+		) {
+			return;
+		}
+
+		$context = $this->get_review_context( $review );
+
+		/**
+		 * Fires after a new pending or approved customer review and its plugin metadata are saved.
+		 *
+		 * @since 5.124.0
+		 *
+		 * @param int   $comment_id Review ID.
+		 * @param array $context {
+		 *     @type int    $order_id Associated order ID, or 0 when unavailable.
+		 *     @type string $source   Submission source: onsite, local_form, or cusrev_form.
+		 *     @type int    $approved Approval status at creation: 0 for pending, 1 for approved.
+		 * }
+		 */
+		do_action( 'cr_review_created', (int) $comment_id, $context );
+	}
+
+	public function notify_review_approved( $review ) {
+		if (
+			'review' !== $review->comment_type ||
+			0 !== (int) $review->comment_parent
+		) {
+			return;
+		}
+
+		$context = $this->get_review_context( $review );
+
+		/**
+		 * Fires when an existing pending review is approved.
+		 *
+		 * @since 5.124.0
+		 *
+		 * @param int   $review_id Review ID.
+		 * @param array $context {
+		 *     @type int    $order_id Associated order ID, or 0 when unavailable.
+		 *     @type string $source   Original submission source: onsite, local_form, or cusrev_form.
+		 *     @type int    $approved Approval status: 1.
+		 * }
+		 */
+		do_action( 'cr_review_approved', (int) $review->comment_ID, $context );
+	}
+
+	private function get_review_context( $review ) {
+		$context = array(
+			'order_id' => 0,
+			'source' => 'onsite',
+			'approved' => (int) $review->comment_approved,
+		);
+		$order_meta_sources = array(
+			'ivole_order_locl' => 'local_form',
+			'ivole_order' => 'cusrev_form',
+			'ivole_order_priv' => 'cusrev_form',
+			'ivole_order_unve' => 'cusrev_form',
+		);
+		foreach ( $order_meta_sources as $meta_key => $source ) {
+			if ( metadata_exists( 'comment', $review->comment_ID, $meta_key ) ) {
+				$context['order_id'] = absint( get_comment_meta( $review->comment_ID, $meta_key, true ) );
+				$context['source'] = $source;
+				break;
+			}
+		}
+
+		return $context;
 	}
 
 	public function show_nosummary( $product_id ) {

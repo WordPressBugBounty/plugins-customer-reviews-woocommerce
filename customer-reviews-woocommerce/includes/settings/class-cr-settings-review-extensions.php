@@ -23,6 +23,13 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 		*/
 		protected $settings;
 
+		protected $theme_mode_disabled_settings = array(
+			'ivole_ajax_reviews_per_page',
+			'ivole_ajax_reviews_sort',
+			'ivole_reviews_histogram',
+			'ivole_avatars'
+		);
+
 		public function __construct( $settings_menu ) {
 			$this->settings_menu = $settings_menu;
 
@@ -50,6 +57,15 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 			// removing spaces
 			if ( !empty( $_POST ) && isset( $_POST['ivole_verified_owner'] ) ) {
 				$_POST['ivole_verified_owner'] = trim($_POST['ivole_verified_owner']);
+			}
+
+			if ( 'theme' === get_option( 'ivole_ajax_reviews', 'no' ) ) {
+				$this->settings = array_filter(
+					$this->settings,
+					function ( $setting ) {
+						return ! isset( $setting['id'] ) || ! in_array( $setting['id'], $this->theme_mode_disabled_settings, true );
+					}
+				);
 			}
 
 			$review_extensions_option = array(
@@ -91,6 +107,7 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 				sprintf( __( 'If you would like to display reviews in locations other than the standard \'Reviews\' tab on product pages, consider using <a href="%s">shortcodes</a> or Gutenberg blocks provided by the plugin.', 'customer-reviews-woocommerce' ), admin_url( 'admin.php?page=cr-reviews-settings&tab=shortcodes' ) ) .
 				'</p>';
 			$ivole_ajax_reviews = get_option( 'ivole_ajax_reviews', 'no' );
+			$theme_mode_disabled = 'theme' === $ivole_ajax_reviews;
 			$this->settings = array(
 				array(
 					'title' => __( 'Display of Customer Reviews', 'customer-reviews-woocommerce' ),
@@ -101,25 +118,29 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 				array(
 					'title'    => __( 'Visual Style', 'customer-reviews-woocommerce' ),
 					'type'     => 'select',
-					'desc'     => __( '', 'customer-reviews-woocommerce' ),
-					'default'  => 'recent',
+					'desc'     => __( 'Choose the review style: the plugin-enhanced WooCommerce interface, the enhanced CusRev interface, or WooCommerce / current theme template.', 'customer-reviews-woocommerce' ),
+					'default'  => 'no',
 					'id'       => 'ivole_ajax_reviews',
 					'desc_tip' => true,
 					'class'    => 'wc-enhanced-select',
 					'options'  => array(
 						'no'  => __( 'WooCommerce (basic user interface)', 'customer-reviews-woocommerce' ),
-						'yes' => __( 'CusRev (enhanced user interface)', 'customer-reviews-woocommerce' )
+						'yes' => __( 'CusRev (enhanced user interface)', 'customer-reviews-woocommerce' ),
+						'theme' => __( 'Theme (default user interface)', 'customer-reviews-woocommerce' )
 					)
 				)
 			);
-			if( 'yes' === $ivole_ajax_reviews ) {
+			if( 'yes' === $ivole_ajax_reviews || $theme_mode_disabled ) {
 				$this->settings[] = array(
 					'title'    => __( 'Default Quantity of Reviews', 'customer-reviews-woocommerce' ),
-					'desc'     => __( 'Specify the default number of reviews that will be shown during the initial product page load.', 'customer-reviews-woocommerce' ),
+					'desc'     => $theme_mode_disabled ?
+						__( 'This option is not available when Visual Style is set to \'Theme\'. Select \'WooCommerce\' or \'CusRev\' under Visual Style to configure the number of reviews shown initially.', 'customer-reviews-woocommerce' ) :
+						__( 'Specify the default number of reviews that will be shown during the initial product page load.', 'customer-reviews-woocommerce' ),
 					'id'       => 'ivole_ajax_reviews_per_page',
 					'default'  => 5,
 					'type'     => 'number',
-					'desc_tip' => true
+					'desc_tip' => true,
+					'custom_attributes' => $theme_mode_disabled ? array( 'disabled' => 'disabled' ) : array()
 				);
 				$sorting_options = array(
 					'recent'  => __( 'Recent reviews first', 'customer-reviews-woocommerce' ),
@@ -133,12 +154,15 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 				$this->settings[] = array(
 					'title'    => __( 'Default Sorting Order', 'customer-reviews-woocommerce' ),
 					'type'     => 'select',
-					'desc'     => __( 'Define how reviews are sorted by default. The option to vote for reviews must be enabled to show the most helpful reviews first.', 'customer-reviews-woocommerce' ),
+					'desc'     => $theme_mode_disabled ?
+						__( 'This option is not available when Visual Style is set to \'Theme\'. Select \'WooCommerce\' or \'CusRev\' under Visual Style to configure the default review order.', 'customer-reviews-woocommerce' ) :
+						__( 'Define how reviews are sorted by default. The option to vote for reviews must be enabled to show the most helpful reviews first.', 'customer-reviews-woocommerce' ),
 					'default'  => 'recent',
 					'id'       => 'ivole_ajax_reviews_sort',
 					'desc_tip' => true,
 					'class'    => 'wc-enhanced-select',
-					'options'  => $sorting_options
+					'options'  => $sorting_options,
+					'custom_attributes' => $theme_mode_disabled ? array( 'disabled' => 'disabled' ) : array()
 				);
 			}
 			$this->settings[] = array(
@@ -161,10 +185,13 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 			);
 			$this->settings[] = array(
 				'title'   => __( 'Reviews Summary Bar', 'customer-reviews-woocommerce' ),
-				'desc'    => __( 'Enable display of a histogram table with a summary of reviews on a product page.', 'customer-reviews-woocommerce' ),
+				'desc'    => $theme_mode_disabled ?
+					__( 'This option is not available when Visual Style is set to \'Theme\'. Select \'WooCommerce\' or \'CusRev\' under Visual Style to display the Reviews Summary Bar.', 'customer-reviews-woocommerce' ) :
+					__( 'Enable display of a histogram table with a summary of reviews on a product page.', 'customer-reviews-woocommerce' ),
 				'id'      => 'ivole_reviews_histogram',
 				'default' => 'no',
-				'type'    => 'checkbox'
+				'type'    => 'checkbox',
+				'custom_attributes' => $theme_mode_disabled ? array( 'disabled' => 'disabled' ) : array()
 			);
 			$this->settings[] = array(
 				'title'    => __( 'Vote for Reviews', 'customer-reviews-woocommerce' ),
@@ -207,12 +234,15 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 			$this->settings[] = array(
 				'title'    => __( 'Customer Avatars', 'customer-reviews-woocommerce' ),
 				'type'     => 'select',
-				'desc'     => __( 'Choose how customer avatars are displayed on WooCommerce single product pages. You can use either the standard WordPress avatars or avatars created based on initial letters of customer names.', 'customer-reviews-woocommerce' ),
+				'desc'     => $theme_mode_disabled ?
+					__( 'This option is not available when Visual Style is set to \'Theme\'. Select \'WooCommerce\' or \'CusRev\' under Visual Style to customize review avatars.', 'customer-reviews-woocommerce' ) :
+					__( 'Choose how customer avatars are displayed on WooCommerce single product pages. You can use either the standard WordPress avatars or avatars created based on initial letters of customer names.', 'customer-reviews-woocommerce' ),
 				'default'  => 'standard',
 				'id'       => 'ivole_avatars',
 				'desc_tip' => true,
 				'class'    => 'wc-enhanced-select',
-				'options'  => $avatars_display_options
+				'options'  => $avatars_display_options,
+				'custom_attributes' => $theme_mode_disabled ? array( 'disabled' => 'disabled' ) : array()
 			);
 			$this->settings[] = array(
 				'type' => 'sectionend',
