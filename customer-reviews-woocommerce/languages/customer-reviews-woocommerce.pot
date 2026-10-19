@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Reviews for WooCommerce 5.124.0\n"
+"Project-Id-Version: Customer Reviews for WooCommerce 5.125.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-reviews-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-04T22:32:53+00:00\n"
+"POT-Creation-Date: 2026-10-19T00:30:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: customer-reviews-woocommerce\n"
@@ -2293,7 +2293,7 @@ msgid "Product ratings will not be displayed because WooCommerce product reviews
 msgstr ""
 
 #: includes/misc/class-cr-admin-menu-diagnostics.php:312
-#: includes/qna/class-cr-qna-list-table.php:435
+#: includes/qna/class-cr-qna-list-table.php:436
 #: includes/reviews/class-cr-reviews-list-table.php:442
 msgid "Product"
 msgstr ""
@@ -2450,46 +2450,46 @@ msgstr ""
 msgid "wp_mail failed to send test email"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:243
+#: includes/qna/class-cr-qna-list-table.php:244
 msgid "No questions / answers awaiting moderation."
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:245
+#: includes/qna/class-cr-qna-list-table.php:246
 msgid "No questions / answers found."
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:430
+#: includes/qna/class-cr-qna-list-table.php:431
 #: includes/reminders/class-cr-reminders-list-table.php:210
 #: includes/reminders/class-cr-reminders-log-table.php:91
 #: includes/reviews/class-cr-reviews-list-table.php:437
 msgid "Customer"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:432
+#: includes/qna/class-cr-qna-list-table.php:433
 msgid "Question / Answer"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:438
+#: includes/qna/class-cr-qna-list-table.php:439
 #: includes/reviews/class-cr-reviews-list-table.php:445
 msgid "Submitted On"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:676
+#: includes/qna/class-cr-qna-list-table.php:677
 #: includes/reviews/class-cr-reviews-list-table.php:859
 #, php-format
 msgid "In reply to %s"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:687
+#: includes/qna/class-cr-qna-list-table.php:688
 #, php-format
 msgid "ID: %s"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:693
+#: includes/qna/class-cr-qna-list-table.php:694
 msgid "This is the internal reference number for a question"
 msgstr ""
 
-#: includes/qna/class-cr-qna-list-table.php:697
+#: includes/qna/class-cr-qna-list-table.php:698
 msgid "This is the internal reference number for an answer"
 msgstr ""
 
@@ -4357,6 +4357,8 @@ msgstr ""
 #: includes/reviews/class-cr-reviews.php:268
 #: includes/reviews/class-cr-reviews.php:1225
 #: includes/reviews/class-cr-reviews.php:1239
+#: templates/review-media.php:47
+#: templates/review-media.php:68
 #: templates/reviews-grid.php:90
 #: templates/reviews-grid.php:97
 #, php-format
@@ -4371,6 +4373,8 @@ msgstr ""
 #: includes/reviews/class-cr-reviews.php:311
 #: includes/reviews/class-cr-reviews.php:1253
 #: includes/reviews/class-cr-reviews.php:1267
+#: templates/review-media.php:39
+#: templates/review-media.php:60
 #: templates/reviews-grid.php:80
 #: templates/reviews-grid.php:82
 #: templates/reviews-grid.php:94
@@ -7723,7 +7727,7 @@ msgid "Show Less"
 msgstr ""
 
 #: templates/reviews-grid.php:199
-#: templates/reviews-slider.php:114
+#: templates/reviews-slider.php:126
 #, php-format
 msgctxt "%s = human-readable time difference"
 msgid "%s ago"

@@ -76,7 +76,7 @@
 				}
 			}
 		});
-		// play a video when a user clicks on it in the reviews grid
+		// play a video when a user clicks on it in a review card
 		jQuery(".cr-reviews-grid").on("click", ".image-row-vid, .cr-comment-videoicon", function(t) {
 			if( ! jQuery(this).closest(".image-row").hasClass( "cr-vid-playing" ) ) {
 				jQuery(this).closest(".image-row").addClass( "cr-vid-playing" );
@@ -102,16 +102,16 @@
 			}
 			return false;
 		} );
-		// open a gallery with media files in the reviews grid
-		jQuery(".cr-reviews-grid").on("click", ".media-row-count", function(t) {
+		// open a gallery with media files in a review card
+		jQuery(".cr-reviews-grid, .cr-reviews-slider").on("click", ".media-row-count, .cr-media-thumbnail", function(t) {
 			if ( cr_ajax_object.disable_lightbox === '0' ) {
 				// only if lightbox is not disabled in settings of the plugin
 				t.preventDefault();
 				const oo = jQuery(".pswp");
-				let media = jQuery(this).parent().find(".image-row-vid,.image-row-img"),
-					this_media = jQuery(this),
+				let media = jQuery(this).closest(".image-row").find(".image-row-vid,.image-row-img"),
+					this_media = jQuery(this).find("[data-crmedia]").first(),
 					inx = 0;
-				if (media.length > 0 && this_media.length > 0) {
+				if (oo.length > 0 && media.length > 0) {
 					const o = oo[0];
 					var a = [];
 					for (i = 0; i < media.length; i++) {
@@ -128,7 +128,7 @@
 								title: media[i].alt
 							});
 						}
-						if (this_media[0].src == media[i].src) {
+						if (this_media[0] === media[i]) {
 							inx = i;
 						}
 					}

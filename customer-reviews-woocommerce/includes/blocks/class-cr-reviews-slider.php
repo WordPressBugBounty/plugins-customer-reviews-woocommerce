@@ -285,6 +285,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				$section_style .= "background-color:" . $attributes['color_ex_bcrd'] . ";";
 			}
 			$card_style = "border-color:" . $attributes['color_brdr'] . ";";
+			$card_style .= "--cr-slider-border-color:" . $attributes['color_brdr'] . ";";
 			$card_style .= "background-color:" . $attributes['color_bcrd'] . ";";
 			$product_style = "background-color:" . $attributes['color_pr_bcrd'] . ";";
 			$stars_style = $attributes['color_stars'];
@@ -341,10 +342,11 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				$incentivized_label = $incentivized_setting['lbl'];
 			}
 
+			$templates_path = dirname( dirname( dirname( __FILE__ ) ) ) . '/templates/';
 			$template = wc_locate_template(
 				'reviews-slider.php',
 				'customer-reviews-woocommerce',
-				dirname( dirname( dirname( __FILE__ ) ) ) . '/templates/'
+				$templates_path
 			);
 
 			if( 'initials' === $attributes['avatars'] ) {

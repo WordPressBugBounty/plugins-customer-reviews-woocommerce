@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<div class="reviewer">
 						<div class="reviewer-name">
 							<?php
-							echo esc_html( $author );
+							echo '<span class="cr-reviewer-name-text" title="' . esc_attr( $author ) . '">' . esc_html( $author ) . '</span>';
 							if( $country_code ) {
 								echo '<img src="' . CR_Utils::cr_get_plugin_dir_url() . 'img/flags/' .
 								rawurlencode( strtolower( $country_code ) ) .
@@ -45,11 +45,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						if ( CR_Reviews::cr_review_is_from_verified_owner( $review ) ) {
 							echo '<div class="reviewer-verified">';
 							echo '<img class="cr-reviewer-verified" src="' . CR_Utils::cr_get_plugin_dir_url() . 'img/verified.svg' . '" alt="' . $verified_text . '" width="22" height="22" loading="lazy" />';
-							echo $verified_text;
+							echo '<span class="cr-reviewer-verified-text">' . $verified_text . '</span>';
 							echo '</div>';
 						} else {
 							echo '<div class="reviewer-verified">';
-							echo esc_html__( 'Reviewer', 'customer-reviews-woocommerce' );
+							echo '<span class="cr-reviewer-verified-text">' . esc_html__( 'Reviewer', 'customer-reviews-woocommerce' ) . '</span>';
 							echo '</div>';
 						}
 						?>
@@ -100,6 +100,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 						}
 						?>
 						</div>
+						<?php
+						wc_get_template(
+							'review-media.php',
+							array(
+								'review' => $review,
+								'image_size' => apply_filters( 'cr_reviews_slider_image_size', 'large' ),
+								'thumbnails' => true
+							),
+							'customer-reviews-woocommerce',
+							$templates_path
+						);
+						?>
 					</div>
 					<?php if ( $order_id && intval( $review->comment_post_ID ) !== intval( $shop_page_id ) ): ?>
 						<div class="verified-review-row">
