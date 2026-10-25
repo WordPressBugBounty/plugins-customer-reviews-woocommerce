@@ -116,9 +116,22 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 				'code' => 100,
 				'message' => ''
 			);
+			if ( ! isset( $_POST['cr_form'] ) || ! is_string( $_POST['cr_form'] ) ) {
+				$return['code'] = 509;
+				$return['message'] = __( 'Error: invalid review form, please reload the page and try again', 'customer-reviews-woocommerce' );
+				wp_send_json( $return );
+				return;
+			}
+			$form_id = sanitize_text_field( wp_unslash( $_POST['cr_form'] ) );
+			if ( ! isset( $_POST['nonce'] ) || ! is_string( $_POST['nonce'] ) || ! check_ajax_referer( 'cr_local_forms_submit_' . $form_id, 'nonce', false ) ) {
+				$return['code'] = 510;
+				$return['message'] = __( 'Error: nonce expired, please reload the page and try again', 'customer-reviews-woocommerce' );
+				wp_send_json( $return );
+				return;
+			}
 			if ( 'yes' === get_option( 'ivole_form_attach_media', 'no' ) ) {
 				if ( isset( $_POST['cr_form'] ) && isset( $_POST['cr_item'] ) ) {
-					if ( self::form_exists( $_POST['cr_form'] ) ) {
+					if ( self::form_exists( $form_id ) ) {
 						if ( isset( $_FILES ) && is_array( $_FILES ) && 0 < count( $_FILES ) ) {
 							// check the file size
 							$attach_image_size = get_option( 'ivole_attach_image_size', 25 );
@@ -144,7 +157,7 @@ if ( ! class_exists( 'CR_Local_Forms_Ajax' ) ) :
 								$upload_key = bin2hex( openssl_random_pseudo_bytes( 10 ) );
 								if( false !== update_post_meta( $attachmentId, 'cr-upload-temp-key', $upload_key ) ) {
 									// save the attachment id in the database
-									if( false !== self::update_db_item( $_POST['cr_form'], $_POST['cr_item'], $attachmentId, false ) ) {
+									if( false !== self::update_db_item( $form_id, $_POST['cr_item'], $attachmentId, false ) ) {
 										// return to js
 										$return['attachment'] = array(
 											'id' => $attachmentId,

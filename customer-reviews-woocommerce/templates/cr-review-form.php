@@ -205,7 +205,7 @@ if( $cr_current_user instanceof WP_User ) {
 		</div>
 
 		<div class="cr-review-form-result">
-			<span></span>
+			<span tabindex="-1"></span>
 			<button type="button" class="cr-review-form-continue" aria-label="<?php echo esc_attr__( 'Continue', 'customer-reviews-woocommerce' ); ?>"></button>
 		</div>
 

@@ -1159,6 +1159,7 @@
 								} else {
 									this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-continue" ).addClass( "cr-review-form-error" );
 								}
+								this.closest( ".cr-review-form-wrap" ).find( ".cr-review-form-result > span" ).first().trigger( "focus" );
 							},
 							dataType: "json"
 						}

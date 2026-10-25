@@ -49,7 +49,7 @@ if (! class_exists('CR_All_Reviews')) :
 				'products' => [],
 				'product_reviews' => 'true',
 				'shop_reviews' => 'true',
-				'inactive_products' => 'false',
+				'inactive_products' => 'true',
 				'show_replies' => 'false',
 				'product_tags' => [],
 				'tags' => [],
@@ -231,6 +231,27 @@ if (! class_exists('CR_All_Reviews')) :
 						'cr_helpful1' => $this->shortcode_atts['sort'],
 						'comment_date_gmt' => $this->shortcode_atts['sort']
 					);
+				} elseif ( 'media' === $this->shortcode_atts['sort_by'] ) {
+					$args['meta_query'] = array(
+						'cr_media_sort' => array(
+							'relation' => 'OR',
+							'cr_order_by_media_ne' => array(
+								'key' => 'ivole_media_count',
+								'type' => 'NUMERIC',
+								'compare' => 'NOT EXISTS'
+							),
+							'cr_order_by_media_e' => array(
+								'key' => 'ivole_media_count',
+								'type' => 'NUMERIC',
+								'compare' => 'EXISTS'
+							)
+						)
+					);
+
+					$args['orderby'] = array(
+						'cr_order_by_media_ne' => $this->shortcode_atts['sort'],
+						'comment_date_gmt' => $this->shortcode_atts['sort']
+					);
 				}
 
 				// search
@@ -391,7 +412,7 @@ if (! class_exists('CR_All_Reviews')) :
 				$args_top_level['comment__not_in'] = '';
 				$args_top_level['count'] = true;
 				$args_top_level['number'] = '';
-				unset( $args_top_level['meta_query']['cr_helpful'] );
+				unset( $args_top_level['meta_query']['cr_helpful'], $args_top_level['meta_query']['cr_media_sort'] );
 				$args_top_level['orderby'] = 'comment_date_gmt';
 				$reviews_top_level = get_comments( $args_top_level );
 				// get product reviews with media attachments (limited to max number of media that can be displayed at the top)
@@ -568,6 +589,8 @@ if (! class_exists('CR_All_Reviews')) :
 			if ( isset( $_POST['sort'] ) ) {
 				if( 'helpful' === $_POST['sort'] ) {
 					$this->shortcode_atts['sort_by'] = 'helpful';
+				} elseif ( 'media' === $_POST['sort'] ) {
+					$this->shortcode_atts['sort_by'] = 'media';
 				} else {
 					$this->shortcode_atts['sort_by'] = 'date';
 				}
@@ -845,6 +868,7 @@ if (! class_exists('CR_All_Reviews')) :
 			if ( isset( $args_tags['meta_query']['cr_helpful'] ) ) {
 				unset( $args_tags['meta_query']['cr_helpful'] );
 			}
+			unset( $args_tags['meta_query']['cr_media_sort'] );
 
 			$all_review_ids = get_comments( $args_tags );
 			$all_tags = array();
@@ -1126,16 +1150,20 @@ if (! class_exists('CR_All_Reviews')) :
 		public function show_count_row( $count, $page, $per_page, $pagination, $rating, $all ) {
 			$count_wording = self::get_count_wording( $count, $page, $per_page, $pagination, $rating, $all );
 			$sort_helpful = 'helpful' === $this->shortcode_atts['sort_by'] ? true : false;
+			$sort_media = 'media' === $this->shortcode_atts['sort_by'];
 
 			$output = '<div class="cr-count-row">';
 			$output .=  '<div class="cr-count-row-count">' . $count_wording . '</div>';
 			$output .=  '<div class="cr-ajax-reviews-sort-div">';
 			$output .=   '<select name="cr_ajax_reviews_sort" class="cr-ajax-reviews-sort" data-nonce="' . wp_create_nonce( 'cr_product_reviews_sort' ) . '" aria-label="' . esc_attr__( 'Sort reviews', 'customer-reviews-woocommerce' ) . '">';
-			$output .=    '<option value="recent"' . ( $sort_helpful ? '' : ' selected="selected"' ) . '>';
+			$output .=    '<option value="recent"' . ( $sort_helpful || $sort_media ? '' : ' selected="selected"' ) . '>';
 			$output .=     esc_html__( 'Most Recent', 'customer-reviews-woocommerce' );
 			$output .=    '</option>';
 			$output .=    '<option value="helpful"' . ( $sort_helpful ? ' selected="selected"' : '' ) . '>';
 			$output .=     esc_html__( 'Most Helpful', 'customer-reviews-woocommerce' );
+			$output .=    '</option>';
+			$output .=    '<option value="media"' . ( $sort_media ? ' selected="selected"' : '' ) . '>';
+			$output .=     esc_html__( 'Most Media', 'customer-reviews-woocommerce' );
 			$output .=    '</option>';
 			$output .=   '</select>';
 			$output .=  '</div>';

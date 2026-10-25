@@ -50,6 +50,9 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			$max_reviews = $attributes['count'];
 			$this->custom_ratings = isset( $attributes['custom_ratings'] ) ? $attributes['custom_ratings'] : true;
 			$order_by = $attributes['sort_by'] === 'date' ? 'comment_date_gmt' : 'rating';
+			if ( 'media' === $attributes['sort_by'] ) {
+				$order_by = 'media';
+			}
 			$order = strtoupper( $attributes['sort'] );
 			$inactive_products = $attributes['inactive_products'];
 			$avatars = 'initials';
@@ -141,6 +144,28 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				'comment__in' => $comment_in
 			);
 
+			if ( 'media' === $order_by ) {
+				$args['meta_query'] = array(
+					array(
+						'relation' => 'OR',
+						'cr_order_by_media_ne' => array(
+							'key' => 'ivole_media_count',
+							'type' => 'NUMERIC',
+							'compare' => 'NOT EXISTS'
+						),
+						'cr_order_by_media_e' => array(
+							'key' => 'ivole_media_count',
+							'type' => 'NUMERIC',
+							'compare' => 'EXISTS'
+						)
+					)
+				);
+				$args['orderby'] = array(
+					'cr_order_by_media_ne',
+					'comment_date_gmt'
+				);
+			}
+
 			if( !$inactive_products ) {
 				$args['post_status'] = 'publish';
 			}
@@ -216,6 +241,10 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 						'orderby'     => $order_by,
 						'comment__in' => $comment_in
 					);
+					if ( 'media' === $order_by ) {
+						$args_s['meta_query'] = $args['meta_query'];
+						$args_s['orderby'] = $args['orderby'];
+					}
 					if ( function_exists( 'pll_current_language' ) ) {
 						// Polylang compatibility
 						$args_s['lang'] = '';
@@ -382,7 +411,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				'color_stars' => '#FFBC00',
 				'shop_reviews' => 'false',
 				'count_shop_reviews' => 1,
-				'inactive_products' => false,
+				'inactive_products' => 'true',
 				'autoplay' => false,
 				'avatars' => 'initials',
 				'max_chars' => 0,
@@ -469,6 +498,15 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 		}
 
 		private static function compare_dates_sort( $a, $b ) {
+			if ( 'media' === CR_Reviews_Slider::$sort_order_by ) {
+				$media1 = intval( get_comment_meta( $a->comment_ID, 'ivole_media_count', true ) );
+				$media2 = intval( get_comment_meta( $b->comment_ID, 'ivole_media_count', true ) );
+				$difference = $media1 - $media2;
+				if ( 0 === $difference ) {
+					$difference = strtotime( $a->comment_date_gmt ) - strtotime( $b->comment_date_gmt );
+				}
+				return 'ASC' === CR_Reviews_Slider::$sort_order ? $difference : -$difference;
+			}
 			if( 'rating' === CR_Reviews_Slider::$sort_order_by ) {
 				$rating1 = intval( get_comment_meta( $a->comment_ID, 'rating', true ) );
 				$rating2 = intval( get_comment_meta( $b->comment_ID, 'rating', true ) );

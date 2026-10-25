@@ -211,7 +211,7 @@ if ( ! class_exists( 'CR_Review_Extensions_Settings' ) ):
 			);
 			$this->settings[] = array(
 				'title'   => __( 'Remove Plugin\'s Branding', 'customer-reviews-woocommerce' ),
-				'desc'    => __( 'Enable this option to remove plugin\'s branding ("Powered by Customer Reviews plugin") from the reviews summary bar. If you like our plugin and would like to support us, please disable this checkbox.', 'customer-reviews-woocommerce' ),
+				'desc'    => __( 'Hide the "Powered by CusRev" credit in the reviews summary bar and the "Created with CusRev" attribution below QR codes. If you enjoy the plugin, please consider leaving this option disabled to support us.', 'customer-reviews-woocommerce' ),
 				'id'      => 'ivole_reviews_nobranding',
 				'default' => 'yes',
 				'type'    => 'checkbox'

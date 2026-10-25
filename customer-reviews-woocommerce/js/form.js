@@ -203,6 +203,7 @@
 			for(let i = 0; i < countFiles; i++) {
 				let formData = new FormData();
 				formData.append( "action", "cr_local_forms_upload_media" );
+				formData.append( "nonce", crSubmitNonce );
 				formData.append( "cr_file", uploadFiles[0].files[i] );
 				formData.append( "cr_form", jQuery( ".cr-form" ).data( "formid" ) );
 				formData.append( "cr_item", jQuery( this ).parents( ".cr-form-item" ).data( "itemid" ) );

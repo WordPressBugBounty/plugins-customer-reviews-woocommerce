@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 5.125.0
+Stable tag: 5.126.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -60,6 +60,7 @@ Plus, benefit from:
 * A one-page review form where customers can review multiple items in one go
 * Manual email invitations for selected orders
 * Manual WhatsApp review invitations via the 'click to chat' integration
+* Order-specific QR codes for self-hosted review forms, with image copying and printing from the WooCommerce orders menu
 * Personalized emails for each customer with built-in variables
 * Emails restricted for particular categories of products or customers with specific user roles
 * Quick and easy functionality thanks to a responsive email template and custom colors
@@ -206,13 +207,24 @@ Please visit a website of the CAPTCHA service that you selected and sign up for 
 The standard WooCommerce functionality already includes structured data mark up to display your product reviews effectively within organic search results. This plugin extends the standard functionality and adds some extra mark up to help search engines properly crawl your shop. It is important to understand that having a valid structured data mark up in place makes your website eligible for organic stars in Google but it doesn't guarantee that they will be shown. You can test the rich snippets using [Google’s Structured Data Testing Tool](https://search.google.com/structured-data/testing-tool).
 
 = How to customize template of the reviews on a single product page? =
+
 The plugin uses the standard reviews template provided by WooCommerce and enhances it with the reviews summary bar. If your theme requires a customized reviews template or you would like to use a customized reviews template for some other reason, it is possible to do so. Here is how to do it:
+
 1) Create a folder 'customer-reviews-woocommerce' in your current theme's folder.
 2) Copy file 'cr-single-product-reviews.php' from 'templates' subfolder in the plugin's folder to the folder created at step 1.
 3) Customize the file 'cr-single-product-reviews.php' in the current theme's folder according to your requirements.
 
 = How to Change Sorting of Reviews? =
+
 If you would like to change how reviews are sorted on product pages, it is possible to do so using the standard WordPress functionality. Go to Settings -> Discussion menu and find options “Break comments into pages with X top level comments per page and the last/first page displayed by default” and “Comments should be displayed with the older/newer comments at the top of each page”. You can control how reviews are sorted and displayed on product pages by modifying these options.
+
+= How can I create a QR code for an order's review form? =
+
+With self-hosted review forms enabled, open the review invitation menu in the Actions column of WooCommerce orders and select "QR code".
+
+QR codes are generated locally without an external QR service. Each code opens a personalized aggregated review form for that order, so share it only with the customer for that order. The usual review form eligibility and expiration settings apply.
+
+QR Code is a registered trademark of DENSO WAVE INCORPORATED.
 
 == Screenshots ==
 
@@ -234,6 +246,12 @@ If you would like to change how reviews are sorted on product pages, it is possi
 
 == Changelog ==
 
+= 5.126.0 =
+* New feature: sort reviews by the number of attached media files using sort_by="media" in the [cusrev_all_reviews] and [cusrev_reviews_slider] shortcodes
+* New feature: 'QR code' action in the review reminder menu on the WooCommerce Orders page to create, copy, and print a QR code with a link to an order's self-hosted aggregated review form
+* Improvement: [cusrev_all_reviews], [cusrev_reviews_grid], and [cusrev_reviews_slider] shortcodes include reviews for unpublished products by default
+* Improvement: nonce verification for media uploads on local review forms
+* Improvement: focus submission results on on-site review forms for screen reader users
 = 5.125.0 =
 * Improvement: display images and videos attached to reviews as thumbnails below the review text in the [cusrev_reviews_slider] shortcode
 = 5.124.0 =

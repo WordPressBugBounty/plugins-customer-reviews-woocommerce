@@ -47,6 +47,7 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 			add_action( 'wp_ajax_cr_manual_review_reminder_wa_api', array( $this, 'manual_wa_review_reminder_api' ) );
 			add_action( 'wp_ajax_cr_manual_review_reminder_conf', array( $this, 'manual_review_reminder_conf' ) );
 			add_action( 'wp_ajax_cr_manual_review_reminder_link', array( $this, 'manual_review_reminder_link' ) );
+			add_action( 'wp_ajax_cr_manual_review_reminder_qr', array( $this, 'manual_review_reminder_qr' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'include_scripts' ) );
 		}
 
@@ -395,7 +396,7 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 				wp_register_script( 'cr-manual-review-reminder', plugins_url( 'js/admin-manual.js', dirname( dirname( __FILE__ ) ) ), array( 'jquery' ), Ivole::CR_VERSION, false );
 
 				$send_button = '<ul class="cr-send-menu">';
-				$send_button .= '<li class="cr-send-email">' . __( 'Email', 'customer-reviews-woocommerce' );
+				$send_button .= '<li class="cr-send-email" data-tip="' . esc_attr__( 'Send a review invitation by email to the customer for this order.', 'customer-reviews-woocommerce' ) . '">' . __( 'Email', 'customer-reviews-woocommerce' );
 				$send_button .= '<span class="dashicons dashicons-email"></span></li>';
 				//
 				$send_button .= '<li class="cr-send-whatsapp" data-tip="' . esc_attr__( 'A review invitation cannot be sent by WhatsApp because no phone number is found in the order.', 'customer-reviews-woocommerce' ) . '">';
@@ -405,6 +406,10 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 				$send_button .= '<li class="cr-send-link" data-tip="' . esc_attr__( 'Copy a link to an aggregated review form for this order.', 'customer-reviews-woocommerce' ) . '">';
 				$send_button .= __( 'Link', 'customer-reviews-woocommerce' );
 				$send_button .= '<span class="dashicons dashicons-admin-links"></span></li>';
+				//
+				$send_button .= '<li class="cr-send-qr" data-tip="' . esc_attr__( 'Create a QR code with a link to an aggregated review form for this order.', 'customer-reviews-woocommerce' ) . '"><button type="button" class="cr-send-qr-button">';
+				$send_button .= __( 'QR code', 'customer-reviews-woocommerce' );
+				$send_button .= '<span class="dashicons dashicons-screenoptions" aria-hidden="true"></span></button></li>';
 				//
 				$send_button .= '<li class="cr-send-link cr-send-link-copying">';
 				$send_button .= __( 'Copying...', 'customer-reviews-woocommerce' );
@@ -459,6 +464,26 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 				));
 
 				wp_enqueue_script( 'cr-manual-review-reminder' );
+
+				if ( 'no' === get_option( 'ivole_verified_reviews', 'no' ) ) {
+					wp_enqueue_script( 'cr-qrcode-generator', plugins_url( 'js/lib/qrcode.js', dirname( dirname( __FILE__ ) ) ), array(), '2.0.4', true );
+					wp_enqueue_script( 'cr-admin-review-qr', plugins_url( 'js/admin-review-qr.js', dirname( dirname( __FILE__ ) ) ), array( 'cr-manual-review-reminder', 'cr-qrcode-generator' ), Ivole::CR_VERSION, true );
+					wp_localize_script( 'cr-admin-review-qr', 'CrReviewQRStrings', array(
+						'title' => __( 'QR code', 'customer-reviews-woocommerce' ),
+						'loading' => __( 'Creating QR code...', 'customer-reviews-woocommerce' ),
+						'image_alt' => __( 'Scan this QR code to open the review form for this order.', 'customer-reviews-woocommerce' ),
+						'private_notice' => __( 'Share this QR code only with the customer for this order. It opens their personalized review form.', 'customer-reviews-woocommerce' ),
+						'copy' => __( 'Copy image', 'customer-reviews-woocommerce' ),
+						'print' => __( 'Print', 'customer-reviews-woocommerce' ),
+						'close' => __( 'Close', 'customer-reviews-woocommerce' ),
+						'copied' => __( 'QR code image copied', 'customer-reviews-woocommerce' ),
+						'copy_error' => __( 'The image could not be copied. Please check your browser clipboard permissions or print the QR code instead.', 'customer-reviews-woocommerce' ),
+						'copy_unavailable' => __( 'Copying images is not supported in this browser or connection. You can still print the QR code.', 'customer-reviews-woocommerce' ),
+						'error' => __( 'The QR code could not be created. Please refresh the page and try again.', 'customer-reviews-woocommerce' ),
+						'print_error' => __( 'The QR code could not be printed. Please try again.', 'customer-reviews-woocommerce' ),
+						'attribution' => 'yes' !== get_option( 'ivole_reviews_nobranding', 'yes' ) ? __( 'Created with', 'customer-reviews-woocommerce' ) : '',
+					) );
+				}
 
 				wp_enqueue_style( 'cr-admin-css', plugins_url('css/admin.css', dirname( dirname( __FILE__ ) ) ), array(), Ivole::CR_VERSION );
 			}
@@ -747,11 +772,15 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 			}
 		}
 
-		public function manual_review_reminder_link() {
+		public function manual_review_reminder_qr() {
+			$this->manual_review_reminder_link( true );
+		}
+
+		public function manual_review_reminder_link( $qr_code = false ) {
 			if ( isset( $_POST['order_id'] ) ) {
 				$order_id = intval( $_POST['order_id'] );
 
-				if ( ! wp_verify_nonce( $_POST['nonce'], 'cr-man-rem' ) ) {
+				if ( ! isset( $_POST['nonce'] ) || ! is_string( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'cr-man-rem' ) ) {
 					wp_send_json(
 						array(
 							'code' => 101,
@@ -820,7 +849,9 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 					} else {
 						// add an order note
 						$order->add_order_note(
-							__( 'CR: a link to an aggregated review form was copied manually.', 'customer-reviews-woocommerce' )
+							$qr_code ?
+								__( 'CR: a QR code for an aggregated review form was requested manually.', 'customer-reviews-woocommerce' ) :
+								__( 'CR: a link to an aggregated review form was copied manually.', 'customer-reviews-woocommerce' )
 						);
 						// success
 						wp_send_json(

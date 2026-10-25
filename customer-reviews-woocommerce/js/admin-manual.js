@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
 				let sendButtonHTML = jQuery( CrManualStrings.send_button );
 				// remove the copy link nodes if not self-hosted
 				if ( jQuery(this).hasClass( 'cr-whatsapp-api' ) ) {
-					sendButtonHTML.find( '.cr-send-link' ).remove();
+					sendButtonHTML.find( '.cr-send-link, .cr-send-qr' ).remove();
 				}
 				// add the menu
 				jQuery(this).after( sendButtonHTML );
@@ -62,8 +62,8 @@ jQuery(document).ready(function($) {
 				if ( jQuery(this).hasClass( 'cr-whatsapp-api' ) ) {
 					menu.addClass('cr-send-menu-wa-api');
 				}
-				// add a tooltip for the link option
-				jQuery(this).parent().find( '.cr-send-link' ).tipTip( {
+				// add a tooltip for the email, link and QR code options
+				jQuery(this).parent().find( '.cr-send-email, .cr-send-link, .cr-send-qr' ).tipTip( {
 					fadeIn: 50,
 					fadeOut: 50,
 					delay: 200,
@@ -171,6 +171,8 @@ jQuery(document).ready(function($) {
 			crSendReminderEmail( this, orderID, nonce );
 		}
 		jQuery( this ).closest( '.cr-send-menu' ).remove();
+		// the menu is removed before tipTip sees mouseleave, so hide its tooltip explicitly
+		jQuery( '#tiptip_holder' ).trigger( 'mouseleave' ).stop( true, true ).hide();
 		return false;
 	} );
 	// copy a link from the dropdown menu

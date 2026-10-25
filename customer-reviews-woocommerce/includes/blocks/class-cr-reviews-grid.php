@@ -505,7 +505,7 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 				'color_stars' => '#FFBC00',
 				'shop_reviews' => 'false',
 				'count_shop_reviews' => 1,
-				'inactive_products' => 'false',
+				'inactive_products' => 'true',
 				'avatars' => 'initials',
 				'show_more' => 0,
 				'count_total' => 0,
