@@ -590,7 +590,7 @@
 			}).fail(function(response) {
 				$spinner.hide();
 				$this.show();
-				$this.parent().append('<div style="color:#cd2653;text-align:center;display:block;">'+response.responseText+'</div>');
+				$this.parent().append( jQuery( '<div style="color:#cd2653;text-align:center;display:block;"></div>' ).text( response.responseText ) );
 			});
 		});
 
@@ -637,7 +637,7 @@
 				}
 			}).fail(function(response) {
 				$spinner.hide();
-				$this.parent().append('<div style="color: #cd2653;text-align: center;display: block;">'+response.responseText+'</div>');
+				$this.parent().append( jQuery( '<div style="color: #cd2653;text-align: center;display: block;"></div>' ).text( response.responseText ) );
 			});
 
 		});

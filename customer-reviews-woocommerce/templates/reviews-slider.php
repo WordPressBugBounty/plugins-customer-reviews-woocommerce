@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="cr-reviews-slider" id="<?php echo $id; ?>" data-slick='<?php echo wp_json_encode( $slider_settings ); ?>' style="<?php echo esc_attr( $section_style ); ?>">
+<div class="cr-reviews-slider" id="<?php echo $id; ?>" data-slick="<?php echo esc_attr( wp_json_encode( $slider_settings ) ); ?>" style="<?php echo esc_attr( $section_style ); ?>">
 	<?php foreach ( $reviews as $i => $review ):
 		$rating = intval( get_comment_meta( $review->comment_ID, 'rating', true ) );
 		if( 'yes' === get_option( 'ivole_verified_links', 'no' ) ) {

@@ -139,6 +139,22 @@ class CR_Reminders_Log {
 				} else {
 					$status = 'error';
 					$reminder['errorDetails'] = $result[1];
+					CR_Error_Log::record(
+						'reminder_sending',
+						sprintf(
+							/* translators: %1$s: order ID, %2$s: error description. */
+							__( 'A review reminder for order %1$s could not be sent. %2$s', 'customer-reviews-woocommerce' ),
+							$order_id,
+							$result[1]
+						),
+						array(
+							'label' => __( 'View reminders', 'customer-reviews-woocommerce' ),
+							'url' => add_query_arg(
+								array( 'tab' => 'sent', 'status' => 'rmd_error' ),
+								admin_url( 'admin.php?page=cr-reviews-reminders' )
+							)
+						)
+					);
 				}
 			}
 

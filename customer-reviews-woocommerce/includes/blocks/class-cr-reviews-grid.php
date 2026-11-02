@@ -16,6 +16,15 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 		private $min_chars;
 		private $attributes;
 
+		private const COLOR_DEFAULTS = array(
+			'color_ex_brdr' => '#ebebeb',
+			'color_brdr' => '#ebebeb',
+			'color_ex_bcrd' => '',
+			'color_bcrd' => '#ffffff',
+			'color_pr_bcrd' => '#f4f4f4',
+			'color_stars' => '#FFBC00',
+		);
+
 		/**
 		* Constructor.
 		*
@@ -61,6 +70,7 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 		}
 
 		public function render_reviews_grid( $attributes ) {
+			$attributes = CR_Reviews::sanitize_review_display_attributes( $attributes, self::COLOR_DEFAULTS );
 			wp_enqueue_script( 'cr-colcade' );
 			$this->attributes = $attributes;
 
@@ -489,7 +499,7 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 
 		public function render_reviews_grid_shortcode( $attributes ) {
 			// Convert shortcode attributes to block attributes
-			$attributes = shortcode_atts( array(
+			$defaults = array(
 				'count' => 3,
 				'show_products' => true,
 				'product_links' => true,
@@ -497,12 +507,6 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 				'sort' => 'DESC',
 				'categories' => array(),
 				'products' => 'current',
-				'color_ex_brdr' => '#ebebeb',
-				'color_brdr' => '#ebebeb',
-				'color_ex_bcrd' => '',
-				'color_bcrd' => '#ffffff',
-				'color_pr_bcrd' => '#f4f4f4',
-				'color_stars' => '#FFBC00',
 				'shop_reviews' => 'false',
 				'count_shop_reviews' => 1,
 				'inactive_products' => 'true',
@@ -517,7 +521,10 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 				'add_review' => 'false',
 				'schema_markup' => 'false',
 				'comment__not_in' => []
-			), $attributes, 'cusrev_reviews_grid' );
+			);
+			$defaults = array_merge( $defaults, self::COLOR_DEFAULTS );
+			$attributes = shortcode_atts( $defaults, $attributes, 'cusrev_reviews_grid' );
+			$attributes = CR_Reviews::sanitize_review_display_attributes( $attributes, $defaults );
 
 			$attributes['count'] = absint( $attributes['count'] );
 			$attributes['show_products'] = ( $attributes['show_products'] !== 'false' && boolval( $attributes['count'] ) );
@@ -562,20 +569,6 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 				$attributes['products'] = $products;
 			} else {
 				$attributes['products'] = array_map( 'intval', $attributes['products'] );
-			}
-
-			if(
-				! empty( $attributes['product_tags'] ) &&
-		 		! is_array( $attributes['product_tags'] )
-			) {
-				$attributes['product_tags'] = array_filter( array_map( 'trim', explode( ',', $attributes['product_tags'] ) ) );
-			}
-
-			if(
-				! empty( $attributes['tags'] ) &&
-		 		! is_array( $attributes['tags'] )
-			) {
-				$attributes['tags'] = array_filter( array_map( 'trim', explode( ',', $attributes['tags'] ) ) );
 			}
 
 			if ( 'true' === $attributes['add_review'] ) {
@@ -877,22 +870,16 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 						if( !in_array( $val, $allowed ) ) $val = 'initials';
 						break;
 					case 'product_tags':
-						$new_val = array();
-						if ( is_array( $val ) && count( $val ) ) {
-							foreach( $val as $item ) {
-								$new_val[] = strval( $item );
-							}
-							$val = $new_val;
-						}
-						break;
 					case 'tags':
-						$new_val = array();
-						if ( is_array( $val ) && count( $val ) ) {
-							foreach( $val as $item ) {
-								$new_val[] = strval( $item );
-							}
-							$val = $new_val;
-						}
+						$val = CR_Reviews::sanitize_review_tags( wp_unslash( $val ) );
+						break;
+					case 'color_ex_brdr':
+					case 'color_brdr':
+					case 'color_ex_bcrd':
+					case 'color_bcrd':
+					case 'color_pr_bcrd':
+					case 'color_stars':
+						$val = wp_unslash( $val );
 						break;
 					default:
 						$val = sanitize_text_field( $val );

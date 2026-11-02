@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Reviews for WooCommerce 5.126.0\n"
+"Project-Id-Version: Customer Reviews for WooCommerce 5.127.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-reviews-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-25T22:08:57+00:00\n"
+"POT-Creation-Date: 2026-11-02T01:54:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: customer-reviews-woocommerce\n"
@@ -65,7 +65,17 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:383
+#. translators: %1$s: order ID, %2$s: error description.
+#: includes/analytics/class-cr-reminders-log.php:146
+#, php-format
+msgid "A review reminder for order %1$s could not be sent. %2$s"
+msgstr ""
+
+#: includes/analytics/class-cr-reminders-log.php:151
+msgid "View reminders"
+msgstr ""
+
+#: includes/analytics/class-cr-reminders-log.php:399
 #: includes/reminders/class-cr-reminders-log-table.php:94
 #: templates/reminders-admin-page.php:23
 #: admin/build/index.js:1
@@ -73,26 +83,26 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:386
+#: includes/analytics/class-cr-reminders-log.php:402
 #: includes/misc/class-cr-admin-menu-diagnostics.php:364
 #: includes/reminders/class-cr-local-forms.php:298
 #: includes/reminders/class-cr-manual.php:419
 msgid "Error"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:389
+#: includes/analytics/class-cr-reminders-log.php:405
 msgid "Reminder Opened"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:392
+#: includes/analytics/class-cr-reminders-log.php:408
 msgid "Form Opened"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:395
+#: includes/analytics/class-cr-reminders-log.php:411
 msgid "Canceled"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:407
+#: includes/analytics/class-cr-reminders-log.php:423
 #: includes/google/class-cr-product-fields.php:90
 #: includes/google/class-cr-product-fields.php:259
 #: includes/misc/class-cr-admin-menu-diagnostics.php:276
@@ -110,7 +120,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:410
+#: includes/analytics/class-cr-reminders-log.php:426
 #: includes/google/class-cr-product-fields.php:91
 #: includes/google/class-cr-product-fields.php:260
 #: includes/misc/class-cr-admin-menu-diagnostics.php:281
@@ -128,7 +138,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:422
+#: includes/analytics/class-cr-reminders-log.php:438
 #: includes/reminders/class-cr-manual.php:399
 #: includes/settings/class-cr-settings-emails.php:113
 #: includes/settings/class-cr-settings-review-discount.php:965
@@ -140,17 +150,17 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:425
+#: includes/analytics/class-cr-reminders-log.php:441
 #: includes/reminders/class-cr-manual.php:403
 msgid "WhatsApp"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:437
+#: includes/analytics/class-cr-reminders-log.php:453
 #: includes/analytics/class-cr-reviews-top-charts.php:261
 msgid "Manual"
 msgstr ""
 
-#: includes/analytics/class-cr-reminders-log.php:440
+#: includes/analytics/class-cr-reminders-log.php:456
 #: includes/analytics/class-cr-reviews-top-charts.php:254
 #: includes/reminders/class-cr-reminders-list-table.php:69
 msgid "Automatic"
@@ -250,7 +260,7 @@ msgid "Show more reviews (%d)"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:963
-#: includes/blocks/class-cr-reviews-grid.php:994
+#: includes/blocks/class-cr-reviews-grid.php:981
 #: includes/reviews/class-cr-reviews.php:525
 #, php-format
 msgid "Based on %s review"
@@ -259,7 +269,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:984
-#: includes/blocks/class-cr-reviews-grid.php:1016
+#: includes/blocks/class-cr-reviews-grid.php:1003
 #: includes/reviews/class-cr-reviews.php:1772
 #: templates/cr-review-form.php:31
 msgid "Add a review"
@@ -292,7 +302,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:1187
-#: includes/blocks/class-cr-reviews-grid.php:1025
+#: includes/blocks/class-cr-reviews-grid.php:1012
 #: includes/reviews/class-cr-reviews.php:550
 #, php-format
 msgid "See all %d review"
@@ -424,22 +434,22 @@ msgstr ""
 msgid "Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:398
-#: includes/blocks/class-cr-reviews-slider.php:295
+#: includes/blocks/class-cr-reviews-grid.php:408
+#: includes/blocks/class-cr-reviews-slider.php:303
 #: includes/reviews/class-cr-admin-menu-reviews.php:663
 #: includes/reviews/class-cr-reviews-list-table.php:1265
 #: templates/cr-review.php:123
 msgid "Verified owner"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:402
-#: includes/blocks/class-cr-reviews-grid.php:404
-#: includes/blocks/class-cr-reviews-grid.php:409
-#: includes/blocks/class-cr-reviews-grid.php:411
-#: includes/blocks/class-cr-reviews-slider.php:299
-#: includes/blocks/class-cr-reviews-slider.php:301
-#: includes/blocks/class-cr-reviews-slider.php:306
-#: includes/blocks/class-cr-reviews-slider.php:308
+#: includes/blocks/class-cr-reviews-grid.php:412
+#: includes/blocks/class-cr-reviews-grid.php:414
+#: includes/blocks/class-cr-reviews-grid.php:419
+#: includes/blocks/class-cr-reviews-grid.php:421
+#: includes/blocks/class-cr-reviews-slider.php:307
+#: includes/blocks/class-cr-reviews-slider.php:309
+#: includes/blocks/class-cr-reviews-slider.php:314
+#: includes/blocks/class-cr-reviews-slider.php:316
 #: includes/reviews/class-cr-reviews-list-table.php:655
 #: includes/reviews/class-cr-reviews.php:1053
 #: includes/reviews/class-cr-reviews.php:1055
@@ -448,16 +458,16 @@ msgstr ""
 msgid "Verified review"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:405
-#: includes/blocks/class-cr-reviews-grid.php:412
-#: includes/blocks/class-cr-reviews-slider.php:302
-#: includes/blocks/class-cr-reviews-slider.php:309
+#: includes/blocks/class-cr-reviews-grid.php:415
+#: includes/blocks/class-cr-reviews-grid.php:422
+#: includes/blocks/class-cr-reviews-slider.php:310
+#: includes/blocks/class-cr-reviews-slider.php:317
 #: includes/reviews/class-cr-reviews.php:1064
 #: includes/reviews/class-cr-reviews.php:1133
 msgid "view original"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:1024
+#: includes/blocks/class-cr-reviews-grid.php:1011
 #: includes/reviews/class-cr-reviews.php:549
 #, php-format
 msgid "Showing %1$d of %2$d review (%3$d star). "
@@ -469,7 +479,7 @@ msgstr[1] ""
 msgid "Error: if no valid product ID was provided as a parameter, [cusrev_reviews_rating] shortcode works only on WooCommerce single product pages"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-slider.php:281
+#: includes/blocks/class-cr-reviews-slider.php:289
 msgid "No reviews to show"
 msgstr ""
 

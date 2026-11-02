@@ -1813,6 +1813,46 @@ if ( ! class_exists( 'CR_Reviews' ) ) :
 		return apply_filters( 'cr_topreviews_max_count', 10 );
 	}
 
+	public static function sanitize_review_display_attributes( $attributes, $defaults ) {
+		foreach ( $defaults as $key => $default ) {
+			if ( 0 === strpos( $key, 'color_' ) ) {
+				$attributes[$key] = self::sanitize_review_color( isset( $attributes[$key] ) ? $attributes[$key] : $default, $default );
+			}
+		}
+		foreach ( array( 'tags', 'product_tags' ) as $key ) {
+			$attributes[$key] = self::sanitize_review_tags( isset( $attributes[$key] ) ? $attributes[$key] : array() );
+		}
+		return $attributes;
+	}
+
+	public static function sanitize_review_tags( $tags ) {
+		if ( ! is_array( $tags ) ) {
+			$tags = explode( ',', sanitize_text_field( $tags ) );
+		}
+		$result = array();
+		foreach ( $tags as $tag ) {
+			$tag = sanitize_text_field( $tag );
+			if ( '' !== $tag ) {
+				$result[] = $tag;
+			}
+		}
+		return $result;
+	}
+
+	public static function sanitize_review_color( $color, $default ) {
+		if ( ! is_string( $color ) ) {
+			return $default;
+		}
+		$color = trim( $color );
+		if ( '' === $color ) {
+			return $default;
+		}
+		if ( preg_match( '/\A#(?:[a-f0-9]{3}|[a-f0-9]{4}|[a-f0-9]{6}|[a-f0-9]{8})\z/i', $color ) ) {
+			return $color;
+		}
+		return $default;
+	}
+
 	public static function get_star_rating_svg( $rating, $count, $color ) {
 		$templateFile = plugin_dir_path( dirname( dirname( __FILE__ ) ) ) . '/templates/cr-rating-icon.php';
 		$templateFileBg = plugin_dir_path( dirname( dirname( __FILE__ ) ) ) . '/templates/cr-rating-icon-bg.php';

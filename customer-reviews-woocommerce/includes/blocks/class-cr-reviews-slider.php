@@ -46,6 +46,14 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 		}
 
 		public function render_reviews_slider( $attributes ) {
+			$attributes = CR_Reviews::sanitize_review_display_attributes( $attributes, array(
+				'color_ex_brdr' => '#ebebeb',
+				'color_brdr' => '#ebebeb',
+				'color_ex_bcrd' => '',
+				'color_bcrd' => '#ffffff',
+				'color_pr_bcrd' => '#f4f4f4',
+				'color_stars' => '#FFD707',
+			) );
 			wp_enqueue_script( 'cr-reviews-slider' );
 			$max_reviews = $attributes['count'];
 			$this->custom_ratings = isset( $attributes['custom_ratings'] ) ? $attributes['custom_ratings'] : true;
@@ -394,7 +402,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 
 		public function render_reviews_slider_shortcode( $attributes ) {
 			// Convert shortcode attributes
-			$attributes = shortcode_atts( array(
+			$defaults = array(
 				'slides_to_show' => 3,
 				'count' => 5,
 				'show_products' => true,
@@ -420,9 +428,11 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				'min_chars' => 0,
 				'show_dots' => true,
 				'custom_ratings' => 'true',
-			), $attributes, 'cusrev_reviews_slider' );
+			);
+			$attributes = shortcode_atts( $defaults, $attributes, 'cusrev_reviews_slider' );
+			$attributes = CR_Reviews::sanitize_review_display_attributes( $attributes, $defaults );
 
-			$attributes['slides_to_shows'] = absint( $attributes['slides_to_show'] ) >= absint( $attributes['count'] ) ? absint( $attributes['count'] ) : absint( $attributes['slides_to_show'] );
+			$attributes['slides_to_show'] = absint( $attributes['slides_to_show'] ) >= absint( $attributes['count'] ) ? absint( $attributes['count'] ) : absint( $attributes['slides_to_show'] );
 			$attributes['count'] = absint( $attributes['count'] );
 			$attributes['show_products'] = ( $attributes['show_products'] !== 'false' && boolval( $attributes['count'] ) );
 			$attributes['product_links'] = ( $attributes['product_links'] !== 'false' );
@@ -468,16 +478,8 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				$attributes['products'] = array();
 			}
 
-			if( $attributes['slides_to_shows'] <= 0 ) {
-				$attributes['slides_to_shows'] = 1;
-			}
-
-			if( ! empty( $attributes['product_tags'] ) ) {
-				$attributes['product_tags'] = array_filter( array_map( 'trim', explode( ',', $attributes['product_tags'] ) ) );
-			}
-
-			if ( ! empty( $attributes['tags'] ) ) {
-				$attributes['tags'] = array_filter( array_map( 'trim', explode( ',', $attributes['tags'] ) ) );
+			if( $attributes['slides_to_show'] <= 0 ) {
+				$attributes['slides_to_show'] = 1;
 			}
 
 			return $this->render_reviews_slider( $attributes );

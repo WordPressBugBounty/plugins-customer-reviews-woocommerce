@@ -4,7 +4,7 @@ Tags: woocommerce, review plugin, review reminder, customer reviews, review for 
 Requires at least: 4.5
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 5.126.0
+Stable tag: 5.127.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl.html
 
@@ -246,6 +246,11 @@ QR Code is a registered trademark of DENSO WAVE INCORPORATED.
 
 == Changelog ==
 
+= 5.127.0 =
+* Improvement: display review reminder sending errors on the Reviews page in WordPress admin console
+* Security: normalize reviews slider shortcode slide counts and escape slider settings in HTML attributes
+* Security: display reviews grid AJAX error responses as plain text instead of HTML
+* Security: validate reviews grid and slider colors and normalize review and product tag filters
 = 5.126.0 =
 * New feature: sort reviews by the number of attached media files using sort_by="media" in the [cusrev_all_reviews] and [cusrev_reviews_slider] shortcodes
 * New feature: 'QR code' action in the review reminder menu on the WooCommerce Orders page to create, copy, and print a QR code with a link to an order's self-hosted aggregated review form

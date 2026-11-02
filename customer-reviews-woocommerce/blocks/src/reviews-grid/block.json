@@ -109,7 +109,7 @@
 		},
 		"color_stars": {
 			"type": "string",
-			"default": "#FFD707"
+			"default": "#FFBC00"
 		}
 	},
 	"textdomain": "customer-reviews-woocommerce",
