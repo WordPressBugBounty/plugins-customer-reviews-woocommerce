@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: Customer Reviews for WooCommerce 5.127.0\n"
+"Project-Id-Version: Customer Reviews for WooCommerce 5.128.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/customer-reviews-woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-02T01:54:41+00:00\n"
+"POT-Creation-Date: 2026-11-09T01:15:09+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: customer-reviews-woocommerce\n"
@@ -260,7 +260,7 @@ msgid "Show more reviews (%d)"
 msgstr ""
 
 #: includes/blocks/class-cr-all-reviews.php:963
-#: includes/blocks/class-cr-reviews-grid.php:981
+#: includes/blocks/class-cr-reviews-grid.php:985
 #: includes/reviews/class-cr-reviews.php:525
 #, php-format
 msgid "Based on %s review"
@@ -269,7 +269,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:984
-#: includes/blocks/class-cr-reviews-grid.php:1003
+#: includes/blocks/class-cr-reviews-grid.php:1007
 #: includes/reviews/class-cr-reviews.php:1772
 #: templates/cr-review-form.php:31
 msgid "Add a review"
@@ -302,7 +302,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: includes/blocks/class-cr-all-reviews.php:1187
-#: includes/blocks/class-cr-reviews-grid.php:1012
+#: includes/blocks/class-cr-reviews-grid.php:1016
 #: includes/reviews/class-cr-reviews.php:550
 #, php-format
 msgid "See all %d review"
@@ -434,22 +434,22 @@ msgstr ""
 msgid "Error: accepted file types are PNG, JPG, JPEG, GIF, MP4, MPEG, OGG, WEBM, MOV, AVI"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:408
-#: includes/blocks/class-cr-reviews-slider.php:303
+#: includes/blocks/class-cr-reviews-grid.php:409
+#: includes/blocks/class-cr-reviews-slider.php:315
 #: includes/reviews/class-cr-admin-menu-reviews.php:663
 #: includes/reviews/class-cr-reviews-list-table.php:1265
 #: templates/cr-review.php:123
 msgid "Verified owner"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:412
-#: includes/blocks/class-cr-reviews-grid.php:414
-#: includes/blocks/class-cr-reviews-grid.php:419
-#: includes/blocks/class-cr-reviews-grid.php:421
-#: includes/blocks/class-cr-reviews-slider.php:307
-#: includes/blocks/class-cr-reviews-slider.php:309
-#: includes/blocks/class-cr-reviews-slider.php:314
-#: includes/blocks/class-cr-reviews-slider.php:316
+#: includes/blocks/class-cr-reviews-grid.php:413
+#: includes/blocks/class-cr-reviews-grid.php:415
+#: includes/blocks/class-cr-reviews-grid.php:420
+#: includes/blocks/class-cr-reviews-grid.php:422
+#: includes/blocks/class-cr-reviews-slider.php:319
+#: includes/blocks/class-cr-reviews-slider.php:321
+#: includes/blocks/class-cr-reviews-slider.php:326
+#: includes/blocks/class-cr-reviews-slider.php:328
 #: includes/reviews/class-cr-reviews-list-table.php:655
 #: includes/reviews/class-cr-reviews.php:1053
 #: includes/reviews/class-cr-reviews.php:1055
@@ -458,16 +458,16 @@ msgstr ""
 msgid "Verified review"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:415
-#: includes/blocks/class-cr-reviews-grid.php:422
-#: includes/blocks/class-cr-reviews-slider.php:310
-#: includes/blocks/class-cr-reviews-slider.php:317
+#: includes/blocks/class-cr-reviews-grid.php:416
+#: includes/blocks/class-cr-reviews-grid.php:423
+#: includes/blocks/class-cr-reviews-slider.php:322
+#: includes/blocks/class-cr-reviews-slider.php:329
 #: includes/reviews/class-cr-reviews.php:1064
 #: includes/reviews/class-cr-reviews.php:1133
 msgid "view original"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-grid.php:1011
+#: includes/blocks/class-cr-reviews-grid.php:1015
 #: includes/reviews/class-cr-reviews.php:549
 #, php-format
 msgid "Showing %1$d of %2$d review (%3$d star). "
@@ -479,7 +479,7 @@ msgstr[1] ""
 msgid "Error: if no valid product ID was provided as a parameter, [cusrev_reviews_rating] shortcode works only on WooCommerce single product pages"
 msgstr ""
 
-#: includes/blocks/class-cr-reviews-slider.php:289
+#: includes/blocks/class-cr-reviews-slider.php:301
 msgid "No reviews to show"
 msgstr ""
 
@@ -1017,7 +1017,7 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:200
-#: blocks/src/reviews-slider/edit.js:172
+#: blocks/src/reviews-slider/edit.js:177
 msgid "Product Categories"
 msgstr ""
 
@@ -2773,7 +2773,7 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:176
-#: blocks/src/reviews-slider/edit.js:153
+#: blocks/src/reviews-slider/edit.js:158
 msgid "Rating"
 msgstr ""
 
@@ -4330,7 +4330,7 @@ msgstr ""
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/editor-components/review-tag-control/index.js:106
 #: blocks/src/reviews-grid/edit.js:237
-#: blocks/src/reviews-slider/edit.js:209
+#: blocks/src/reviews-slider/edit.js:214
 msgid "Tags"
 msgstr ""
 
@@ -4979,7 +4979,7 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:213
-#: blocks/src/reviews-slider/edit.js:185
+#: blocks/src/reviews-slider/edit.js:190
 msgid "Products"
 msgstr ""
 
@@ -5674,7 +5674,7 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:292
-#: blocks/src/reviews-slider/edit.js:264
+#: blocks/src/reviews-slider/edit.js:269
 msgid "Stars"
 msgstr ""
 
@@ -6141,7 +6141,7 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:162
-#: blocks/src/reviews-slider/edit.js:141
+#: blocks/src/reviews-slider/edit.js:146
 msgid "Standard"
 msgstr ""
 
@@ -6149,7 +6149,7 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:161
-#: blocks/src/reviews-slider/edit.js:140
+#: blocks/src/reviews-slider/edit.js:145
 msgid "Initials"
 msgstr ""
 
@@ -6726,9 +6726,9 @@ msgstr ""
 #: includes/settings/class-cr-settings-shortcodes.php:82
 #: includes/settings/class-cr-settings-shortcodes.php:122
 #: includes/settings/class-cr-settings-shortcodes.php:165
-#: includes/settings/class-cr-settings-shortcodes.php:198
 #: includes/settings/class-cr-settings-shortcodes.php:208
 #: includes/settings/class-cr-settings-shortcodes.php:218
+#: includes/settings/class-cr-settings-shortcodes.php:228
 msgid "Parameters:"
 msgstr ""
 
@@ -6940,6 +6940,7 @@ msgid "%1$s argument limits the number of characters that are displayed by defau
 msgstr ""
 
 #: includes/settings/class-cr-settings-shortcodes.php:149
+#: includes/settings/class-cr-settings-shortcodes.php:193
 #, php-format
 msgid "%1$s parameter accepts %2$s or %3$s and controls if %4$s structured data should be created for search engines. To comply with schema markup guidelines, this parameter takes effect only when the shortcode displays reviews for a single product, that is, when parameter %5$s is %3$s and parameter %6$s is set to either %7$s or a single product ID."
 msgstr ""
@@ -6988,64 +6989,64 @@ msgstr ""
 msgid "%1$s argument accepts %2$s or %3$s and specifies if dot indicators will be shown."
 msgstr ""
 
-#: includes/settings/class-cr-settings-shortcodes.php:193
+#: includes/settings/class-cr-settings-shortcodes.php:203
 #, php-format
 msgid "%1$s shortcode is also available as <strong>Reviews Slider</strong> block in the new WordPress Gutenberg page editor (blocks require WordPress 5.0 or newer)."
 msgstr ""
 
-#: includes/settings/class-cr-settings-shortcodes.php:196
-msgid "Use this shortcode to display a widget with rating stars on any single WooCommerce product page. Here are the default parameters of the shortcode:"
-msgstr ""
-
-#: includes/settings/class-cr-settings-shortcodes.php:200
-#, php-format
-msgid "%1$s parameter is a hex color code of rating stars."
-msgstr ""
-
-#: includes/settings/class-cr-settings-shortcodes.php:201
-#, php-format
-msgid "%1$s parameter accepts a product ID. Use this parameter to show rating stars of a specific product. If you provide an empty parameter like %2$s and place the shortcode on a WooCommerce product page, it will display a rating of that product."
-msgstr ""
-
-#: includes/settings/class-cr-settings-shortcodes.php:202
-#, php-format
-msgid "%1$s parameter accepts %2$s or %3$s and controls how rating stars are displayed for grouped products. When set to %2$s, the shortcode will show an aggregated rating based on all child products of a grouped product. When set to %3$s, the shortcode will display only the rating of the current product, even if it is a grouped product."
-msgstr ""
-
 #: includes/settings/class-cr-settings-shortcodes.php:206
-msgid "Use this shortcode to display a block with Questions and Answers on any page or post. Here are the default parameters of the shortcode:"
+msgid "Use this shortcode to display a widget with rating stars on any single WooCommerce product page. Here are the default parameters of the shortcode:"
 msgstr ""
 
 #: includes/settings/class-cr-settings-shortcodes.php:210
 #, php-format
-msgid "%1$s parameter accepts a comma-separated list of product IDs or %2$s. If product IDs are provided, the block will display Q & A linked to the corresponding products. If the parameter is equal to %3$s, the block will display Q & A for all products in the store."
+msgid "%1$s parameter is a hex color code of rating stars."
 msgstr ""
 
 #: includes/settings/class-cr-settings-shortcodes.php:211
 #, php-format
-msgid "%1$s parameter accepts a comma-separated list of non-product pages (e.g., regular WordPress pages or posts) or %2$s. If non-product page IDs are provided, the block will display Q & A linked to the corresponding non-product pages. If the parameter is equal to %3$s, the block will display Q & A for all non-product pages in the store."
+msgid "%1$s parameter accepts a product ID. Use this parameter to show rating stars of a specific product. If you provide an empty parameter like %2$s and place the shortcode on a WooCommerce product page, it will display a rating of that product."
+msgstr ""
+
+#: includes/settings/class-cr-settings-shortcodes.php:212
+#, php-format
+msgid "%1$s parameter accepts %2$s or %3$s and controls how rating stars are displayed for grouped products. When set to %2$s, the shortcode will show an aggregated rating based on all child products of a grouped product. When set to %3$s, the shortcode will display only the rating of the current product, even if it is a grouped product."
 msgstr ""
 
 #: includes/settings/class-cr-settings-shortcodes.php:216
-msgid "Use this shortcode to display a button linking to an aggregated review form in the customer-facing WooCommerce email notifications \"Processing order\" and \"Completed order\". You can add the shortcode in the “Additional content” field of these email notifications. Below are the default parameters of the shortcode:"
+msgid "Use this shortcode to display a block with Questions and Answers on any page or post. Here are the default parameters of the shortcode:"
 msgstr ""
 
 #: includes/settings/class-cr-settings-shortcodes.php:220
 #, php-format
-msgid "%1$s parameter accepts a string that will be used as the button text."
+msgid "%1$s parameter accepts a comma-separated list of product IDs or %2$s. If product IDs are provided, the block will display Q & A linked to the corresponding products. If the parameter is equal to %3$s, the block will display Q & A for all products in the store."
 msgstr ""
 
 #: includes/settings/class-cr-settings-shortcodes.php:221
 #, php-format
+msgid "%1$s parameter accepts a comma-separated list of non-product pages (e.g., regular WordPress pages or posts) or %2$s. If non-product page IDs are provided, the block will display Q & A linked to the corresponding non-product pages. If the parameter is equal to %3$s, the block will display Q & A for all non-product pages in the store."
+msgstr ""
+
+#: includes/settings/class-cr-settings-shortcodes.php:226
+msgid "Use this shortcode to display a button linking to an aggregated review form in the customer-facing WooCommerce email notifications \"Processing order\" and \"Completed order\". You can add the shortcode in the “Additional content” field of these email notifications. Below are the default parameters of the shortcode:"
+msgstr ""
+
+#: includes/settings/class-cr-settings-shortcodes.php:230
+#, php-format
+msgid "%1$s parameter accepts a string that will be used as the button text."
+msgstr ""
+
+#: includes/settings/class-cr-settings-shortcodes.php:231
+#, php-format
 msgid "%1$s parameter accepts a hex color code that defines the button's background color."
 msgstr ""
 
-#: includes/settings/class-cr-settings-shortcodes.php:222
+#: includes/settings/class-cr-settings-shortcodes.php:232
 #, php-format
 msgid "%1$s parameter accepts a hex color code that defines the text color of the button."
 msgstr ""
 
-#: includes/settings/class-cr-settings-shortcodes.php:223
+#: includes/settings/class-cr-settings-shortcodes.php:233
 #, php-format
 msgid "%1$s parameter accepts a value that defines the border radius of the button's corners."
 msgstr ""
@@ -8062,35 +8063,37 @@ msgid "Add Review"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
+#: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:152
+#: blocks/src/reviews-slider/edit.js:137
 msgid "Schema Markup"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:158
-#: blocks/src/reviews-slider/edit.js:137
+#: blocks/src/reviews-slider/edit.js:142
 msgid "Avatars"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:163
-#: blocks/src/reviews-slider/edit.js:142
+#: blocks/src/reviews-slider/edit.js:147
 msgid "No avatars"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:172
-#: blocks/src/reviews-slider/edit.js:149
+#: blocks/src/reviews-slider/edit.js:154
 msgid "Sort By"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:175
-#: blocks/src/reviews-slider/edit.js:152
+#: blocks/src/reviews-slider/edit.js:157
 msgid "Date"
 msgstr ""
 
@@ -8102,105 +8105,105 @@ msgstr ""
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:186
-#: blocks/src/reviews-slider/edit.js:160
+#: blocks/src/reviews-slider/edit.js:165
 msgid "Sort Order"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:189
-#: blocks/src/reviews-slider/edit.js:163
+#: blocks/src/reviews-slider/edit.js:168
 msgid "Ascending"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:190
-#: blocks/src/reviews-slider/edit.js:164
+#: blocks/src/reviews-slider/edit.js:169
 msgid "Descending"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:191
-#: blocks/src/reviews-slider/edit.js:165
+#: blocks/src/reviews-slider/edit.js:170
 msgid "Random"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:202
-#: blocks/src/reviews-slider/edit.js:174
+#: blocks/src/reviews-slider/edit.js:179
 msgid "Select which product categories to show reviews for."
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:215
-#: blocks/src/reviews-slider/edit.js:187
+#: blocks/src/reviews-slider/edit.js:192
 msgid "Select which products to show reviews for."
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:225
-#: blocks/src/reviews-slider/edit.js:197
+#: blocks/src/reviews-slider/edit.js:202
 msgid "Product Tags"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:227
-#: blocks/src/reviews-slider/edit.js:199
+#: blocks/src/reviews-slider/edit.js:204
 msgid "Select which product tags to show reviews for."
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:239
-#: blocks/src/reviews-slider/edit.js:211
+#: blocks/src/reviews-slider/edit.js:216
 msgid "Select which tags to show reviews for."
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:249
-#: blocks/src/reviews-slider/edit.js:221
+#: blocks/src/reviews-slider/edit.js:226
 msgid "Colors"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:252
-#: blocks/src/reviews-slider/edit.js:224
+#: blocks/src/reviews-slider/edit.js:229
 msgid "External Border"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:260
-#: blocks/src/reviews-slider/edit.js:232
+#: blocks/src/reviews-slider/edit.js:237
 msgid "Review Card Border"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:268
-#: blocks/src/reviews-slider/edit.js:240
+#: blocks/src/reviews-slider/edit.js:245
 msgid "Background"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:276
-#: blocks/src/reviews-slider/edit.js:248
+#: blocks/src/reviews-slider/edit.js:253
 msgid "Review Card Background"
 msgstr ""
 
 #: blocks/build/reviews-grid/index.js:12
 #: blocks/build/reviews-slider/index.js:12
 #: blocks/src/reviews-grid/edit.js:284
-#: blocks/src/reviews-slider/edit.js:256
+#: blocks/src/reviews-slider/edit.js:261
 msgid "Product Area Background"
 msgstr ""
 

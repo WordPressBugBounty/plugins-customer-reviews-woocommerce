@@ -133,6 +133,11 @@ export default function Edit( { attributes, setAttributes } ) {
 						checked={ attributes.custom_ratings }
 						onChange={ () => setAttributes( { custom_ratings: ! attributes.custom_ratings } ) }
 					/>
+					<ToggleControl
+						label={ __( 'Schema Markup', 'customer-reviews-woocommerce' ) }
+						checked={ attributes.schema_markup }
+						onChange={ () => setAttributes( { schema_markup: ! attributes.schema_markup } ) }
+					/>
 					<SelectControl
 						label={ __( 'Avatars', 'customer-reviews-woocommerce' ) }
 						value={ attributes.avatars }

@@ -254,8 +254,8 @@ if (! class_exists('CR_All_Reviews')) :
 					);
 				}
 
-				// search
-				$args['search'] = $this->search;
+				// search (restricted to public fields to prevent disclosure of emails and IP addresses)
+				$args = CR_Utils::add_comment_search( $args, $this->search );
 
 				// tags passed in the shortcode parameters
 				if ( isset( $this->shortcode_atts['tags'] ) && $this->shortcode_atts['tags'] ) {
@@ -448,7 +448,7 @@ if (! class_exists('CR_All_Reviews')) :
 
 				//highlight search results for products
 				if( !empty( $this->search ) ) {
-					$highlight = $this->search;
+					$highlight = preg_quote( $this->search, '/' );
 					$comments = array_map( function( $item ) use( $highlight ) {
 						$item->comment_content = preg_replace( '/(' . $highlight . ')(?![^<>]*\/>)/iu', '<span class="cr-search-highlight">\0</span>', $item->comment_content );
 						return $item;

@@ -15,6 +15,7 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 		private static $sort_order;
 		private $min_chars;
 		private $attributes;
+		private $include_data_attributes = true;
 
 		private const COLOR_DEFAULTS = array(
 			'color_ex_brdr' => '#ebebeb',
@@ -488,6 +489,7 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 			if( 'initials' === $attributes['avatars'] ) {
 				add_filter( 'get_avatar', array( 'CR_Reviews_Grid', 'cr_get_avatar' ), 10, 5 );
 			}
+			$include_data_attributes = $this->include_data_attributes;
 			ob_start();
 			include( $template );
 			if( 'initials' === $attributes['avatars'] ) {
@@ -889,7 +891,9 @@ if ( ! class_exists( 'CR_Reviews_Grid' ) ) {
 			}
 
 			$attributes['count_total'] = $attributes['show_more'];
-			$response['html'] = $html = $this->render_reviews_grid_shortcode( $attributes );
+			// AJAX uses the original grid's configuration; omit it here to avoid reflecting submitted values
+			$this->include_data_attributes = false;
+			$response['html'] = $this->render_reviews_grid_shortcode( $attributes );
 
 			wp_send_json( $response );
 		}

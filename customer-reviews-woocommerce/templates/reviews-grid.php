@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="cr-reviews-grid" id="<?php echo $id; ?>" style="<?php echo esc_attr( $section_style ); ?>" data-attributes="<?php echo wc_esc_json(wp_json_encode($attributes));?>">
+<div class="cr-reviews-grid" id="<?php echo $id; ?>" style="<?php echo esc_attr( $section_style ); ?>"<?php if ( $include_data_attributes ) : ?> data-attributes="<?php echo wc_esc_json(wp_json_encode($attributes));?>"<?php endif; ?>>
 	<?php
 		echo $cr_credits_line;
 		echo $review_form;

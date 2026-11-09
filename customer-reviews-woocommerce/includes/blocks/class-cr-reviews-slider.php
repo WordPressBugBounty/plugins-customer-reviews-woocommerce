@@ -223,8 +223,8 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 
 			$reviews = [];
 			// Query needs to be modified if min_chars constraints are set
-			if ( ! empty( $attributes['min_chars'] ) ) {
-				$this->min_chars = $attributes['min_chars'];
+			$this->min_chars = empty( $attributes['min_chars'] ) ? 0 : intval( $attributes['min_chars'] );
+			if ( ! empty( $this->min_chars ) ) {
 				add_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
 			}
 			// Query needs to be modified if random sorting is required
@@ -274,6 +274,18 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			}
 			remove_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
 			remove_filter( 'comments_clauses', array( $this, 'random_order_comments_clauses' ), 10 );
+
+			// add structured data
+			$schema_markup_html = '';
+			if (
+				! empty( $attributes['schema_markup'] ) &&
+				! $attributes['shop_reviews'] &&
+				$attributes['products'] &&
+				is_array( $attributes['products'] ) &&
+				1 === count( $attributes['products'] )
+			) {
+				$schema_markup_html = $this->get_schema_markup( $attributes['products'][0], $args );
+			}
 
 			// WPML compatibility
 			if( has_filter( 'wpml_current_language' ) && ! function_exists( 'pll_current_language' ) ) {
@@ -397,7 +409,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				remove_filter( 'get_avatar', array( 'CR_Reviews_Grid', 'cr_get_avatar' ) );
 			}
 
-			return ob_get_clean();
+			return ob_get_clean() . $schema_markup_html;
 		}
 
 		public function render_reviews_slider_shortcode( $attributes ) {
@@ -428,6 +440,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 				'min_chars' => 0,
 				'show_dots' => true,
 				'custom_ratings' => 'true',
+				'schema_markup' => 'false',
 			);
 			$attributes = shortcode_atts( $defaults, $attributes, 'cusrev_reviews_slider' );
 			$attributes = CR_Reviews::sanitize_review_display_attributes( $attributes, $defaults );
@@ -444,6 +457,7 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			$attributes['min_chars'] = intval( $attributes['min_chars'] );
 			$attributes['show_dots'] = ( $attributes['show_dots'] !== 'false' );
 			$attributes['custom_ratings'] = ( $attributes['custom_ratings'] !== 'false' );
+			$attributes['schema_markup'] = ( $attributes['schema_markup'] === 'true' );
 			if( $attributes['min_chars'] < 0 ) {
 				$attributes['min_chars'] = 0;
 			}
@@ -550,6 +564,63 @@ if ( ! class_exists( 'CR_Reviews_Slider' ) ) {
 			global $wpdb;
 			$clauses['where'] .= " AND CHAR_LENGTH({$wpdb->comments}.comment_content) >= " . $this->min_chars;
 			return $clauses;
+		}
+
+		private function get_schema_markup( $product_id, $args ) {
+			$output = '';
+			$prod_temp = wc_get_product( $product_id );
+			if ( $prod_temp ) {
+				if ( ! empty( $this->min_chars ) ) {
+					add_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
+				}
+				$all = $this->count_ratings( 0, $args );
+				if ( $all > 0 ) {
+					$five = (float) $this->count_ratings( 5, $args );
+					$four = (float) $this->count_ratings( 4, $args );
+					$three = (float) $this->count_ratings( 3, $args );
+					$two = (float) $this->count_ratings( 2, $args );
+					$one = (float) $this->count_ratings( 1, $args );
+					$average = ( 5 * $five + 4 * $four + 3 * $three + 2 * $two + 1 * $one ) / $all;
+					$prod_name = esc_html( strip_tags( $prod_temp->get_title() ) );
+					$schema = array(
+						'@context' => 'https://schema.org/',
+						'@type' => 'Product',
+						'name' => $prod_name,
+						'aggregateRating' => array(
+							'@type' => 'aggregateRating',
+							'ratingValue' => round( $average, 1 ),
+							'bestRating' => 5,
+							'ratingCount' => $all
+						)
+					);
+					$output .= '<script type="application/ld+json">';
+					$output .= wp_json_encode( $schema );
+					$output .= '</script>';
+				}
+				remove_filter( 'comments_clauses', array( $this, 'min_chars_comments_clauses' ) );
+			}
+			return $output;
+		}
+
+		private function count_ratings( $rating, $args ) {
+			$args['count'] = true;
+			$args['type__not_in'] = array( 'cr_qna' );
+			$args['parent'] = 0;
+			unset( $args['meta_query'] );
+			unset( $args['number'] );
+			unset( $args['orderby'] );
+			unset( $args['order'] );
+
+			if ( $rating > 0 ) {
+				$args['meta_query'][] = array(
+					'key' => 'rating',
+					'value' => $rating,
+					'compare' => '=',
+					'type' => 'numeric'
+				);
+			}
+
+			return get_comments( $args );
 		}
 
 		public function random_order_comments_clauses( $clauses, $comment_query ) {

@@ -121,6 +121,10 @@
     "custom_ratings": {
       "type": "boolean",
       "default": true
+    },
+    "schema_markup": {
+      "type": "boolean",
+      "default": false
     }
   },
   "textdomain": "customer-reviews-woocommerce",

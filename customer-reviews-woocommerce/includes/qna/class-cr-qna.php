@@ -845,7 +845,7 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 
 		private function highlight_search_text( $text ) {
 
-			$highlight = $this->search;
+			$highlight = preg_quote( $this->search, '/' );
 
 			$text = sanitize_textarea_field( $text );
 			$text = esc_html( $text );
@@ -880,10 +880,11 @@ if ( ! class_exists( 'CR_Qna' ) ) :
 			$args = array(
 				'status' => 'approve',
 				'type' => 'cr_qna',
-				'search' => $this->search,
 				'post_type' => array(),
 				'post__in' => array()
 			);
+			// search (restricted to public fields to prevent disclosure of emails and IP addresses)
+			$args = CR_Utils::add_comment_search( $args, $this->search );
 
 			if( !$attributes && isset( $_POST['cr_attributes'] ) ) {
 				$attributes = $_POST['cr_attributes'];

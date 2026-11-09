@@ -155,8 +155,8 @@ if (! class_exists('CR_Ajax_Reviews')) :
 					'type' => 'NUMERIC'
 				);
 			}
-			// search
-			$args['search'] = self::$search;
+			// search (restricted to public fields to prevent disclosure of emails and IP addresses)
+			$args = CR_Utils::add_comment_search( $args, self::$search );
 			// tags
 			if( 0 < count( self::$tags ) ) {
 				$reviews_by_tags = get_objects_in_term( self::$tags, 'cr_tag' );
@@ -240,7 +240,7 @@ if (! class_exists('CR_Ajax_Reviews')) :
 
 			//highlight search results
 			if( !empty( self::$search ) ) {
-				$highlight = self::$search;
+				$highlight = preg_quote( self::$search, '/' );
 				$reviews = array_map( function( $item ) use( $highlight ) {
 					$item->comment_content = preg_replace( '/(' . $highlight . ')(?![^<>]*\/>)/iu', '<span class="cr-search-highlight">\0</span>', $item->comment_content );
 					return $item;
