@@ -1937,6 +1937,144 @@ li.select2-results__option {
 .cr-admin-settings-footer {
 	width: 700px;
 }
+#cr-order-review-reminder .cr-order-reminder-history-section summary {
+	align-items: center;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	list-style: none;
+	margin: 1em 0;
+}
+
+#cr-order-review-reminder .cr-order-reminder-history-section summary::-webkit-details-marker {
+	display: none;
+}
+
+#cr-order-review-reminder .cr-order-reminder-history-chevron {
+	align-items: center;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	display: inline-flex;
+	flex-shrink: 0;
+	height: 24px;
+	justify-content: center;
+	margin-left: 8px;
+	width: 24px;
+}
+
+#cr-order-review-reminder .cr-order-reminder-history-chevron::after {
+	border-bottom: 2px solid currentcolor;
+	border-right: 2px solid currentcolor;
+	content: "";
+	height: 6px;
+	margin-top: -3px;
+	transform: rotate(45deg);
+	width: 6px;
+}
+
+#cr-order-review-reminder .cr-order-reminder-history-section[open] .cr-order-reminder-history-chevron::after {
+	margin-top: 3px;
+	transform: rotate(225deg);
+}
+
+#cr-order-review-reminder .cr-order-reminder-history {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+#cr-order-review-reminder .cr-order-reminder-history li {
+	align-items: center;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	display: flex;
+	gap: 8px;
+	margin: 0;
+	overflow-wrap: break-word;
+	padding: 8px 12px;
+}
+
+#cr-order-review-reminder .cr-order-reminder-history-content {
+	flex: 1;
+	font-size: 12px;
+	min-width: 0;
+}
+
+#cr-order-review-reminder .cr-order-review-stars {
+	display: flex;
+	gap: 2px;
+	margin-bottom: 4px;
+}
+
+#cr-order-review-reminder .cr-order-review-star {
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 15px 15px;
+	display: block;
+	flex: 0 0 15px;
+	height: 15px;
+}
+
+#cr-order-review-reminder .cr-order-review-star-filled {
+	background-image: url(../img/star-fill.svg);
+}
+
+#cr-order-review-reminder .cr-order-review-star-empty {
+	background-image: url(../img/star-stroke.svg);
+}
+
+#cr-order-review-reminder .cr-order-reminder-history-action {
+	flex-shrink: 0;
+}
+
+#cr-order-review-reminder .cr-order-reminder-details-button {
+	line-height: 17px;
+	min-height: 17px;
+	padding: 5px;
+	width: 27px;
+}
+
+#cr-order-review-reminder .cr-order-reminder-details-button .dashicons {
+	font-size: 17px;
+	height: 17px;
+	line-height: 17px;
+	width: 17px;
+}
+
+#cr-order-review-reminder .cr-order-reminder-summary {
+	align-items: baseline;
+	box-sizing: border-box;
+	display: flex;
+	gap: 8px;
+	width: 100%;
+}
+
+#cr-order-review-reminder .cr-order-reminder-summary-text {
+	flex: 1;
+	min-width: 0;
+}
+
+#cr-order-review-reminder .cr-order-reminder-status {
+	border-radius: 50%;
+	flex: 0 0 9px;
+	height: 9px;
+}
+
+#cr-order-review-reminder .cr-order-reminder-status-success {
+	background: #146c2e;
+}
+
+#cr-order-review-reminder .cr-order-reminder-status-error {
+	background: #a00;
+}
+
+#cr-order-review-reminder .cr-order-reminder-status-neutral {
+	background: #6b7177;
+}
+
 .cr-reminders-log-table {
 	.column-action {
 		vertical-align: middle;

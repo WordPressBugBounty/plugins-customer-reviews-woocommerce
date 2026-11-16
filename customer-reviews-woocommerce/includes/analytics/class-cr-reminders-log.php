@@ -392,6 +392,35 @@ class CR_Reminders_Log {
 		return false;
 	}
 
+	public function get_history_for_order( $order_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . self::LOGS_TABLE;
+		$records = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT `id`, `dateCreated`, `dateSent`, `type`, `channel`, `status` FROM `$table_name` WHERE `orderId` = %s AND `status` IN ( 'sent', 'rmd_opened', 'frm_opened', 'error' ) ORDER BY `dateCreated` DESC, `id` DESC",
+				(string) $order_id
+			),
+			ARRAY_A
+		);
+		return ! $wpdb->last_error && is_array( $records ) ? $records : false;
+	}
+
+	public function get_latest_for_order( $order_id ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . self::LOGS_TABLE;
+		$records = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT `status` FROM `$table_name` WHERE `orderId` = %s ORDER BY `dateCreated` DESC, `id` DESC LIMIT 1",
+				(string) $order_id
+			),
+			ARRAY_A
+		);
+		if ( $wpdb->last_error || ! is_array( $records ) ) {
+			return false;
+		}
+		return $records ? $records[0] : null;
+	}
+
 	public static function get_status_description( $status ) {
 		$description = '';
 		switch ($status) {

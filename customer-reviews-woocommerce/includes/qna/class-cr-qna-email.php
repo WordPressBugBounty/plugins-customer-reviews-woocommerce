@@ -12,6 +12,7 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 	class CR_Qna_Email
 	{
 		private $name = '';
+		private $language = 'en';
 		private $subject = '';
 		private $heading = '';
 		private $body = '';
@@ -27,6 +28,9 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 
 		public function __construct( $name, $language = NULL ) {
 			$this->name = $name;
+			if ( $language ) {
+				$this->language = $language;
+			}
 			$this->headers[] = 'Content-Type: text/html; charset=UTF-8';
 
 			$this->find['site-title'] = '{site_title}';
@@ -106,6 +110,21 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 
 			$this->subject = $this->replace_variables( $this->subject );
 			$this->message = $this->get_email_template();
+
+			// filters that enable customization of the email
+			$filter_args = array(
+				'language' => $this->language,
+				'email' => $to,
+				'customer_name' => $this->replace['customer-name'],
+				'user_name' => $this->replace['user-name'],
+				'product_name' => $this->replace['product-name'],
+				'product_link' => $this->replace['product-link'],
+				'answer' => $this->replace['answer'],
+				'is_test' => true
+			);
+			$this->subject = apply_filters( 'cr_local_qna_reply_subject', $this->subject, $filter_args );
+			$this->message = apply_filters( 'cr_local_qna_reply_template', $this->message, $filter_args );
+
 			$result = $this->send_email( $to );
 			if ( $result ) {
 				return 0;
@@ -145,6 +164,11 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 				if( ! get_comment_meta( $answer_id, 'cr_answer_notification', true ) ) {
 					$to = get_comment_author_email( $question_id );
 					if ( filter_var( $to, FILTER_VALIDATE_EMAIL ) ) {
+						// a filter to skip sending of the notification (e.g., if the customer unsubscribed from emails)
+						if ( apply_filters( 'cr_skip_qna_reply_notification', false, $to ) ) {
+							return;
+						}
+
 						$this->replace['customer-name'] = get_comment_author( $question_id );
 						$this->replace['user-name'] = $user_name;
 						$this->replace['product-name'] = get_the_title( $product_id );
@@ -154,6 +178,20 @@ if ( ! class_exists( 'CR_Qna_Email' ) ) :
 
 						$this->subject = $this->replace_variables( $this->subject );
 						$this->message = $this->get_email_template();
+
+						// filters that enable customization of the email
+						$filter_args = array(
+							'language' => $this->language,
+							'email' => $to,
+							'customer_name' => $this->replace['customer-name'],
+							'user_name' => $this->replace['user-name'],
+							'product_name' => $this->replace['product-name'],
+							'product_link' => $this->replace['product-link'],
+							'answer' => $this->replace['answer'],
+							'is_test' => false
+						);
+						$this->subject = apply_filters( 'cr_local_qna_reply_subject', $this->subject, $filter_args );
+						$this->message = apply_filters( 'cr_local_qna_reply_template', $this->message, $filter_args );
 
 						$bcc = trim( get_option( 'ivole_email_bcc_' . $this->name, '' ) );
 						if( $bcc ) {

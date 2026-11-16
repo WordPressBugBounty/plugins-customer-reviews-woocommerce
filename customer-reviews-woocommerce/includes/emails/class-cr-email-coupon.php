@@ -41,6 +41,8 @@ class CR_Email_Coupon {
 		$this->find['site-title'] = '{site_title}';
 		$this->find['customer-first-name']  = '{customer_first_name}';
 		$this->find['customer-last-name']  = '{customer_last_name}';
+		$this->find['shipping-first-name']  = '{shipping_first_name}';
+		$this->find['shipping-last-name']  = '{shipping_last_name}';
 		$this->find['customer-name'] = '{customer_name}';
 		$this->find['coupon-code'] = '{coupon_code}';
 		$this->find['discount-amount'] = '{discount_amount}';
@@ -150,6 +152,8 @@ class CR_Email_Coupon {
 		$this->to = $to;
 		$this->replace['customer-first-name'] = __( 'Jane', 'customer-reviews-woocommerce' );
 		$this->replace['customer-last-name'] = __( 'Doe', 'customer-reviews-woocommerce' );
+		$this->replace['shipping-first-name'] = __( 'Jane', 'customer-reviews-woocommerce' );
+		$this->replace['shipping-last-name'] = __( 'Doe', 'customer-reviews-woocommerce' );
 		$this->replace['customer-name'] = __( 'Jane Doe', 'customer-reviews-woocommerce' );
 		$this->replace['coupon-code'] = $coupon_code;
 		$this->replace['discount-amount'] = ( $discount_string == "" ) ? '10%' : $discount_string;
@@ -372,6 +376,15 @@ class CR_Email_Coupon {
 	public function trigger_coupon( $customer_first_name, $customer_last_name, $customer_name, $coupon_code, $discount_string, $customer_email, $order_id, $order_date, $order_currency, $order, $discount_type, $discount_amount ) {
 		$this->replace['customer-first-name'] = $customer_first_name;
 		$this->replace['customer-last-name'] = $customer_last_name;
+		// shipping name with a fallback to the billing name (e.g., virtual orders without a shipping address)
+		$shipping_first_name = '';
+		$shipping_last_name = '';
+		if ( $order && method_exists( $order, 'get_shipping_first_name' ) ) {
+			$shipping_first_name = $order->get_shipping_first_name();
+			$shipping_last_name = $order->get_shipping_last_name();
+		}
+		$this->replace['shipping-first-name'] = $shipping_first_name ? $shipping_first_name : $customer_first_name;
+		$this->replace['shipping-last-name'] = $shipping_last_name ? $shipping_last_name : $customer_last_name;
 		$this->replace['customer-name'] = $customer_name;
 		$this->replace['coupon-code'] = $coupon_code;
 		$this->replace['discount-amount'] = $discount_string;

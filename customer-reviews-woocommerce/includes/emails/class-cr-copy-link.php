@@ -24,6 +24,8 @@ class CR_Copy_Link {
 		$this->replace['site-title'] = Ivole_Email::get_blogname();
 		$this->find['customer-first-name']  = '{customer_first_name}';
 		$this->find['customer-last-name'] = '{customer_last_name}';
+		$this->find['shipping-first-name'] = '{shipping_first_name}';
+		$this->find['shipping-last-name'] = '{shipping_last_name}';
 		$this->find['customer-name'] = '{customer_name}';
 		$this->find['order-id'] = '{order_id}';
 		$this->find['order-date'] = '{order_date}';
@@ -199,8 +201,13 @@ class CR_Copy_Link {
 				}
 				$customer_first_name = $order->get_billing_first_name();
 				$customer_last_name = $order->get_billing_last_name();
+				// shipping name with a fallback to the billing name (e.g., virtual orders without a shipping address)
+				$shipping_first_name = $order->get_shipping_first_name();
+				$shipping_last_name = $order->get_shipping_last_name();
 				$this->replace['customer-first-name'] = $customer_first_name;
 				$this->replace['customer-last-name'] = $customer_last_name;
+				$this->replace['shipping-first-name'] = $shipping_first_name ? $shipping_first_name : $customer_first_name;
+				$this->replace['shipping-last-name'] = $shipping_last_name ? $shipping_last_name : $customer_last_name;
 				$this->replace['customer-name'] = $customer_first_name . ' ' . $customer_last_name;
 				$this->replace['order-id'] = $order->get_order_number();
 				$this->replace['order-date']   = date_i18n( wc_date_format(), strtotime( $order->get_date_created() ) );

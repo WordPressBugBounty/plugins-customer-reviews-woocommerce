@@ -16,6 +16,17 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 			$this->auto_reminders = $automatic_reminders_enabled;
 			$manual_reminders_enabled = 'yes' === get_option( 'ivole_enable_manual', 'yes' ) ? true : false;
 
+			$wc_status_names = wc_get_order_statuses();
+			$this->order_status = get_option( 'ivole_order_status', 'completed' );
+			$this->order_status = 'wc-' === substr( $this->order_status, 0, 3 ) ? substr( $this->order_status, 3 ) : $this->order_status;
+			$this->order_status_name = $this->order_status;
+			if( isset( $wc_status_names['wc-' . $this->order_status] ) ) {
+				$this->order_status_name = $wc_status_names['wc-' . $this->order_status];
+			}
+
+			add_action( 'add_meta_boxes', array( $this, 'add_order_reminder_meta_box' ), 10, 2 );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_order_reminder_styles' ) );
+
 			if( ! $automatic_reminders_enabled && ! $manual_reminders_enabled ) {
 				return;
 			}
@@ -26,14 +37,6 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 			add_action( 'manage_shop_order_posts_custom_column' , array( $this, 'custom_orders_list_column_content' ), 10, 2 );
 			add_action( 'manage_woocommerce_page_wc-orders_custom_column' , array( $this, 'custom_orders_list_column_content' ), 10, 2 );
 			add_filter( 'default_hidden_columns', array( $this, 'default_hidden_columns' ), 20, 2 );
-
-			$wc_status_names = wc_get_order_statuses();
-			$this->order_status = get_option( 'ivole_order_status', 'completed' );
-			$this->order_status = 'wc-' === substr( $this->order_status, 0, 3 ) ? substr( $this->order_status, 3 ) : $this->order_status;
-			$this->order_status_name = $this->order_status;
-			if( isset( $wc_status_names['wc-' . $this->order_status] ) ) {
-				$this->order_status_name = $wc_status_names['wc-' . $this->order_status];
-			}
 
 			if( ! $manual_reminders_enabled ) {
 				return;
@@ -266,7 +269,7 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 		}
 
 		public function custom_shop_order_column( $columns ) {
-			$columns['ivole-review-reminder'] = __( 'Review Reminder', 'customer-reviews-woocommerce' );
+			$columns['ivole-review-reminder'] = __( 'Review reminder', 'customer-reviews-woocommerce' );
 			return $columns;
 		}
 
@@ -277,99 +280,281 @@ if ( ! class_exists( 'CR_Manual' ) ) :
 			) {
 				$order = wc_get_order( $post_id );
 				if ( $order ) {
-					// Check customer consent
-					$no_cr_consent = 'no' === $order->get_meta( '_ivole_cr_consent', true ) ? true : false;
-					if( $no_cr_consent ) {
-						echo __( 'No customer consent received', 'customer-reviews-woocommerce' );
-						return;
+					$this->display_order_reminder_status( $order );
+				}
+			}
+		}
+
+		public function add_order_reminder_meta_box( $screen_id, $post_or_order ) {
+			$hpos_screen = function_exists( 'wc_get_page_screen_id' ) ? wc_get_page_screen_id( 'shop-order' ) : '';
+			if ( 'shop_order' !== $screen_id && ( ! $hpos_screen || $hpos_screen !== $screen_id ) ) {
+				return;
+			}
+
+			add_meta_box(
+				'cr-order-review-reminder',
+				__( 'Review reminder', 'customer-reviews-woocommerce' ),
+				array( $this, 'display_order_reminder_meta_box' ),
+				$screen_id,
+				'side',
+				'default'
+			);
+		}
+
+		public function enqueue_order_reminder_styles() {
+			$screen = get_current_screen();
+			$hpos_screen = function_exists( 'wc_get_page_screen_id' ) ? wc_get_page_screen_id( 'shop-order' ) : '';
+			if ( $screen && ( 'shop_order' === $screen->id || ( $hpos_screen && $hpos_screen === $screen->id ) ) ) {
+				wp_enqueue_style( 'cr-admin-css', plugins_url( 'css/admin.css', dirname( dirname( __FILE__ ) ) ), array(), Ivole::CR_VERSION );
+			}
+		}
+
+		public function display_order_reminder_meta_box( $post_or_order ) {
+			$order = $post_or_order instanceof WC_Order ? $post_or_order : wc_get_order( $post_or_order->ID );
+			if ( ! $order ) {
+				echo '<p>' . esc_html__( 'Unable to load the order.', 'customer-reviews-woocommerce' ) . '</p>';
+				return;
+			}
+
+			$log = new CR_Reminders_Log();
+			$latest = $log->get_latest_for_order( $order->get_id() );
+			$reminders = $log->get_history_for_order( $order->get_id() );
+			$successful_reminders = false;
+			if ( false !== $reminders ) {
+				$successful_reminders = count( array_filter( $reminders, function( $reminder ) {
+					return in_array( $reminder['status'], array( 'sent', 'rmd_opened', 'frm_opened' ), true );
+				} ) );
+			}
+
+			$status = $this->get_order_reminder_indicator( $order, $latest, $successful_reminders );
+			echo '<p class="cr-order-reminder-summary"><span class="cr-order-reminder-status cr-order-reminder-status-' . esc_attr( $status['type'] ) . '" title="' . esc_attr( $status['label'] ) . '" aria-hidden="true"></span>';
+			echo '<span class="cr-order-reminder-summary-text"><span class="screen-reader-text">' . esc_html( $status['label'] ) . ': </span>';
+			$this->display_order_reminder_status( $order, false );
+			echo '</span></p>';
+
+			if ( false === $latest || false === $reminders ) {
+				echo '<p>' . esc_html__( 'Unable to load reminder history.', 'customer-reviews-woocommerce' ) . '</p>';
+				$this->display_order_review_history( $order );
+				return;
+			}
+
+			if ( $reminders ) {
+				echo '<details class="cr-order-reminder-history-section"><summary><strong>' . esc_html__( 'Reminder history', 'customer-reviews-woocommerce' ) . '</strong><span class="cr-order-reminder-history-chevron" aria-hidden="true"></span></summary><ul class="cr-order-reminder-history">';
+				foreach ( $reminders as $reminder ) {
+					$date = 'error' === $reminder['status'] ? $reminder['dateCreated'] : $reminder['dateSent'];
+					$date = $date && '0000-00-00 00:00:00' !== $date
+						? get_date_from_gmt( $date, get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) . ' (T)' )
+						: __( 'Date unavailable', 'customer-reviews-woocommerce' );
+					$details = array_filter( array(
+						CR_Reminders_Log::get_type_description( $reminder['type'] ),
+						CR_Reminders_Log::get_channel_description( $reminder['channel'] ),
+						CR_Reminders_Log::get_status_description( $reminder['status'] )
+					) );
+					echo '<li><div class="cr-order-reminder-history-content">' . esc_html( $date );
+					if ( $details ) {
+						echo '<br>' . esc_html( implode( ', ', $details ) );
 					}
-					//count reviews that an order has received
-					$order_id = $order->get_id();
-					$args = array(
-						'count' => true,
-						'type' => 'review',
-						'meta_query' => array(
-							'relation' => 'OR',
-							array(
-								'key'   => 'ivole_order',
-								'value' => $order_id
-							),
-							array(
-								'key'   => 'ivole_order_locl',
-								'value' => $order_id
-							),
-							array(
-								'key'   => 'ivole_order_priv',
-								'value' => $order_id
-							),
-							array(
-								'key'   => 'ivole_order_unve',
-								'value' => $order_id
-							)
-						)
-					);
-					$reviews_count = get_comments( $args );
-					$reviews_text = '';
-					if( $reviews_count > 0 ) {
-						/* translators: %d will be automatically replaced with the count of reviews */
-						$reviews_text = ';<br> ' . sprintf( _n( '%d review received', '%d reviews received', $reviews_count, 'customer-reviews-woocommerce' ), $reviews_count );
+					echo '</div>';
+					if ( current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' ) ) {
+						$url = add_query_arg(
+							array( 'page' => 'cr-reviews-reminders', 'reminder' => (int) $reminder['id'] ),
+							admin_url( 'admin.php' )
+						);
+						echo '<div class="cr-order-reminder-history-action"><a href="' . esc_url( $url ) . '" class="button cr-order-reminder-details-button" aria-label="' . esc_attr__( 'View details', 'customer-reviews-woocommerce' ) . '" title="' . esc_attr__( 'View details', 'customer-reviews-woocommerce' ) . '"><span class="dashicons dashicons-arrow-right-alt" aria-hidden="true"></span></a></div>';
 					}
-					//
-					$cr_cron = $order->get_meta( '_ivole_cr_cron', true );
-					//check if a review reminder was sent via CR Cron
-					if( $cr_cron ) {
-						echo __( 'A review reminder was scheduled via CR Cron', 'customer-reviews-woocommerce' ) . $reviews_text;
+					echo '</li>';
+				}
+				echo '</ul></details>';
+			}
+
+			$sent_count = (int) $order->get_meta( '_ivole_review_reminder', true );
+			if ( $sent_count > $successful_reminders ) {
+				echo '<p>' . esc_html__( 'Some sent reminders are not available in the reminder history.', 'customer-reviews-woocommerce' ) . '</p>';
+			}
+			$this->display_order_review_history( $order );
+		}
+
+		private function get_order_reviews_query_args( $order_id ) {
+			return array(
+				'type' => 'review',
+				'meta_query' => array(
+					'relation' => 'OR',
+					array(
+						'key'   => 'ivole_order',
+						'value' => $order_id
+					),
+					array(
+						'key'   => 'ivole_order_locl',
+						'value' => $order_id
+					),
+					array(
+						'key'   => 'ivole_order_priv',
+						'value' => $order_id
+					),
+					array(
+						'key'   => 'ivole_order_unve',
+						'value' => $order_id
+					)
+				)
+			);
+		}
+
+		private function display_order_review_history( $order ) {
+			$reviews = get_comments( $this->get_order_reviews_query_args( $order->get_id() ) );
+			if ( ! $reviews ) {
+				return;
+			}
+
+			echo '<details class="cr-order-reminder-history-section"><summary><strong>' . esc_html__( 'Review history', 'customer-reviews-woocommerce' ) . '</strong><span class="cr-order-reminder-history-chevron" aria-hidden="true"></span></summary>';
+			$hidden_reviews = false;
+			echo '<ul class="cr-order-reminder-history">';
+			foreach ( $reviews as $review ) {
+				$url = get_edit_comment_link( $review->comment_ID, 'raw' );
+				if ( ! $url ) {
+					$hidden_reviews = true;
+					continue;
+				}
+
+				$date = get_comment_date( get_option( 'date_format' ) . ', ' . get_option( 'time_format' ), $review );
+				$title = get_the_title( $review->comment_post_ID );
+				$rating = (int) get_comment_meta( $review->comment_ID, 'rating', true );
+
+				echo '<li><div class="cr-order-reminder-history-content">';
+				if ( $rating >= 1 && $rating <= 5 ) {
+					/* translators: %d is the review rating out of five. */
+					$rating_label = sprintf( __( 'Rated %d out of 5', 'customer-reviews-woocommerce' ), $rating );
+					echo '<div class="cr-order-review-stars" role="img" aria-label="' . esc_attr( $rating_label ) . '">';
+					for ( $i = 1; $i <= 5; $i++ ) {
+						echo '<span class="cr-order-review-star ' . ( $i <= $rating ? 'cr-order-review-star-filled' : 'cr-order-review-star-empty' ) . '" aria-hidden="true"></span>';
+					}
+					echo '</div>';
+				}
+				echo esc_html( $date );
+				if ( $title ) {
+					$item_url = get_edit_post_link( $review->comment_post_ID, 'raw' );
+					echo '<br>';
+					if ( $item_url ) {
+						echo '<a href="' . esc_url( $item_url ) . '">' . esc_html( $title ) . '</a>';
 					} else {
-						//a review has not been sent via CR Cron
-						$reminder = $order->get_meta( '_ivole_review_reminder', true );
-						if( '' === $reminder && 'cr' === get_option( 'ivole_scheduler_type', 'wp' ) ) {
-							//no review reminder has been scheduled via WP Cron and CR Cron is the current setting
-							if( $this->auto_reminders ) {
-								if ( $order->has_status( array( $this->order_status ) ) ) {
-									echo __( 'No reminders sent yet', 'customer-reviews-woocommerce' );
-								} else {
-									/* translators: %s will be automatically replaced with the status name */
-									echo sprintf( __( 'A review reminder will be scheduled after the status is set to %s', 'customer-reviews-woocommerce' ), '\'' . $this->order_status_name . '\'' );
-								}
+						echo esc_html( $title );
+					}
+				}
+				echo '</div><div class="cr-order-reminder-history-action"><a href="' . esc_url( $url ) . '" class="button cr-order-reminder-details-button" aria-label="' . esc_attr__( 'Edit review', 'customer-reviews-woocommerce' ) . '" title="' . esc_attr__( 'Edit review', 'customer-reviews-woocommerce' ) . '"><span class="dashicons dashicons-arrow-right-alt" aria-hidden="true"></span></a></div></li>';
+			}
+			echo '</ul>';
+			if ( $hidden_reviews ) {
+				echo '<p>' . esc_html__( 'Some review details are unavailable because you do not have permission to edit them.', 'customer-reviews-woocommerce' ) . '</p>';
+			}
+			echo '</details>';
+		}
+
+		private function get_order_reminder_indicator( $order, $latest, $successful_reminders ) {
+			if ( false === $latest || false === $successful_reminders ) {
+				return array( 'type' => 'error', 'label' => __( 'Reminder history unavailable', 'customer-reviews-woocommerce' ) );
+			}
+
+			$first = wp_next_scheduled( 'ivole_send_reminder', array( $order->get_id() ) );
+			$second = wp_next_scheduled( 'ivole_send_reminder', array( $order->get_id(), 2 ) );
+			if ( $first < 0 || $second < 0 ) {
+				return array( 'type' => 'error', 'label' => __( 'WP Cron error', 'customer-reviews-woocommerce' ) );
+			}
+			if ( $first || $second || $order->get_meta( '_ivole_cr_cron', true ) ) {
+				return array( 'type' => 'success', 'label' => __( 'Reminder scheduled', 'customer-reviews-woocommerce' ) );
+			}
+			if ( $successful_reminders || (int) $order->get_meta( '_ivole_review_reminder', true ) > 0 ) {
+				return array( 'type' => 'success', 'label' => __( 'Reminder sent', 'customer-reviews-woocommerce' ) );
+			}
+			if ( null !== $latest ) {
+				if ( 'error' === $latest['status'] ) {
+					return array( 'type' => 'error', 'label' => __( 'Latest reminder failed', 'customer-reviews-woocommerce' ) );
+				}
+				if ( in_array( $latest['status'], array( 'sent', 'rmd_opened', 'frm_opened' ), true ) ) {
+					return array( 'type' => 'success', 'label' => __( 'Reminder sent', 'customer-reviews-woocommerce' ) );
+				}
+				if ( 'canceled' === $latest['status'] ) {
+					return array( 'type' => 'neutral', 'label' => __( 'Latest reminder canceled', 'customer-reviews-woocommerce' ) );
+				}
+			}
+			if ( 'no' === $order->get_meta( '_ivole_cr_consent', true ) ) {
+				return array( 'type' => 'neutral', 'label' => __( 'No consent', 'customer-reviews-woocommerce' ) );
+			}
+			if ( ! $this->auto_reminders ) {
+				return array( 'type' => 'neutral', 'label' => __( 'Automatic reminders disabled', 'customer-reviews-woocommerce' ) );
+			}
+			return array( 'type' => 'neutral', 'label' => __( 'Pending', 'customer-reviews-woocommerce' ) );
+		}
+
+		private function display_order_reminder_status( $order, $include_reviews = true ) {
+			// Check customer consent
+			$no_cr_consent = 'no' === $order->get_meta( '_ivole_cr_consent', true ) ? true : false;
+			if( $no_cr_consent ) {
+				echo __( 'No customer consent received', 'customer-reviews-woocommerce' );
+				return;
+			}
+			$reviews_text = '';
+			if ( $include_reviews ) {
+				$args = $this->get_order_reviews_query_args( $order->get_id() );
+				$args['count'] = true;
+				$reviews_count = get_comments( $args );
+				if( $reviews_count > 0 ) {
+					/* translators: %d will be automatically replaced with the count of reviews */
+					$reviews_text = ';<br> ' . sprintf( _n( '%d review received', '%d reviews received', $reviews_count, 'customer-reviews-woocommerce' ), $reviews_count );
+				}
+			}
+			//
+			$cr_cron = $order->get_meta( '_ivole_cr_cron', true );
+			//check if a review reminder was sent via CR Cron
+			if( $cr_cron ) {
+				echo __( 'A review reminder was scheduled via CR Cron', 'customer-reviews-woocommerce' ) . $reviews_text;
+			} else {
+				//a review has not been sent via CR Cron
+				$reminder = $order->get_meta( '_ivole_review_reminder', true );
+				if( '' === $reminder && 'cr' === get_option( 'ivole_scheduler_type', 'wp' ) ) {
+					//no review reminder has been scheduled via WP Cron and CR Cron is the current setting
+					if( $this->auto_reminders ) {
+						if ( $order->has_status( array( $this->order_status ) ) ) {
+							echo __( 'No reminders sent yet', 'customer-reviews-woocommerce' );
+						} else {
+							/* translators: %s will be automatically replaced with the status name */
+							echo sprintf( __( 'A review reminder will be scheduled after the status is set to %s', 'customer-reviews-woocommerce' ), '\'' . $this->order_status_name . '\'' );
+						}
+					} else {
+						echo __( 'Automatic review reminders are disabled', 'customer-reviews-woocommerce' ) . $reviews_text;
+					}
+				} else {
+					if( !$reminder ) {
+						//no review reminder has been sent via WP Cron and WP Cron is the current setting
+						if( $this->auto_reminders ) {
+							if ( $order->has_status( array( $this->order_status ) ) ) {
+								echo __( 'No reminders sent yet', 'customer-reviews-woocommerce' );
 							} else {
-								echo __( 'Automatic review reminders are disabled', 'customer-reviews-woocommerce' ) . $reviews_text;
+								/* translators: %s will be automatically replaced with the status name */
+								echo sprintf( __( 'A review reminder will be scheduled after the status is set to %s', 'customer-reviews-woocommerce' ), '\'' . $this->order_status_name . '\'' );
 							}
 						} else {
-							if( !$reminder ) {
-								//no review reminder has been sent via WP Cron and WP Cron is the current setting
-								if( $this->auto_reminders ) {
-									if ( $order->has_status( array( $this->order_status ) ) ) {
-										echo __( 'No reminders sent yet', 'customer-reviews-woocommerce' );
-									} else {
-										/* translators: %s will be automatically replaced with the status name */
-										echo sprintf( __( 'A review reminder will be scheduled after the status is set to %s', 'customer-reviews-woocommerce' ), '\'' . $this->order_status_name . '\'' );
-									}
-								} else {
-									echo __( 'Automatic review reminders are disabled', 'customer-reviews-woocommerce' ) . $reviews_text;
-								}
-							} else {
-								//a review reminder has been sent via WP Cron
-								$reminder = intval( $reminder );
-								if( $reminder > 0) {
-									/* translators: %d will be automatically replaced with the count of review reminders */
-									echo sprintf( _n( '%d reminder sent', '%d reminders sent', $reminder, 'customer-reviews-woocommerce' ), $reminder ) . $reviews_text;
-								} else {
-									echo __( 'No reminders sent', 'customer-reviews-woocommerce' ) . $reviews_text;
-								}
-							}
-							$timestamp = wp_next_scheduled( 'ivole_send_reminder', array( $order->get_id() ) );
-							if( $timestamp ) {
-								echo ';<br> ';
-								if( $timestamp >= 0 ) {
-									$local_timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', $timestamp ), get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) . ' (T)' );
-									echo esc_html( __( 'A reminder is scheduled for ', 'customer-reviews-woocommerce' ) . $local_timestamp );
-								} else {
-									echo esc_html__( 'WP Cron error', 'customer-reviews-woocommerce' );
-								}
-							} else {
-								do_action( 'cr_manual_next_scheduled', $order );
-							}
+							echo __( 'Automatic review reminders are disabled', 'customer-reviews-woocommerce' ) . $reviews_text;
 						}
+					} else {
+						//a review reminder has been sent via WP Cron
+						$reminder = intval( $reminder );
+						if( $reminder > 0) {
+							/* translators: %d will be automatically replaced with the count of review reminders */
+							echo sprintf( _n( '%d reminder sent', '%d reminders sent', $reminder, 'customer-reviews-woocommerce' ), $reminder ) . $reviews_text;
+						} else {
+							echo __( 'No reminders sent', 'customer-reviews-woocommerce' ) . $reviews_text;
+						}
+					}
+					$timestamp = wp_next_scheduled( 'ivole_send_reminder', array( $order->get_id() ) );
+					if( $timestamp ) {
+						echo ';<br> ';
+						if( $timestamp >= 0 ) {
+							$local_timestamp = get_date_from_gmt( date( 'Y-m-d H:i:s', $timestamp ), get_option( 'date_format' ) . ', ' . get_option( 'time_format' ) . ' (T)' );
+							echo esc_html( __( 'A reminder is scheduled for ', 'customer-reviews-woocommerce' ) . $local_timestamp );
+						} else {
+							echo esc_html__( 'WP Cron error', 'customer-reviews-woocommerce' );
+						}
+					} else {
+						do_action( 'cr_manual_next_scheduled', $order );
 					}
 				}
 			}

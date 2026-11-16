@@ -439,6 +439,8 @@ if ( ! class_exists( 'CR_Email_Template' ) ):
 						'<code>{site_title}</code> - ' . __( 'The title of your WordPress website.', 'customer-reviews-woocommerce' ),
 						'<code>{customer_first_name}</code> - ' . __( 'The first name of the customer who purchased from your store.', 'customer-reviews-woocommerce' ),
 						'<code>{customer_last_name}</code> - ' . __( 'The last name of the customer who purchased from your store.', 'customer-reviews-woocommerce' ),
+						'<code>{shipping_first_name}</code> - ' . __( 'The first name from the shipping address of the order. If the order has no shipping address, the billing first name is used instead.', 'customer-reviews-woocommerce' ),
+						'<code>{shipping_last_name}</code> - ' . __( 'The last name from the shipping address of the order. If the order has no shipping address, the billing last name is used instead.', 'customer-reviews-woocommerce' ),
 						'<code>{customer_name}</code> - ' . __( 'The full name of the customer who purchased from your store.', 'customer-reviews-woocommerce' ),
 						'<code>{order_id}</code> - ' . __( 'The order number for the purchase.', 'customer-reviews-woocommerce' ),
 						'<code>{order_date}</code> - ' . __( 'The date that the order was made.', 'customer-reviews-woocommerce' ),
@@ -452,6 +454,8 @@ if ( ! class_exists( 'CR_Email_Template' ) ):
 						'<code>{site_title}</code> - ' . __( 'The title of your WordPress website.', 'customer-reviews-woocommerce' ),
 						'<code>{customer_first_name}</code> - ' . __( 'The first name of the customer who purchased from your store.', 'customer-reviews-woocommerce' ),
 						'<code>{customer_last_name}</code> - ' . __( 'The last name of the customer who purchased from your store.', 'customer-reviews-woocommerce' ),
+						'<code>{shipping_first_name}</code> - ' . __( 'The first name from the shipping address of the order. If the order has no shipping address, the billing first name is used instead.', 'customer-reviews-woocommerce' ),
+						'<code>{shipping_last_name}</code> - ' . __( 'The last name from the shipping address of the order. If the order has no shipping address, the billing last name is used instead.', 'customer-reviews-woocommerce' ),
 						'<code>{customer_name}</code> - ' . __( 'The full name of the customer who purchased from your store.', 'customer-reviews-woocommerce' ),
 						'<code>{coupon_code}</code> - ' . __( 'The code of coupon for discount.', 'customer-reviews-woocommerce' ),
 						'<code>{discount_amount}</code> - ' . __( 'Amount of the coupon (e.g., $10 or 11% depending on type of the coupon).', 'customer-reviews-woocommerce' )

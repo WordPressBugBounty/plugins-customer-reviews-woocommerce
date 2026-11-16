@@ -163,6 +163,8 @@ class Ivole_Email {
 		}
 		$this->find['customer-first-name']  = '{customer_first_name}';
 		$this->find['customer-last-name']  = '{customer_last_name}';
+		$this->find['shipping-first-name']  = '{shipping_first_name}';
+		$this->find['shipping-last-name']  = '{shipping_last_name}';
 		$this->find['customer-name'] = '{customer_name}';
 		$this->find['order-id'] = '{order_id}';
 		$this->find['order-date'] = '{order_date}';
@@ -250,8 +252,13 @@ class Ivole_Email {
 				$this->to = self::get_customer_email( $order );
 				$customer_first_name = $order->get_billing_first_name();
 				$customer_last_name = $order->get_billing_last_name();
+				// shipping name with a fallback to the billing name (e.g., virtual orders without a shipping address)
+				$shipping_first_name = $order->get_shipping_first_name();
+				$shipping_last_name = $order->get_shipping_last_name();
 				$this->replace['customer-first-name'] = $customer_first_name;
 				$this->replace['customer-last-name'] = $customer_last_name;
+				$this->replace['shipping-first-name'] = $shipping_first_name ? $shipping_first_name : $customer_first_name;
+				$this->replace['shipping-last-name'] = $shipping_last_name ? $shipping_last_name : $customer_last_name;
 				$this->replace['customer-name'] = $customer_first_name . ' ' . $customer_last_name;
 				$this->replace['order-id'] = $order->get_order_number();
 				$this->replace['order-date']   = date_i18n( wc_date_format(), strtotime( $order->get_date_created() ) );
@@ -464,6 +471,8 @@ class Ivole_Email {
 			// no order number means this is a test and we should provide some dummy information
 			$this->replace['customer-first-name'] = __( 'Jane', 'customer-reviews-woocommerce' );
 			$this->replace['customer-last-name'] = __( 'Doe', 'customer-reviews-woocommerce' );
+			$this->replace['shipping-first-name'] = __( 'Jane', 'customer-reviews-woocommerce' );
+			$this->replace['shipping-last-name'] = __( 'Doe', 'customer-reviews-woocommerce' );
 			$this->replace['customer-name'] = __( 'Jane Doe', 'customer-reviews-woocommerce' );
 			$this->replace['order-id'] = 12345;
 			$this->replace['order-date'] = date_i18n( wc_date_format(), time() );
